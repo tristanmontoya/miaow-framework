@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MIAOW: Model-Independent Actor Orchestration Workflows for Scientific Computing &#8212; MIAOW API documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=7f41d439"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="miaow-model-independent-actor-orchestration-workflows-for-scientific-computing">
+<h1>MIAOW: Model-Independent Actor Orchestration Workflows for Scientific Computing<a class="headerlink" href="#miaow-model-independent-actor-orchestration-workflows-for-scientific-computing" title="Link to this heading">¶</a></h1>
+<p>Managing concurrent numerical simulation tasks with dynamic workloads and
+heterogeneous hardware can feel like herding cats. <strong>MIAOW</strong> embraces that
+reality by using actor-based asynchronous orchestration so tasks run when they
+are ready, maximizing utilization across available resources.</p>
+<p>MIAOW targets the <a class="reference external" href="https://en.cppreference.com/w/cpp/17.html">C++17 standard</a>,
+uses the <a class="reference external" href="https://www.actor-framework.org/">C++ Actor Framework (CAF)</a> as its
+actor orchestration backend, and employs the
+<a class="reference external" href="https://bmi.csdms.io/en/stable/">Basic Model Interface (BMI)</a> for Earth
+system model integration.</p>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
+<p>From the repository root, using <a class="reference external" href="https://cmake.org/">CMake</a> (requires C++ and
+Fortran compilers plus Boost):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+</pre></div>
+</div>
+<p>Run each example from its own <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;</span></code> directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/00_hello
+./miaow_hello
+<span class="nb">cd</span><span class="w"> </span>../01_heat
+./miaow_heat
+<span class="nb">cd</span><span class="w"> </span>../02_soil_freeze_thaw
+./miaow_soil_freeze_thaw<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
+<span class="nb">cd</span><span class="w"> </span>../03_dynamic_bmi
+./miaow_dynamic_bmi<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
+<span class="nb">cd</span><span class="w"> </span>../04_noah_owp
+./miaow_noah_owp<span class="w"> </span>--realization<span class="w"> </span>data/realization_config.json<span class="w"> </span>--output_root<span class="w"> </span>./output
+</pre></div>
+</div>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#core-runtime">Core runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#bmi-integration">BMI integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#realization-workflows">Realization workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#i-o-and-cli-helpers">I/O and CLI helpers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="authors-and-funding">
+<h2>Authors and funding<a class="headerlink" href="#authors-and-funding" title="Link to this heading">¶</a></h2>
+<p>MIAOW was developed at the University of Saskatchewan by Tristan Montoya and
+Raymond Spiteri, with funding support from the <a class="reference external" href="https://ciroh.ua.edu/">Cooperative Institute for
+Research to Operations in Hydrology (CIROH)</a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/miaow_logo.svg" alt="Logo of MIAOW"/>
+            </a></p>
+<h1 class="logo"><a href="#">MIAOW</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
