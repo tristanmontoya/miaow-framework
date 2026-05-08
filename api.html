@@ -532,20 +532,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow18RealizationFeatureE">
 <span id="_CPPv3N5miaow18RealizationFeatureE"></span><span id="_CPPv2N5miaow18RealizationFeatureE"></span><span id="miaow::RealizationFeature"></span><span class="target" id="structmiaow_1_1RealizationFeature"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizationFeature</span></span></span><a class="headerlink" href="#_CPPv4N5miaow18RealizationFeatureE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>One feature entry from a realization file. </p>
-<p>SYMFLUENCE realizations are expanded into one Fortran BMI task input per catchment. Realization-driven C++ BMI modules are not supported yet. </p>
+<p>NextGen-style realizations are expanded into one Fortran BMI task input per catchment. Realization-driven C++ BMI modules are not supported yet. </p>
 </dd></dl>
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow17RealizationConfigE">
 <span id="_CPPv3N5miaow17RealizationConfigE"></span><span id="_CPPv2N5miaow17RealizationConfigE"></span><span id="miaow::RealizationConfig"></span><span class="target" id="structmiaow_1_1RealizationConfig"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizationConfig</span></span></span><a class="headerlink" href="#_CPPv4N5miaow17RealizationConfigE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Parsed realization used to build one task per feature. </p>
-<p>The supported realization format is SYMFLUENCE’s global NGEN realization with one <code class="docutils literal notranslate"><span class="pre">bmi_fortran</span></code> module and <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing. </p>
+<p>The supported realization format is a NextGen-style global realization with one <code class="docutils literal notranslate"><span class="pre">bmi_fortran</span></code> module and <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow23read_realization_configERKNSt6stringE">
 <span id="_CPPv3N5miaow23read_realization_configERKNSt6stringE"></span><span id="_CPPv2N5miaow23read_realization_configERKNSt6stringE"></span><span id="miaow::read_realization_config__ssCR"></span><span class="target" id="miaow__io_8hpp_1a5f9e0d6bfa1144c1cc742caf6fd1d975"></span><a class="reference internal" href="#_CPPv4N5miaow17RealizationConfigE" title="miaow::RealizationConfig"><span class="n"><span class="pre">RealizationConfig</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">read_realization_config</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">realization_path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow23read_realization_configERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Read a SYMFLUENCE NGEN realization file. </p>
+<dd><p>Read a NextGen-style realization file. </p>
 <p>Relative paths are resolved against the realization file’s parent directory. The parser expands sibling <code class="docutils literal notranslate"><span class="pre">catchments.geojson</span></code> features into realization feature tasks. </p>
 </dd></dl>
 
