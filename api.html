@@ -42,7 +42,7 @@
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow16SimulationUnitIdE">
 <span id="_CPPv3N5miaow16SimulationUnitIdE"></span><span id="_CPPv2N5miaow16SimulationUnitIdE"></span><span class="target" id="miaow_8hpp_1a22a5edda77ed85fd7ddb9376e5dbf68d"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">SimulationUnitId</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint64_t</span></span><a class="headerlink" href="#_CPPv4N5miaow16SimulationUnitIdE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Monotonic identifier assigned to each registered simulation unit. </p>
+<dd><p>Monotonic identifier assigned to each registered <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref"><span class="pre">SimulationUnit</span></span></a></code>. </p>
 </dd></dl>
 
 <dl class="cpp type">
@@ -77,7 +77,15 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow21task_status_to_stringE10TaskStatus">
 <span id="_CPPv3N5miaow21task_status_to_stringE10TaskStatus"></span><span id="_CPPv2N5miaow21task_status_to_stringE10TaskStatus"></span><span id="miaow::task_status_to_string__TaskStatus"></span><span class="target" id="miaow_8hpp_1a8585bf7e9c71acf651c80de9bd5caa84"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">task_status_to_string</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow10TaskStatusE" title="miaow::TaskStatus"><span class="n"><span class="pre">TaskStatus</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">status</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow21task_status_to_stringE10TaskStatus" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Convert task status to a stable string value. </p>
+<dd><p>Convert a <code class="docutils literal notranslate"><span class="pre">TaskStatus</span></code> to a stable string value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>status</strong> – <code class="docutils literal notranslate"><span class="pre">TaskStatus</span></code> enum value. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Stable string representation of <code class="docutils literal notranslate"><span class="pre">status</span></code>. </p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -87,17 +95,17 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow4TaskE">
 <span id="_CPPv3N5miaow4TaskE"></span><span id="_CPPv2N5miaow4TaskE"></span><span id="miaow::Task"></span><span class="target" id="structmiaow_1_1Task"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><a class="headerlink" href="#_CPPv4N5miaow4TaskE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Generic task input specification. </p>
-<p>Arguments are positional and interpreted by the concrete <a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref">SimulationUnit</span></a>. </p>
+<p>Arguments are positional and interpreted by the concrete <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref"><span class="pre">SimulationUnit</span></span></a></code>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE">
 <span id="_CPPv3N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE"></span><span id="_CPPv2N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE"></span><span id="miaow::Task::Task__SimulationUnitId.std::vector:caf::config_value:"></span><span class="target" id="structmiaow_1_1Task_1a8b043d8c3fbec87b07118e83209bcc43"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_simulation_unit_id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">caf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">config_value</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">task_args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct a <a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">Task</span></a> for a specific simulation unit from config values. </p>
+<dd><p>Construct a <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> for a specific simulation unit from config values. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_simulation_unit_id</strong> – Simulation unit ID for this task. </p></li>
+<li><p><strong>task_simulation_unit_id</strong> – <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> for this task. </p></li>
 <li><p><strong>task_args</strong> – Positional arguments for this task. </p></li>
 </ul>
 </dd>
@@ -107,12 +115,12 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE">
 <span id="_CPPv3N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE"></span><span id="_CPPv2N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE"></span><span id="miaow::Task::Task__SimulationUnitId.caf::config_value"></span><span class="target" id="structmiaow_1_1Task_1aed565658a2cc7a999faf5698f19b3efc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_simulation_unit_id</span></span>, <span class="n"><span class="pre">caf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">config_value</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct a <a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">Task</span></a> for a specific simulation unit from one config value. </p>
+<dd><p>Construct a <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> for a specific simulation unit from one config value. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_simulation_unit_id</strong> – Simulation unit ID for this task. </p></li>
-<li><p><strong>arg</strong> – Single config value for this task. </p></li>
+<li><p><strong>task_simulation_unit_id</strong> – <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> for this task. </p></li>
+<li><p><strong>arg</strong> – Single <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code> for this task. </p></li>
 </ul>
 </dd>
 </dl>
@@ -121,11 +129,11 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6stringE">
 <span id="_CPPv3N5miaow4Task4TaskE16SimulationUnitIdNSt6stringE"></span><span id="_CPPv2N5miaow4Task4TaskE16SimulationUnitIdNSt6stringE"></span><span id="miaow::Task::Task__SimulationUnitId.ss"></span><span class="target" id="structmiaow_1_1Task_1a50d402fafceea3979af39e4b3baeab4e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_simulation_unit_id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6stringE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct a <a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">Task</span></a> for a specific simulation unit from one string argument. </p>
+<dd><p>Construct a <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> for a specific simulation unit from one string. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_simulation_unit_id</strong> – Simulation unit ID for this task. </p></li>
+<li><p><strong>task_simulation_unit_id</strong> – <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> for this task. </p></li>
 <li><p><strong>arg</strong> – Single string argument for this task. </p></li>
 </ul>
 </dd>
@@ -135,11 +143,11 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt16initializer_listINSt6stringEEE">
 <span id="_CPPv3N5miaow4Task4TaskE16SimulationUnitIdNSt16initializer_listINSt6stringEEE"></span><span id="_CPPv2N5miaow4Task4TaskE16SimulationUnitIdNSt16initializer_listINSt6stringEEE"></span><span id="miaow::Task::Task__SimulationUnitId.std::initializer_list:ss:"></span><span class="target" id="structmiaow_1_1Task_1a95b8e73f22e5a2c5ff29fddffa98bfdf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_simulation_unit_id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">initializer_list</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">string_args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt16initializer_listINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct a <a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">Task</span></a> for a specific simulation unit from string arguments. </p>
+<dd><p>Construct a <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> for a specific simulation unit from string arguments. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_simulation_unit_id</strong> – Simulation unit ID for this task. </p></li>
+<li><p><strong>task_simulation_unit_id</strong> – <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> for this task. </p></li>
 <li><p><strong>string_args</strong> – Positional string arguments for this task. </p></li>
 </ul>
 </dd>
@@ -149,7 +157,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow4Task10string_argENSt6size_tE">
 <span id="_CPPv3NK5miaow4Task10string_argENSt6size_tE"></span><span id="_CPPv2NK5miaow4Task10string_argENSt6size_tE"></span><span id="miaow::Task::string_arg__std::sC"></span><span class="target" id="structmiaow_1_1Task_1ad29ec111fb9da0dcb566b45c6ad02215"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">string_arg</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arg_index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow4Task10string_argENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Return a string argument by index when present and typed as string. </p>
+<dd><p>Return a pointer to a string at a given positional argument index. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>arg_index</strong> – Positional argument index. </p>
@@ -166,7 +174,16 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResultE">
 <span id="_CPPv3N5miaow10TaskResultE"></span><span id="_CPPv2N5miaow10TaskResultE"></span><span id="miaow::TaskResult"></span><span class="target" id="structmiaow_1_1TaskResult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskResult</span></span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskResultE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Structured result payload returned for one task execution. </p>
+<dd><p>Structured result payload returned for one <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> execution. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">`Task`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">TaskStatus</span></code></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp struct">
@@ -178,7 +195,16 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow9JobResultE">
 <span id="_CPPv3N5miaow9JobResultE"></span><span id="_CPPv2N5miaow9JobResultE"></span><span id="miaow::JobResult"></span><span class="target" id="structmiaow_1_1JobResult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">JobResult</span></span></span><a class="headerlink" href="#_CPPv4N5miaow9JobResultE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Result payload returned when awaiting a <a class="reference internal" href="#classmiaow_1_1Runtime_1af2fea471a2191143bcaeda5bd7c9a72b"><span class="std std-ref">Runtime::submit_job</span></a> handle. </p>
+<dd><p>Result payload returned when awaiting a <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime_1af2fea471a2191143bcaeda5bd7c9a72b"><span class="std std-ref"><span class="pre">Runtime::submit_job()</span></span></a></code> handle. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">`Runtime`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref">`TaskResult`</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 </section>
@@ -188,7 +214,12 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow14SimulationUnitE">
 <span id="_CPPv3N5miaow14SimulationUnitE"></span><span id="_CPPv2N5miaow14SimulationUnitE"></span><span id="miaow::SimulationUnit"></span><span class="target" id="classmiaow_1_1SimulationUnit"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SimulationUnit</span></span></span><a class="headerlink" href="#_CPPv4N5miaow14SimulationUnitE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Base class for model-specific simulation units. </p>
-<p><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">Runtime</span></a> dispatch occurs through subclasses overriding <a class="reference internal" href="#classmiaow_1_1SimulationUnit_1a778ecf13149127cb94b9a7e1f2963f9b"><span class="std std-ref">execute()</span></a>. </p>
+<p><code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> dispatch occurs through subclasses overriding <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1SimulationUnit_1a778ecf13149127cb94b9a7e1f2963f9b"><span class="std std-ref"><span class="pre">execute()</span></span></a></code>.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">`Runtime`</span></a></p>
+</div>
+</p>
 <p>Subclassed by <a class="reference internal" href="#classmiaow_1_1BmiSimulationUnit"><span class="std std-ref">miaow::BmiSimulationUnit&lt; BmiModelType &gt;</span></a>, miaow::BmiSimulationUnit&lt; DynamicBmi&lt; Backend &gt; &gt;</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -196,12 +227,21 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow14SimulationUnit7executeERK4Task">
 <span id="_CPPv3N5miaow14SimulationUnit7executeERK4Task"></span><span id="_CPPv2N5miaow14SimulationUnit7executeERK4Task"></span><span id="miaow::SimulationUnit::execute__TaskCR"></span><span class="target" id="classmiaow_1_1SimulationUnit_1a778ecf13149127cb94b9a7e1f2963f9b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">execute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5miaow14SimulationUnit7executeERK4Task" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Execute the simulation unit for a single task. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">`Task`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref">`TaskResult`</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task</strong> – Generic task arguments. </p>
+<dd class="field-odd"><p><strong>task</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Structured result for this execution. </p>
+<dd class="field-even"><p>Structured <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> for this execution.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -212,34 +252,48 @@
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow22SimulationUnitExecutorE">
 <span id="_CPPv3N5miaow22SimulationUnitExecutorE"></span><span id="_CPPv2N5miaow22SimulationUnitExecutorE"></span><span class="target" id="miaow_8hpp_1a198a54ad160f036e67cd4be7e3af6ef5"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">SimulationUnitExecutor</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5miaow22SimulationUnitExecutorE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Callable behaviour used by each simulation_unit_actor. </p>
-<p>The executor receives generic task arguments and returns a structured result. </p>
+<dd><p>Callable behaviour used by each <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code>. </p>
+<p>The executor receives generic task arguments and returns a structured result.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">`Task`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref">`TaskResult`</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow22SimulationUnitRegistryE">
 <span id="_CPPv3N5miaow22SimulationUnitRegistryE"></span><span id="_CPPv2N5miaow22SimulationUnitRegistryE"></span><span id="miaow::SimulationUnitRegistry"></span><span class="target" id="classmiaow_1_1SimulationUnitRegistry"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SimulationUnitRegistry</span></span></span><a class="headerlink" href="#_CPPv4N5miaow22SimulationUnitRegistryE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Registry for simulation unit executors. </p>
-<p>Tracks <code class="docutils literal notranslate"><span class="pre">simulation_unit_id</span> <span class="pre">-&gt;</span> <span class="pre">executor</span></code> for runtime task routing. </p>
+<p>Tracks <code class="docutils literal notranslate"><span class="pre">simulation_unit_id</span> <span class="pre">-&gt;</span> <span class="pre">executor</span></code> for runtime task routing.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">SimulationUnitExecutor</span></code></p>
+</div>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0DpEN5miaow22SimulationUnitRegistry3addE16SimulationUnitIdDp15ConstructorArgs">
 <span id="_CPPv3I0DpEN5miaow22SimulationUnitRegistry3addEDp15ConstructorArgs"></span><span id="_CPPv2I0DpEN5miaow22SimulationUnitRegistry3addEDp15ConstructorArgs"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SimulationUnitType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">ConstructorArgs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classmiaow_1_1SimulationUnitRegistry_1a4af1228ea253a64a010efef5ba298144"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN5miaow22SimulationUnitRegistry3addE16SimulationUnitIdDp15ConstructorArgs" title="miaow::SimulationUnitRegistry::add::ConstructorArgs"><span class="n"><span class="pre">ConstructorArgs</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">constructor_args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN5miaow22SimulationUnitRegistry3addE16SimulationUnitIdDp15ConstructorArgs" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Register a concrete <a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref">SimulationUnit</span></a> type and return its assigned ID. </p>
-<p>Builds an executor that constructs a fresh SimulationUnitType for each task.</p>
+<dd><p>Register a concrete <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref"><span class="pre">SimulationUnit</span></span></a></code> type and return its assigned ID. </p>
+<p>Builds an executor that constructs a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnitType</span></code> for each task.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>SimulationUnitType</strong> – Concrete simulation unit type. </p></li>
-<li><p><strong>ConstructorArgs</strong> – Constructor argument types for SimulationUnitType. </p></li>
+<li><p><strong>SimulationUnitType</strong> – Concrete <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref"><span class="pre">SimulationUnit</span></span></a></code> type. </p></li>
+<li><p><strong>ConstructorArgs</strong> – Constructor argument types for <code class="docutils literal notranslate"><span class="pre">SimulationUnitType</span></code>. </p></li>
 </ul>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>constructor_args</strong> – Arguments forwarded to SimulationUnitType constructor. </p>
+<dd class="field-even"><p><strong>constructor_args</strong> – Arguments forwarded to <code class="docutils literal notranslate"><span class="pre">SimulationUnitType</span></code> constructor. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SimulationUnitId assigned to this registered unit. </p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> assigned to this registered unit. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -248,18 +302,28 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow22SimulationUnitRegistry5emptyEv">
 <span id="_CPPv3NK5miaow22SimulationUnitRegistry5emptyEv"></span><span id="_CPPv2NK5miaow22SimulationUnitRegistry5emptyEv"></span><span id="miaow::SimulationUnitRegistry::emptyC"></span><span class="target" id="classmiaow_1_1SimulationUnitRegistry_1a9f62d96aef73c0da32692150c05b7359"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">empty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow22SimulationUnitRegistry5emptyEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Return true when no simulation units have been registered. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true when the registry contains no simulation units. </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow22SimulationUnitRegistry13find_executorE16SimulationUnitId">
 <span id="_CPPv3NK5miaow22SimulationUnitRegistry13find_executorE16SimulationUnitId"></span><span id="_CPPv2NK5miaow22SimulationUnitRegistry13find_executorE16SimulationUnitId"></span><span id="miaow::SimulationUnitRegistry::find_executor__SimulationUnitIdC"></span><span class="target" id="classmiaow_1_1SimulationUnitRegistry_1a69d6181929582d14f5a3a740055c28d9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow22SimulationUnitExecutorE" title="miaow::SimulationUnitExecutor"><span class="n"><span class="pre">SimulationUnitExecutor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">find_executor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulation_unit_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow22SimulationUnitRegistry13find_executorE16SimulationUnitId" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Look up executor for a simulation unit ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">SimulationUnitExecutor</span></code></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>simulation_unit_id</strong> – Registered ID to resolve. </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Pointer to executor, or null when ID is unknown. </p>
+<dd class="field-even"><p>Pointer to executor, or null when ID is unknown.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,7 +335,12 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow14RuntimeOptionsE">
 <span id="_CPPv3N5miaow14RuntimeOptionsE"></span><span id="_CPPv2N5miaow14RuntimeOptionsE"></span><span id="miaow::RuntimeOptions"></span><span class="target" id="structmiaow_1_1RuntimeOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RuntimeOptions</span></span></span><a class="headerlink" href="#_CPPv4N5miaow14RuntimeOptionsE" title="Link to this definition">¶</a><br /></dt>
 <dd><p><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">Runtime</span></a> options for model-independent orchestration behaviour. </p>
-<p>Solver-specific options should be passed in task arguments and not included here. </p>
+<p>Solver-specific options should be passed in <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">`Task`</span></a></p>
+</div>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -284,7 +353,7 @@
 <li><p><strong>workers</strong> – Desired worker count. Values of zero are clamped to one. </p></li>
 <li><p><strong>task_timeout</strong> – Timeout used for one simulation task request. </p></li>
 <li><p><strong>job_timeout</strong> – Timeout used for whole-job requests. </p></li>
-<li><p><strong>output_root</strong> – Root directory for runtime-managed task output folders. Empty string (default) disables all file output. </p></li>
+<li><p><strong>output_root</strong> – Root directory for runtime-managed <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> output folders. Empty string (default) disables all file output. </p></li>
 <li><p><strong>realization_path</strong> – Path to a realization file. Empty string (default) lets realization-driven callers fall back to their own default. </p></li>
 </ul>
 </dd>
@@ -297,17 +366,20 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow7RuntimeE">
 <span id="_CPPv3N5miaow7RuntimeE"></span><span id="_CPPv2N5miaow7RuntimeE"></span><span id="miaow::Runtime"></span><span class="target" id="classmiaow_1_1Runtime"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><a class="headerlink" href="#_CPPv4N5miaow7RuntimeE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Actor runtime for orchestrating simulation tasks. </p>
+<dd><p>Actor runtime for orchestrating simulation <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code>s. </p>
 <p>The runtime is model-agnostic and thread-safe. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry">
 <span id="_CPPv3N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry"></span><span id="_CPPv2N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry"></span><span id="miaow::Runtime::Runtime__SimulationUnitRegistryCR"></span><span class="target" id="classmiaow_1_1Runtime_1a5e6e5ee2bff8a5317c7618d1f75a2e1a"></span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow22SimulationUnitRegistryE" title="miaow::SimulationUnitRegistry"><span class="n"><span class="pre">SimulationUnitRegistry</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">simulation_unit_registry</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct runtime from a simulation unit registry with default options. </p>
+<dd><p>Construct <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> from a registry with default options. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>simulation_unit_registry</strong> – Registry mapping simulation_unit_id to executor. </p>
+<dd class="field-odd"><p><strong>simulation_unit_registry</strong> – Registry mapping <code class="docutils literal notranslate"><span class="pre">simulation_unit_id</span></code> to executor. </p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">simulation_unit_registry</span></code> is empty. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -315,13 +387,16 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions">
 <span id="_CPPv3N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions"></span><span id="_CPPv2N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions"></span><span id="miaow::Runtime::Runtime__SimulationUnitRegistryCR.RuntimeOptions"></span><span class="target" id="classmiaow_1_1Runtime_1a959dc81b83fa0bcfe8beec387281e64d"></span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow22SimulationUnitRegistryE" title="miaow::SimulationUnitRegistry"><span class="n"><span class="pre">SimulationUnitRegistry</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">simulation_unit_registry</span></span>, <a class="reference internal" href="#_CPPv4N5miaow14RuntimeOptionsE" title="miaow::RuntimeOptions"><span class="n"><span class="pre">RuntimeOptions</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">options</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct runtime from a simulation unit registry and options. </p>
+<dd><p>Construct <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> from a registry and options. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>simulation_unit_registry</strong> – Registry mapping simulation_unit_id to executor. </p></li>
-<li><p><strong>options</strong> – <a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">Runtime</span></a> scheduling and timeout options. </p></li>
+<li><p><strong>simulation_unit_registry</strong> – Registry mapping <code class="docutils literal notranslate"><span class="pre">simulation_unit_id</span></code> to executor. </p></li>
+<li><p><strong>options</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> scheduling and timeout options. </p></li>
 </ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">simulation_unit_registry</span></code> is empty. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -329,13 +404,16 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow7Runtime10submit_jobERK4Task">
 <span id="_CPPv3NK5miaow7Runtime10submit_jobERK4Task"></span><span id="_CPPv2NK5miaow7Runtime10submit_jobERK4Task"></span><span id="miaow::Runtime::submit_job__TaskCRC"></span><span class="target" id="classmiaow_1_1Runtime_1af2fea471a2191143bcaeda5bd7c9a72b"></span><span class="n"><span class="pre">JobHandle</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit_job</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow7Runtime10submit_jobERK4Task" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Submit one task as an asynchronous job. </p>
+<dd><p>Submit one <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> as an asynchronous job. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task</strong> – Generic task arguments. </p>
+<dd class="field-odd"><p><strong>task</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Handle for collecting task messages and diagnostics. </p>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if runtime output directories cannot be created. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for collecting task messages and diagnostics. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -343,14 +421,17 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE">
 <span id="_CPPv3NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE"></span><span id="_CPPv2NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE"></span><span id="miaow::Runtime::submit_job__std::vector:Task:CRC"></span><span class="target" id="classmiaow_1_1Runtime_1a5432c6b595dfcc4ccad506ea8e9a0f36"></span><span class="n"><span class="pre">JobHandle</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit_job</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tasks</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Submit a multi-task asynchronous job (copy path). </p>
+<dd><p>Submit a multi-task asynchronous job with copied tasks. </p>
 <p>This <code class="docutils literal notranslate"><span class="pre">const&amp;</span></code> overload accepts caller-owned vectors (lvalues) and copies tasks so the caller keeps ownership unchanged. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tasks</strong> – Generic task arguments. </p>
+<dd class="field-odd"><p><strong>tasks</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Handle for collecting task messages and diagnostics. </p>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if runtime output directories cannot be created. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for collecting task messages and diagnostics. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -358,14 +439,17 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE">
 <span id="_CPPv3NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE"></span><span id="_CPPv2NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE"></span><span id="miaow::Runtime::submit_job__std::vector:Task:RRC"></span><span class="target" id="classmiaow_1_1Runtime_1a907159840cbd19d588eb24abfca38be9"></span><span class="n"><span class="pre">JobHandle</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit_job</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tasks</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Submit a multi-task asynchronous job (move path). </p>
-<p>This <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> overload accepts rvalues (temporaries or <code class="docutils literal notranslate"><span class="pre">std::move(...)</span></code>) and transfers task ownership into <a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">Runtime</span></a> to avoid an extra copy. </p>
+<dd><p>Submit a multi-task asynchronous job with moved tasks. </p>
+<p>This <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> overload accepts rvalues (temporaries or <code class="docutils literal notranslate"><span class="pre">std::move(...)</span></code>) and transfers task ownership into <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> to avoid an extra copy. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tasks</strong> – Generic task arguments. </p>
+<dd class="field-odd"><p><strong>tasks</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Handle for collecting task messages and diagnostics. </p>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if runtime output directories cannot be created. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for collecting task messages and diagnostics. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -416,18 +500,25 @@
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow13DynamicCppBmiE">
 <span id="_CPPv3N5miaow13DynamicCppBmiE"></span><span id="_CPPv2N5miaow13DynamicCppBmiE"></span><span class="target" id="miaow__bmi_8hpp_1a2e98066b176a9c7658b4931758cba66a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">DynamicCppBmi</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4IEN5miaow10DynamicBmiIN17DynamicBmiBackend3cppEEE" title="miaow::DynamicBmi&lt;DynamicBmiBackend::cpp&gt;"><span class="n"><span class="pre">DynamicBmi</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackendE" title="miaow::DynamicBmiBackend"><span class="n"><span class="pre">DynamicBmiBackend</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackend3cppE" title="miaow::DynamicBmiBackend::cpp"><span class="n"><span class="pre">cpp</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5miaow13DynamicCppBmiE" title="Link to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Alias for <code class="docutils literal notranslate"><span class="pre">DynamicBmi</span></code> using the C++ plugin backend. </p>
+</dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow17DynamicFortranBmiE">
 <span id="_CPPv3N5miaow17DynamicFortranBmiE"></span><span id="_CPPv2N5miaow17DynamicFortranBmiE"></span><span class="target" id="miaow__bmi_8hpp_1a6fffb8e53e7c43a1f28713639c67acc6"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">DynamicFortranBmi</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4IEN5miaow10DynamicBmiIN17DynamicBmiBackend7fortranEEE" title="miaow::DynamicBmi&lt;DynamicBmiBackend::fortran&gt;"><span class="n"><span class="pre">DynamicBmi</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackendE" title="miaow::DynamicBmiBackend"><span class="n"><span class="pre">DynamicBmiBackend</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackend7fortranE" title="miaow::DynamicBmiBackend::fortran"><span class="n"><span class="pre">fortran</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5miaow17DynamicFortranBmiE" title="Link to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Alias for <code class="docutils literal notranslate"><span class="pre">DynamicBmi</span></code> using the Fortran plugin backend. </p>
+</dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4IEN5miaow10DynamicBmiIN17DynamicBmiBackend3cppEEE">
 <span id="_CPPv3IEN5miaow10DynamicBmiIN17DynamicBmiBackend3cppEEE"></span><span id="_CPPv2IEN5miaow10DynamicBmiIN17DynamicBmiBackend3cppEEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classmiaow_1_1DynamicBmi_3_01DynamicBmiBackend_1_1cpp_01_4"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DynamicBmi</span></span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackendE" title="miaow::DynamicBmiBackend"><span class="n"><span class="pre">DynamicBmiBackend</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackend3cppE" title="miaow::DynamicBmiBackend::cpp"><span class="n"><span class="pre">cpp</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">bmi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Bmi</span></span><a class="headerlink" href="#_CPPv4IEN5miaow10DynamicBmiIN17DynamicBmiBackend3cppEEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>C++ BMI model backed by a dynamically loaded C++ BMI plugin. </p>
-<p>The plugin must export <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code>. These symbols may be renamed through constructor arguments. </p>
+<dd><p>BMI model backed by a dynamically loaded C++ BMI plugin. </p>
+<p>The plugin must export <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code>. These symbols may be renamed through constructor arguments.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">DynamicBmiBackend</span></code></p>
+</div>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -436,7 +527,14 @@
 <dd><p>Open a dynamic C++ BMI plugin from an explicit filesystem path. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>plugin_path</strong> – Path passed directly to the platform dynamic loader. </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plugin_path</strong> – Path passed directly to the platform dynamic loader. </p></li>
+<li><p><strong>create_function</strong> – Exported function used to create the BMI model. </p></li>
+<li><p><strong>destroy_function</strong> – Exported function used to destroy the BMI model. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the plugin path or required symbols are invalid, or if model creation fails. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -447,8 +545,13 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4IEN5miaow10DynamicBmiIN17DynamicBmiBackend7fortranEEE">
 <span id="_CPPv3IEN5miaow10DynamicBmiIN17DynamicBmiBackend7fortranEEE"></span><span id="_CPPv2IEN5miaow10DynamicBmiIN17DynamicBmiBackend7fortranEEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classmiaow_1_1DynamicBmi_3_01DynamicBmiBackend_1_1fortran_01_4"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DynamicBmi</span></span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackendE" title="miaow::DynamicBmiBackend"><span class="n"><span class="pre">DynamicBmiBackend</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackend7fortranE" title="miaow::DynamicBmiBackend::fortran"><span class="n"><span class="pre">fortran</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">bmi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Bmi</span></span><a class="headerlink" href="#_CPPv4IEN5miaow10DynamicBmiIN17DynamicBmiBackend7fortranEEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>C++ BMI model backed by a dynamically loaded Fortran BMI plugin. </p>
-<p>The plugin must export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked NOAA-OWP procedural BMI bridge. If the plugin exports <code class="docutils literal notranslate"><span class="pre">unregister_bmi(void**)</span></code>, MIAOW calls it after BMI finalization. </p>
+<dd><p>BMI model backed by a dynamically loaded Fortran BMI plugin. </p>
+<p>The plugin must export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked NOAA-OWP procedural BMI bridge. If the plugin exports <code class="docutils literal notranslate"><span class="pre">unregister_bmi(void**)</span></code>, MIAOW calls it after BMI finalization.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">DynamicBmiBackend</span></code></p>
+</div>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -458,6 +561,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>plugin_path</strong> – Path passed directly to the platform dynamic loader. </p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the plugin path is invalid or <code class="docutils literal notranslate"><span class="pre">register_bmi</span></code> cannot be resolved. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -471,15 +577,44 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow17execute_bmi_modelERN7bmi_api3BmiERK4Task">
 <span id="_CPPv3N5miaow17execute_bmi_modelERN7bmi_api3BmiERK4Task"></span><span id="_CPPv2N5miaow17execute_bmi_modelERN7bmi_api3BmiERK4Task"></span><span id="miaow::execute_bmi_model__bmi_api::BmiR.TaskCR"></span><span class="target" id="miaow__bmi_8hpp_1ad876b180f25e5e4f6557b7a9fc9c2bcf"></span><a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">execute_bmi_model</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">bmi_api</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Bmi</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow17execute_bmi_modelERN7bmi_api3BmiERK4Task" title="Link to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Execute a complete BMI model lifecycle for one task. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">`Task`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref">`TaskResult`</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – BMI-compatible model object to initialize and execute. </p></li>
+<li><p><strong>task</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> input containing model config, forcing, and output paths. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the task specification, forcing setup, or BMI model lifecycle fails.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Structured <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> for the BMI task execution. </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5miaow17BmiSimulationUnitE">
 <span id="_CPPv3I0EN5miaow17BmiSimulationUnitE"></span><span id="_CPPv2I0EN5miaow17BmiSimulationUnitE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BmiModelType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classmiaow_1_1BmiSimulationUnit"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BmiSimulationUnit</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5miaow14SimulationUnitE" title="miaow::SimulationUnit"><span class="n"><span class="pre">SimulationUnit</span></span></a><a class="headerlink" href="#_CPPv4I0EN5miaow17BmiSimulationUnitE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Simulation unit that runs a complete BMI model lifecycle. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classmiaow_1_1SimulationUnit"><span class="std std-ref">`SimulationUnit`</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>BmiModelType</strong> – BMI model type derived from bmi_api::Bmi. </p>
+<dd class="field-odd"><p><strong>BmiModelType</strong> – BMI model type derived from <code class="docutils literal notranslate"><span class="pre">bmi_api::Bmi</span></code>.</p>
 </dd>
 </dl>
 <div class="breathe-sectiondef docutils container">
@@ -495,8 +630,11 @@
 <span id="_CPPv3IDpEN5miaow17BmiSimulationUnit17BmiSimulationUnitEDp15ConstructorArgs"></span><span id="_CPPv2IDpEN5miaow17BmiSimulationUnit17BmiSimulationUnitEDp15ConstructorArgs"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">ConstructorArgs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classmiaow_1_1BmiSimulationUnit_1af7d57e50168f97b9d04464988025209c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BmiSimulationUnit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDpEN5miaow17BmiSimulationUnit17BmiSimulationUnitEDp15ConstructorArgs" title="miaow::BmiSimulationUnit::BmiSimulationUnit::ConstructorArgs"><span class="n"><span class="pre">ConstructorArgs</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">constructor_args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5miaow17BmiSimulationUnit17BmiSimulationUnitEDp15ConstructorArgs" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Store constructor arguments for each per-task BMI model instance. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>constructor_args</strong> – Arguments forwarded to the BMI model constructor. </p>
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ConstructorArgs</strong> – Constructor argument types for <code class="docutils literal notranslate"><span class="pre">BmiModelType</span></code>. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>constructor_args</strong> – Arguments forwarded to the BMI model constructor. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -504,13 +642,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow17BmiSimulationUnit7executeERK4Task">
 <span id="_CPPv3N5miaow17BmiSimulationUnit7executeERK4Task"></span><span id="_CPPv2N5miaow17BmiSimulationUnit7executeERK4Task"></span><span id="miaow::BmiSimulationUnit::execute__TaskCR"></span><span class="target" id="classmiaow_1_1BmiSimulationUnit_1a5f33d0919ebe5e6ffddad4a77b695e3c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">execute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5miaow17BmiSimulationUnit7executeERK4Task" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Execute the simulation unit for a single task. </p>
+<dd><p>Execute a BMI model instance for a single task. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task</strong> – Generic task arguments. </p>
+<dd class="field-odd"><p><strong>task</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> input containing model config, forcing, and output paths. </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Structured result for this execution. </p>
+<dd class="field-even"><p>Structured <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> for this BMI task execution. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -522,6 +660,35 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow39execute_dynamic_bmi_model_in_subprocessE17DynamicBmiBackendRKNSt6stringERK4TaskRKNSt6stringERKNSt6stringE">
 <span id="_CPPv3N5miaow39execute_dynamic_bmi_model_in_subprocessE17DynamicBmiBackendRKNSt6stringERK4TaskRKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N5miaow39execute_dynamic_bmi_model_in_subprocessE17DynamicBmiBackendRKNSt6stringERK4TaskRKNSt6stringERKNSt6stringE"></span><span id="miaow::execute_dynamic_bmi_model_in_subprocess__DynamicBmiBackend.ssCR.TaskCR.ssCR.ssCR"></span><span class="target" id="miaow__bmi_8hpp_1ae0c109b3ef43ebc551d5fd2c4cc1c520"></span><a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">execute_dynamic_bmi_model_in_subprocess</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow17DynamicBmiBackendE" title="miaow::DynamicBmiBackend"><span class="n"><span class="pre">DynamicBmiBackend</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">backend</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plugin_path</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">create_function</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;bmi_model_create&quot;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">destroy_function</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;bmi_model_destroy&quot;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow39execute_dynamic_bmi_model_in_subprocessE17DynamicBmiBackendRKNSt6stringERK4TaskRKNSt6stringERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Execute one dynamic BMI task in a subprocess. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">DynamicBmiBackend</span></code></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref">`TaskResult`</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backend</strong> – <code class="docutils literal notranslate"><span class="pre">DynamicBmiBackend</span></code> implemented by the plugin. </p></li>
+<li><p><strong>plugin_path</strong> – Path passed to the subprocess dynamic loader. </p></li>
+<li><p><strong>task</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> input containing model config, forcing, and output paths. </p></li>
+<li><p><strong>create_function</strong> – C++ plugin function used to create the BMI model. </p></li>
+<li><p><strong>destroy_function</strong> – C++ plugin function used to destroy the BMI model. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the task specification or subprocess execution setup fails. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if subprocess control paths cannot be resolved or created.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Structured <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> for the subprocess BMI task execution. </p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -531,28 +698,76 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow18RealizationFeatureE">
 <span id="_CPPv3N5miaow18RealizationFeatureE"></span><span id="_CPPv2N5miaow18RealizationFeatureE"></span><span id="miaow::RealizationFeature"></span><span class="target" id="structmiaow_1_1RealizationFeature"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizationFeature</span></span></span><a class="headerlink" href="#_CPPv4N5miaow18RealizationFeatureE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>One feature entry from a realization file. </p>
-<p>NextGen-style realizations are expanded into one Fortran BMI task input per catchment. Realization-driven C++ BMI modules are not supported yet. </p>
+<dd><p>One feature entry from a BMI realization file. </p>
+<p>NextGen-style realizations are expanded into one Fortran BMI <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> input per catchment. Realization-driven C++ BMI modules are not supported yet.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1RealizationConfig"><span class="std std-ref">`RealizationConfig`</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow17RealizationConfigE">
 <span id="_CPPv3N5miaow17RealizationConfigE"></span><span id="_CPPv2N5miaow17RealizationConfigE"></span><span id="miaow::RealizationConfig"></span><span class="target" id="structmiaow_1_1RealizationConfig"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizationConfig</span></span></span><a class="headerlink" href="#_CPPv4N5miaow17RealizationConfigE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Parsed realization used to build one task per feature. </p>
-<p>The supported realization format is a NextGen-style global realization with one <code class="docutils literal notranslate"><span class="pre">bmi_fortran</span></code> module and <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing. </p>
+<dd><p>Parsed BMI realization used to build one <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> per feature. </p>
+<p>The supported realization format is a NextGen-style global realization with one <code class="docutils literal notranslate"><span class="pre">bmi_fortran</span></code> module and <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">build_bmi_realization_tasks()</span></code></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow17RealizationConfig17RealizationConfigERKNSt6stringE">
+<span id="_CPPv3N5miaow17RealizationConfig17RealizationConfigERKNSt6stringE"></span><span id="_CPPv2N5miaow17RealizationConfig17RealizationConfigERKNSt6stringE"></span><span id="miaow::RealizationConfig::RealizationConfig__ssCR"></span><span class="target" id="structmiaow_1_1RealizationConfig_1a30ccf2cdac3e2386b4602e00f485d4b9"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizationConfig</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">realization_path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow17RealizationConfig17RealizationConfigERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a parsed realization from a NextGen-style file. </p>
+<p>Relative paths are resolved against the realization file’s parent directory. The parser expands sibling <code class="docutils literal notranslate"><span class="pre">catchments.geojson</span></code> features into realization feature <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code>s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>realization_path</strong> – Path to a NextGen-style realization file. </p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the realization is malformed or references missing or unusable files. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if a referenced path cannot be resolved or inspected. </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5miaow23read_realization_configERKNSt6stringE">
-<span id="_CPPv3N5miaow23read_realization_configERKNSt6stringE"></span><span id="_CPPv2N5miaow23read_realization_configERKNSt6stringE"></span><span id="miaow::read_realization_config__ssCR"></span><span class="target" id="miaow__io_8hpp_1a5f9e0d6bfa1144c1cc742caf6fd1d975"></span><a class="reference internal" href="#_CPPv4N5miaow17RealizationConfigE" title="miaow::RealizationConfig"><span class="n"><span class="pre">RealizationConfig</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">read_realization_config</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">realization_path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow23read_realization_configERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Read a NextGen-style realization file. </p>
-<p>Relative paths are resolved against the realization file’s parent directory. The parser expands sibling <code class="docutils literal notranslate"><span class="pre">catchments.geojson</span></code> features into realization feature tasks. </p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow27build_bmi_realization_tasksERK17RealizationConfigR22SimulationUnitRegistry16BmiExecutionMode">
 <span id="_CPPv3N5miaow27build_bmi_realization_tasksERK17RealizationConfigR22SimulationUnitRegistry16BmiExecutionMode"></span><span id="_CPPv2N5miaow27build_bmi_realization_tasksERK17RealizationConfigR22SimulationUnitRegistry16BmiExecutionMode"></span><span id="miaow::build_bmi_realization_tasks__RealizationConfigCR.SimulationUnitRegistryR.BmiExecutionMode"></span><span class="target" id="miaow__bmi_8hpp_1a0551c9f73ab0b8f3daa5e8e95c0dc719"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">build_bmi_realization_tasks</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow17RealizationConfigE" title="miaow::RealizationConfig"><span class="n"><span class="pre">RealizationConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">realization</span></span>, <a class="reference internal" href="#_CPPv4N5miaow22SimulationUnitRegistryE" title="miaow::SimulationUnitRegistry"><span class="n"><span class="pre">SimulationUnitRegistry</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">registry</span></span>, <a class="reference internal" href="#_CPPv4N5miaow16BmiExecutionModeE" title="miaow::BmiExecutionMode"><span class="n"><span class="pre">BmiExecutionMode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">execution_mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow16BmiExecutionModeE" title="miaow::BmiExecutionMode"><span class="n"><span class="pre">BmiExecutionMode</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5miaow16BmiExecutionMode10subprocessE" title="miaow::BmiExecutionMode::subprocess"><span class="n"><span class="pre">subprocess</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow27build_bmi_realization_tasksERK17RealizationConfigR22SimulationUnitRegistry16BmiExecutionMode" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Register dynamic Fortran BMI units and build realization feature tasks. </p>
+<dd><p>Register dynamic Fortran BMI units and build realization feature <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code>s. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1RealizationConfig"><span class="std std-ref">`RealizationConfig`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">`Runtime`</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>realization</strong> – Parsed BMI <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1RealizationConfig"><span class="std std-ref"><span class="pre">RealizationConfig</span></span></a></code>. </p></li>
+<li><p><strong>registry</strong> – Registry receiving one unit per unique BMI library path. </p></li>
+<li><p><strong>execution_mode</strong> – Process isolation mode used by each dynamic BMI task. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if a feature contains invalid forcing task inputs.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code>s ready to submit through <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime_1af2fea471a2191143bcaeda5bd7c9a72b"><span class="std std-ref"><span class="pre">Runtime::submit_job()</span></span></a></code>. </p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -562,18 +777,62 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow17print_diagnosticsERK14JobDiagnostics5JobId">
 <span id="_CPPv3N5miaow17print_diagnosticsERK14JobDiagnostics5JobId"></span><span id="_CPPv2N5miaow17print_diagnosticsERK14JobDiagnostics5JobId"></span><span id="miaow::print_diagnostics__JobDiagnosticsCR.JobId"></span><span class="target" id="miaow__io_8hpp_1a8b9e5567ee8286f798dd902e2cb4da05"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">print_diagnostics</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow14JobDiagnosticsE" title="miaow::JobDiagnostics"><span class="n"><span class="pre">JobDiagnostics</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">diagnostics</span></span>, <a class="reference internal" href="#_CPPv4N5miaow5JobIdE" title="miaow::JobId"><span class="n"><span class="pre">JobId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">job_id</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow17print_diagnosticsERK14JobDiagnostics5JobId" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Print diagnostics to stdout. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1JobDiagnostics"><span class="std std-ref">`JobDiagnostics`</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>diagnostics</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobDiagnostics"><span class="std std-ref"><span class="pre">JobDiagnostics</span></span></a></code> payload to print. </p></li>
+<li><p><strong>job_id</strong> – <code class="docutils literal notranslate"><span class="pre">JobId</span></code> included in the printed header.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow18print_task_resultsERK9JobResult">
 <span id="_CPPv3N5miaow18print_task_resultsERK9JobResult"></span><span id="_CPPv2N5miaow18print_task_resultsERK9JobResult"></span><span id="miaow::print_task_results__JobResultCR"></span><span class="target" id="miaow__io_8hpp_1a5d9682c4a609f3ab3efdf1dbd924965f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">print_task_results</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobResultE" title="miaow::JobResult"><span class="n"><span class="pre">JobResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow18print_task_resultsERK9JobResult" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Print all task results in a job to stdout. </p>
+<dd><p>Print all <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code>s in a job to stdout. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1JobResult"><span class="std std-ref">`JobResult`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref">`TaskResult`</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>job_result</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobResult"><span class="std std-ref"><span class="pre">JobResult</span></span></a></code> payload containing task results to print.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow19all_tasks_succeededERK9JobResult">
 <span id="_CPPv3N5miaow19all_tasks_succeededERK9JobResult"></span><span id="_CPPv2N5miaow19all_tasks_succeededERK9JobResult"></span><span id="miaow::all_tasks_succeeded__JobResultCR"></span><span class="target" id="miaow__io_8hpp_1af7804277e4eeb764cf3cc526783ca9be"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">all_tasks_succeeded</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobResultE" title="miaow::JobResult"><span class="n"><span class="pre">JobResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow19all_tasks_succeededERK9JobResult" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Return true when every task result in a job succeeded. </p>
+<dd><p>Return true when every <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> in a job succeeded. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1JobResult"><span class="std std-ref">`JobResult`</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="docutils literal notranslate"><span class="pre">TaskStatus</span></code></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>job_result</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobResult"><span class="std std-ref"><span class="pre">JobResult</span></span></a></code> payload to inspect. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>true when every task status is <code class="docutils literal notranslate"><span class="pre">TaskStatus::succeeded</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -582,6 +841,15 @@
 <dd><p>Validate that an example is running from its required working directory. </p>
 <p>On mismatch, prints an actionable error message with the expected and current directories and a suggested <code class="docutils literal notranslate"><span class="pre">cd</span></code> command.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>executable_name</strong> – Executable name included in diagnostic output. </p></li>
+<li><p><strong>expected_run_dir</strong> – Required current working directory. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if the current working directory cannot be resolved. </p>
+</dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>true when the current directory matches <code class="docutils literal notranslate"><span class="pre">expected_run_dir</span></code>, false otherwise. </p>
 </dd>
@@ -600,9 +868,21 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">--realization</span> <span class="pre">&lt;path&gt;</span></code> (used by realization-driven workflows; left empty when absent so callers may substitute their own default)</p></li>
 </ul>
 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structmiaow_1_1RuntimeOptions"><span class="std std-ref">`RuntimeOptions`</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if an argument is unrecognized, missing a value, or has an invalid value. </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>argc</strong> – Number of CLI arguments. </p></li>
+<li><p><strong>argv</strong> – CLI argument vector. </p></li>
+<li><p><strong>runtime_options</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1RuntimeOptions"><span class="std std-ref"><span class="pre">RuntimeOptions</span></span></a></code> updated from parsed arguments. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if an argument is unrecognized, missing a value, or has an invalid value.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -611,7 +891,25 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow33write_repeated_hourly_forcing_csvERKNSt6stringERKNSt6stringENSt6size_tE">
 <span id="_CPPv3N5miaow33write_repeated_hourly_forcing_csvERKNSt6stringERKNSt6stringENSt6size_tE"></span><span id="_CPPv2N5miaow33write_repeated_hourly_forcing_csvERKNSt6stringERKNSt6stringENSt6size_tE"></span><span id="miaow::write_repeated_hourly_forcing_csv__ssCR.ssCR.std::s"></span><span class="target" id="miaow__io_8hpp_1ab95184e52eec1393082b960eccdcc991"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">write_repeated_hourly_forcing_csv</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">source_path</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output_filename</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">total_rows</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow33write_repeated_hourly_forcing_csvERKNSt6stringERKNSt6stringENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Write a generated forcing CSV by repeating one hourly source cycle. </p>
-<p>The source CSV must define its timestamp in the first column, followed by one or more data columns. The generated file is written under the system temporary directory using <code class="docutils literal notranslate"><span class="pre">output_filename</span></code>. </p>
+<p>The source CSV must define its timestamp in the first column, followed by one or more data columns. The generated file is written under the system temporary directory using <code class="docutils literal notranslate"><span class="pre">output_filename</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_path</strong> – Source CSV path. </p></li>
+<li><p><strong>output_filename</strong> – Filename used under the system temporary directory. </p></li>
+<li><p><strong>total_rows</strong> – Number of rows to write to the generated forcing CSV. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the source CSV is missing, malformed, or cannot be written to the generated output path. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if the temporary output path cannot be resolved. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Filesystem path to the generated forcing CSV. </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -619,7 +917,20 @@
 <span id="_CPPv3N5miaow19make_forcing_configERKNSt6stringERKNSt3mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2N5miaow19make_forcing_configERKNSt6stringERKNSt3mapINSt6stringENSt6stringEEE"></span><span id="miaow::make_forcing_config__ssCR.std::map:ss.ss:CR"></span><span class="target" id="miaow__io_8hpp_1aee1c8f1b0913a63fb0f093e6c6b72bd9"></span><span class="n"><span class="pre">caf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">config_value</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_forcing_config</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">forcing_file</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">variables_names_map</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow19make_forcing_configERKNSt6stringERKNSt3mapINSt6stringENSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Build the structured forcing payload consumed by BMI tasks. </p>
 <p><code class="docutils literal notranslate"><span class="pre">variables_names_map</span></code> is optional. When omitted, forcing falls back to identity mapping between BMI input names and CSV headers.</p>
-<p>Throws if <code class="docutils literal notranslate"><span class="pre">forcing_file</span></code> or any explicit mapping entry is empty. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forcing_file</strong> – Path to the forcing CSV file. </p></li>
+<li><p><strong>variables_names_map</strong> – Mapping from BMI input variable names to CSV headers. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">forcing_file</span></code> or any explicit mapping entry is empty. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Structured <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code> forcing payload for BMI tasks. </p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
