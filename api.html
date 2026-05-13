@@ -57,6 +57,12 @@
 <dd><p>Monotonic identifier assigned to each submitted job. </p>
 </dd></dl>
 
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow12TaskMetadataE">
+<span id="_CPPv3N5miaow12TaskMetadataE"></span><span id="_CPPv2N5miaow12TaskMetadataE"></span><span class="target" id="miaow_8hpp_1a0365742084cb5a598ca684cf78faacd6"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TaskMetadata</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5miaow12TaskMetadataE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Descriptive task metadata preserved for reporting and postprocessing. </p>
+</dd></dl>
+
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskStatusE">
 <span id="_CPPv3N5miaow10TaskStatusE"></span><span id="_CPPv2N5miaow10TaskStatusE"></span><span class="target" id="miaow_8hpp_1a6b8fbe25277541f16caa7250fbb28a50"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TaskStatus</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskStatusE" title="Link to this definition">¶</a><br /></dt>
@@ -174,19 +180,75 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResultE">
 <span id="_CPPv3N5miaow10TaskResultE"></span><span id="_CPPv2N5miaow10TaskResultE"></span><span id="miaow::TaskResult"></span><span class="target" id="structmiaow_1_1TaskResult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskResult</span></span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskResultE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Structured result payload returned for one <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> execution. </p>
+<dd><p>Simulation-unit result payload returned for one <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> execution. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringENSt6vectorINSt6stringEEE">
+<span id="_CPPv3N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringENSt6vectorINSt6stringEEE"></span><span id="_CPPv2N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringENSt6vectorINSt6stringEEE"></span><span id="miaow::TaskResult::TaskResult__TaskStatus.ss.std::vector:ss:"></span><span class="target" id="structmiaow_1_1TaskResult_1acea3c5fabe36051d6dfd82d1dfc34433"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskResult</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow10TaskStatusE" title="miaow::TaskStatus"><span class="n"><span class="pre">TaskStatus</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">status</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">artifact_paths</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringENSt6vectorINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a task result from status, message, and artifact paths. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> – Terminal status for this task execution. </p></li>
+<li><p><strong>message</strong> – Message interpreted by <code class="docutils literal notranslate"><span class="pre">status</span></code> as output or failure detail. </p></li>
+<li><p><strong>artifact_paths</strong> – Relative paths to artifacts under <code class="docutils literal notranslate"><span class="pre">task_output_dir_</span></code>. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N5miaow14JobDiagnosticsE">
-<span id="_CPPv3N5miaow14JobDiagnosticsE"></span><span id="_CPPv2N5miaow14JobDiagnosticsE"></span><span id="miaow::JobDiagnostics"></span><span class="target" id="structmiaow_1_1JobDiagnostics"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">JobDiagnostics</span></span></span><a class="headerlink" href="#_CPPv4N5miaow14JobDiagnosticsE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Job timing diagnostics. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskRecordE">
+<span id="_CPPv3N5miaow10TaskRecordE"></span><span id="_CPPv2N5miaow10TaskRecordE"></span><span id="miaow::TaskRecord"></span><span class="target" id="structmiaow_1_1TaskRecord"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskRecord</span></span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskRecordE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Runtime-owned record for one completed task. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultd">
+<span id="_CPPv3N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultd"></span><span id="_CPPv2N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultd"></span><span id="miaow::TaskRecord::TaskRecord__TaskCR.TaskId.TaskResult.double"></span><span class="target" id="structmiaow_1_1TaskRecord_1aa111f93adf9adeb90a7fac5edeb5ad3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskRecord</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span>, <a class="reference internal" href="#_CPPv4N5miaow6TaskIdE" title="miaow::TaskId"><span class="n"><span class="pre">TaskId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_id</span></span>, <a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">result</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">run_time_s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a completed task record from task input and terminal result. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> – Submitted task whose metadata and simulation unit ID are copied. </p></li>
+<li><p><strong>task_id</strong> – <code class="docutils literal notranslate"><span class="pre">TaskId</span></code> within the submitted job. </p></li>
+<li><p><strong>result</strong> – Terminal simulation unit result for this task. </p></li>
+<li><p><strong>run_time_s</strong> – Wall-clock runtime for this task in seconds. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N5miaow9JobResultE">
-<span id="_CPPv3N5miaow9JobResultE"></span><span id="_CPPv2N5miaow9JobResultE"></span><span id="miaow::JobResult"></span><span class="target" id="structmiaow_1_1JobResult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">JobResult</span></span></span><a class="headerlink" href="#_CPPv4N5miaow9JobResultE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Result payload returned when awaiting a <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime_1af2fea471a2191143bcaeda5bd7c9a72b"><span class="std std-ref"><span class="pre">Runtime::submit_job()</span></span></a></code> handle. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow9JobRecordE">
+<span id="_CPPv3N5miaow9JobRecordE"></span><span id="_CPPv2N5miaow9JobRecordE"></span><span id="miaow::JobRecord"></span><span class="target" id="structmiaow_1_1JobRecord"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">JobRecord</span></span></span><a class="headerlink" href="#_CPPv4N5miaow9JobRecordE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Runtime-owned record returned for one submitted job. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEEd">
+<span id="_CPPv3N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEEd"></span><span id="_CPPv2N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEEd"></span><span id="miaow::JobRecord::JobRecord__std::uint64_t.JobId.std::vector:TaskRecord:.double"></span><span class="target" id="structmiaow_1_1JobRecord_1a1b7abf647cb0fd37f2e0949273ad73ce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">JobRecord</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">run_id</span></span>, <a class="reference internal" href="#_CPPv4N5miaow5JobIdE" title="miaow::JobId"><span class="n"><span class="pre">JobId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">job_id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow10TaskRecordE" title="miaow::TaskRecord"><span class="n"><span class="pre">TaskRecord</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tasks</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">run_time_s</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEEd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a final job record from job IDs, task records, and runtime. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> – <a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref">Runtime</span></a> identifier for this <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> instance. </p></li>
+<li><p><strong>job_id</strong> – <code class="docutils literal notranslate"><span class="pre">JobId</span></code> assigned to this submitted job. </p></li>
+<li><p><strong>tasks</strong> – <a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref">Task</span></a> records in submitted task order. </p></li>
+<li><p><strong>run_time_s</strong> – Wall-clock runtime for this job in seconds. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -311,7 +373,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow7RuntimeE">
 <span id="_CPPv3N5miaow7RuntimeE"></span><span id="_CPPv2N5miaow7RuntimeE"></span><span id="miaow::Runtime"></span><span class="target" id="classmiaow_1_1Runtime"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><a class="headerlink" href="#_CPPv4N5miaow7RuntimeE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Actor runtime for orchestrating simulation <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code>s. </p>
-<p>The runtime is model-agnostic and thread-safe. </p>
+<p>The runtime is model-agnostic and thread-safe. Tasks with unknown <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> values fail individually. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -349,6 +411,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow7Runtime10submit_jobERK4Task">
 <span id="_CPPv3NK5miaow7Runtime10submit_jobERK4Task"></span><span id="_CPPv2NK5miaow7Runtime10submit_jobERK4Task"></span><span id="miaow::Runtime::submit_job__TaskCRC"></span><span class="target" id="classmiaow_1_1Runtime_1af2fea471a2191143bcaeda5bd7c9a72b"></span><span class="n"><span class="pre">JobHandle</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit_job</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow7Runtime10submit_jobERK4Task" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Submit one <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> as an asynchronous job. </p>
+<p>The returned handle may rethrow if final <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> output fails. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>task</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
@@ -357,7 +420,7 @@
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if runtime output directories cannot be created. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for collecting task messages and diagnostics. </p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for retrieving the final <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref"><span class="pre">JobRecord</span></span></a></code>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -366,7 +429,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE">
 <span id="_CPPv3NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE"></span><span id="_CPPv2NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE"></span><span id="miaow::Runtime::submit_job__std::vector:Task:CRC"></span><span class="target" id="classmiaow_1_1Runtime_1a5432c6b595dfcc4ccad506ea8e9a0f36"></span><span class="n"><span class="pre">JobHandle</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit_job</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tasks</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow7Runtime10submit_jobERKNSt6vectorI4TaskEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Submit a multi-task asynchronous job with copied tasks. </p>
-<p>This <code class="docutils literal notranslate"><span class="pre">const&amp;</span></code> overload accepts caller-owned vectors (lvalues) and copies tasks so the caller keeps ownership unchanged. </p>
+<p>This <code class="docutils literal notranslate"><span class="pre">const&amp;</span></code> overload accepts caller-owned vectors (lvalues) and copies tasks so the caller keeps ownership unchanged. The returned handle may rethrow if final <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> output fails. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tasks</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
@@ -375,7 +438,7 @@
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if runtime output directories cannot be created. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for collecting task messages and diagnostics. </p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for retrieving the final <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref"><span class="pre">JobRecord</span></span></a></code>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -384,7 +447,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE">
 <span id="_CPPv3NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE"></span><span id="_CPPv2NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE"></span><span id="miaow::Runtime::submit_job__std::vector:Task:RRC"></span><span class="target" id="classmiaow_1_1Runtime_1a907159840cbd19d588eb24abfca38be9"></span><span class="n"><span class="pre">JobHandle</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit_job</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tasks</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow7Runtime10submit_jobERRNSt6vectorI4TaskEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Submit a multi-task asynchronous job with moved tasks. </p>
-<p>This <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> overload accepts rvalues (temporaries or <code class="docutils literal notranslate"><span class="pre">std::move(...)</span></code>) and transfers task ownership into <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> to avoid an extra copy. </p>
+<p>This <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> overload accepts rvalues (temporaries or <code class="docutils literal notranslate"><span class="pre">std::move(...)</span></code>) and transfers task ownership into <code class="docutils literal notranslate"><a class="reference internal" href="#classmiaow_1_1Runtime"><span class="std std-ref"><span class="pre">Runtime</span></span></a></code> to avoid an extra copy. The returned handle may rethrow if final <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> output fails. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tasks</strong> – Generic <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> arguments. </p>
@@ -393,7 +456,7 @@
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if runtime output directories cannot be created. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for collecting task messages and diagnostics. </p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> for retrieving the final <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref"><span class="pre">JobRecord</span></span></a></code>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -723,37 +786,34 @@
 <section id="i-o-and-cli-helpers">
 <h2>I/O and CLI helpers<a class="headerlink" href="#i-o-and-cli-helpers" title="Link to this heading">¶</a></h2>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5miaow17print_diagnosticsERK14JobDiagnostics5JobId">
-<span id="_CPPv3N5miaow17print_diagnosticsERK14JobDiagnostics5JobId"></span><span id="_CPPv2N5miaow17print_diagnosticsERK14JobDiagnostics5JobId"></span><span id="miaow::print_diagnostics__JobDiagnosticsCR.JobId"></span><span class="target" id="miaow__io_8hpp_1a8b9e5567ee8286f798dd902e2cb4da05"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">print_diagnostics</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow14JobDiagnosticsE" title="miaow::JobDiagnostics"><span class="n"><span class="pre">JobDiagnostics</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">diagnostics</span></span>, <a class="reference internal" href="#_CPPv4N5miaow5JobIdE" title="miaow::JobId"><span class="n"><span class="pre">JobId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">job_id</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow17print_diagnosticsERK14JobDiagnostics5JobId" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow17print_diagnosticsERK9JobRecord">
+<span id="_CPPv3N5miaow17print_diagnosticsERK9JobRecord"></span><span id="_CPPv2N5miaow17print_diagnosticsERK9JobRecord"></span><span id="miaow::print_diagnostics__JobRecordCR"></span><span class="target" id="miaow__io_8hpp_1ae1ce44fdb98f2900218be269cdb52fc4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">print_diagnostics</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobRecordE" title="miaow::JobRecord"><span class="n"><span class="pre">JobRecord</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_record</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow17print_diagnosticsERK9JobRecord" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Print diagnostics to stdout. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>diagnostics</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobDiagnostics"><span class="std std-ref"><span class="pre">JobDiagnostics</span></span></a></code> payload to print. </p></li>
-<li><p><strong>job_id</strong> – <code class="docutils literal notranslate"><span class="pre">JobId</span></code> included in the printed header. </p></li>
-</ul>
+<dd class="field-odd"><p><strong>job_record</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref"><span class="pre">JobRecord</span></span></a></code> payload containing task and job timings. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5miaow18print_task_resultsERK9JobResult">
-<span id="_CPPv3N5miaow18print_task_resultsERK9JobResult"></span><span id="_CPPv2N5miaow18print_task_resultsERK9JobResult"></span><span id="miaow::print_task_results__JobResultCR"></span><span class="target" id="miaow__io_8hpp_1a5d9682c4a609f3ab3efdf1dbd924965f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">print_task_results</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobResultE" title="miaow::JobResult"><span class="n"><span class="pre">JobResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow18print_task_resultsERK9JobResult" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Print all <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code>s in a job to stdout. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow18print_task_resultsERK9JobRecord">
+<span id="_CPPv3N5miaow18print_task_resultsERK9JobRecord"></span><span id="_CPPv2N5miaow18print_task_resultsERK9JobRecord"></span><span id="miaow::print_task_results__JobRecordCR"></span><span class="target" id="miaow__io_8hpp_1a081299ef9159a34c50892a9ff79ab02f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">print_task_results</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobRecordE" title="miaow::JobRecord"><span class="n"><span class="pre">JobRecord</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_record</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow18print_task_resultsERK9JobRecord" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Print all task results in a job to stdout. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>job_result</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobResult"><span class="std std-ref"><span class="pre">JobResult</span></span></a></code> payload containing task results to print. </p>
+<dd class="field-odd"><p><strong>job_record</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref"><span class="pre">JobRecord</span></span></a></code> payload containing task records to print. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5miaow19all_tasks_succeededERK9JobResult">
-<span id="_CPPv3N5miaow19all_tasks_succeededERK9JobResult"></span><span id="_CPPv2N5miaow19all_tasks_succeededERK9JobResult"></span><span id="miaow::all_tasks_succeeded__JobResultCR"></span><span class="target" id="miaow__io_8hpp_1af7804277e4eeb764cf3cc526783ca9be"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">all_tasks_succeeded</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobResultE" title="miaow::JobResult"><span class="n"><span class="pre">JobResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow19all_tasks_succeededERK9JobResult" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Return true when every <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> in a job succeeded. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow19all_tasks_succeededERK9JobRecord">
+<span id="_CPPv3N5miaow19all_tasks_succeededERK9JobRecord"></span><span id="_CPPv2N5miaow19all_tasks_succeededERK9JobRecord"></span><span id="miaow::all_tasks_succeeded__JobRecordCR"></span><span class="target" id="miaow__io_8hpp_1ae4bf8ebbc18fcd9b6122081584b23142"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">all_tasks_succeeded</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow9JobRecordE" title="miaow::JobRecord"><span class="n"><span class="pre">JobRecord</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">job_record</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow19all_tasks_succeededERK9JobRecord" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Return true when every task result in a job succeeded. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>job_result</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobResult"><span class="std std-ref"><span class="pre">JobResult</span></span></a></code> payload to inspect. </p>
+<dd class="field-odd"><p><strong>job_record</strong> – <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref"><span class="pre">JobRecord</span></span></a></code> payload to inspect. </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>true when every task status is <code class="docutils literal notranslate"><span class="pre">TaskStatus::succeeded</span></code>. </p>
