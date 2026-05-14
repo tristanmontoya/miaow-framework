@@ -192,7 +192,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>status</strong> – Terminal status for this task execution. </p></li>
 <li><p><strong>message</strong> – Message interpreted by <code class="docutils literal notranslate"><span class="pre">status</span></code> as output or failure detail. </p></li>
-<li><p><strong>artifact_paths</strong> – Relative paths to artifacts under <code class="docutils literal notranslate"><span class="pre">task_output_dir_</span></code>. </p></li>
+<li><p><strong>artifact_paths</strong> – Relative paths to artifacts under the job directory. </p></li>
 </ul>
 </dd>
 </dl>
@@ -359,7 +359,7 @@
 <li><p><strong>workers</strong> – Desired worker count. Values of zero are clamped to one. </p></li>
 <li><p><strong>task_timeout</strong> – Timeout used for one simulation task request. </p></li>
 <li><p><strong>job_timeout</strong> – Timeout used for whole-job requests. </p></li>
-<li><p><strong>output_root</strong> – Root directory for runtime-managed <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1Task"><span class="std std-ref"><span class="pre">Task</span></span></a></code> output folders. Empty string (default) disables all file output. </p></li>
+<li><p><strong>output_root</strong> – Root directory for runtime-managed output folders. Empty string (default) disables all file output. </p></li>
 <li><p><strong>realization_path</strong> – Path to a realization file. Empty string (default) lets realization-driven callers fall back to their own default. </p></li>
 </ul>
 </dd>
