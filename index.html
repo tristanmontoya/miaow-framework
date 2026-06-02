@@ -39,16 +39,17 @@
 heterogeneous hardware can feel like herding cats. <strong>MIAOW</strong> embraces that
 reality by using actor-based asynchronous orchestration so tasks run when they
 are ready, maximizing utilization across available resources.</p>
-<p>MIAOW targets the <a class="reference external" href="https://en.cppreference.com/w/cpp/17.html">C++17 standard</a>,
+<p>MIAOW targets the <a class="reference external" href="https://en.cppreference.com/w/cpp/20.html">C++20 standard</a>,
 uses the <a class="reference external" href="https://www.actor-framework.org/">C++ Actor Framework (CAF)</a> as its
 actor orchestration backend, and employs the
 <a class="reference external" href="https://bmi.csdms.io/en/stable/">Basic Model Interface (BMI)</a> for Earth
 system model integration.</p>
 <section id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
-<p>From the repository root, using <a class="reference external" href="https://cmake.org/">CMake</a> (requires C++ and
-Fortran compilers plus Boost):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build
+<p>See the repository README for platform-specific dependency installation
+commands. From the repository root, build the core library and subprocess
+runner with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>OFF
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
@@ -61,8 +62,8 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 ./miaow_soil_freeze_thaw<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
 <span class="nb">cd</span><span class="w"> </span>../03_dynamic_bmi
 ./miaow_dynamic_bmi<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
-<span class="nb">cd</span><span class="w"> </span>../04_noah_owp
-./miaow_noah_owp<span class="w"> </span>--realization<span class="w"> </span>data/realization_config.json<span class="w"> </span>--output_root<span class="w"> </span>./output
+<span class="nb">cd</span><span class="w"> </span>../04_summa
+./miaow_summa<span class="w"> </span>--realization<span class="w"> </span>data/realization_config.json<span class="w"> </span>--output_root<span class="w"> </span>./output
 </pre></div>
 </div>
 </section>
