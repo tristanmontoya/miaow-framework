@@ -42,9 +42,10 @@ by using actor-based asynchronous orchestration so tasks run when they are
 ready, maximizing utilization across available resources.</p>
 <p>MIAOW targets the <a class="reference external" href="https://en.cppreference.com/w/cpp/20.html">C++20 standard</a>,
 uses the <a class="reference external" href="https://www.actor-framework.org/">C++ Actor Framework (CAF)</a> as its
-actor orchestration backend, and employs the
-<a class="reference external" href="https://bmi.csdms.io/en/stable/">Basic Model Interface (BMI)</a> for Earth
-system model integration.</p>
+actor backend, relies on <a class="reference external" href="https://www.boost.org/">Boost</a> for process
+management and JSON support, and includes C++/Fortran
+<a class="reference external" href="https://bmi.csdms.io/en/stable/">Basic Model Interface (BMI)</a> integration
+paths.</p>
 <section id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
 <p>See the repository README for platform-specific dependency installation. Build
