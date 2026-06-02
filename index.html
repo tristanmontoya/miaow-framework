@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/index.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API" href="api.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -46,31 +46,54 @@ actor orchestration backend, and employs the
 system model integration.</p>
 <section id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
-<p>See the repository README for platform-specific dependency installation
-commands. From the repository root, build the core library and subprocess
-runner with:</p>
+<p>See the repository README for platform-specific dependency installation. Build
+the core library and subprocess runner:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>OFF
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>Run each example from its own <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;</span></code> directory:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/00_hello
-./miaow_hello
-<span class="nb">cd</span><span class="w"> </span>../01_heat
-./miaow_heat
-<span class="nb">cd</span><span class="w"> </span>../02_soil_freeze_thaw
-./miaow_soil_freeze_thaw<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
-<span class="nb">cd</span><span class="w"> </span>../03_dynamic_bmi
-./miaow_dynamic_bmi<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
-<span class="nb">cd</span><span class="w"> </span>../04_summa
-./miaow_summa<span class="w"> </span>--realization<span class="w"> </span>data/realization_config.json<span class="w"> </span>--output_root<span class="w"> </span>./output
+<p>Build all examples and run the test suite:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
 </div>
 </section>
-<section id="reference">
-<h2>Reference<a class="headerlink" href="#reference" title="Link to this heading">¶</a></h2>
+<section id="guides">
+<h2>Guides<a class="headerlink" href="#guides" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#orchestration-model">Orchestration model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#scheduling-behaviour">Scheduling behaviour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#public-api-summary">Public API summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#limitations">Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bmi.html">Basic Model Interface (BMI) integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#executing-a-static-bmi-model">Executing a static BMI model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#executing-a-dynamic-bmi-model">Executing a dynamic BMI model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#executing-a-realization-driven-bmi-pipeline">Executing a realization-driven BMI pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#reading-forcing-data">Reading forcing data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#diagnostics-and-artifacts">Diagnostics and artifacts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#included-examples">Included examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#summa-test-data">SUMMA test data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#example-layout">Example layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#configuring-model-examples-independently">Configuring model examples independently</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#example-command-line-options">Example command-line options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#build-and-test">Build and test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#build-options">Build options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#documentation-build">Documentation build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#code-structure">Code structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#namespace-layout">Namespace layout</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#core-runtime">Core runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#bmi-integration">BMI integration</a></li>
@@ -119,6 +142,10 @@ Research to Operations in Hydrology (CIROH)</a>.</p>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bmi.html">Basic Model Interface (BMI) integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
 
@@ -126,7 +153,7 @@ Research to Operations in Hydrology (CIROH)</a>.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+      <li>Next: <a href="architecture.html" title="next chapter">Architecture</a></li>
   </ul></li>
 </ul>
 </div>

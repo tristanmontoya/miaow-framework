@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Architecture &#8212; MIAOW documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=5611fc0a" />
+    <script src="_static/documentation_options.js?v=7f41d439"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/architecture.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic Model Interface (BMI) integration" href="bmi.html" />
+    <link rel="prev" title="MIAOW: Model-Independent Actor Orchestration Workflows for Scientific Computing" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h1>
+<section id="orchestration-model">
+<h2>Orchestration model<a class="headerlink" href="#orchestration-model" title="Link to this heading">¶</a></h2>
+<p>MIAOW executes simulation workflows with the following actor hierarchy:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Runtime (shared for process lifetime)
+`-- orchestrator_actor (shared, one per Runtime)
+    `-- job_actor (one per submitted job)
+        `-- simulation_unit_actor (many per job, up to max_workers)
+</pre></div>
+</div>
+<p>A typical workflow has these steps:</p>
+<ol class="arabic simple">
+<li><p>Caller invokes <code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(tasks)</span></code>.</p></li>
+<li><p>Runtime assigns a <code class="docutils literal notranslate"><span class="pre">job_id</span></code> and sends <code class="docutils literal notranslate"><span class="pre">(job_id,</span> <span class="pre">tasks)</span></code> to
+<code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code> spawns one <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> for that job.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">job_actor</span></code> greedily dispatches tasks to available
+<code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p></li>
+<li><p>Completed task results are wrapped into one <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p></li>
+<li><p>Runtime fulfils the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p></li>
+</ol>
+<p>Multiple <code class="docutils literal notranslate"><span class="pre">submit_job(...)</span></code> calls can be running concurrently. Tasks with
+unknown <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> values fail individually; other tasks in the same
+job continue through the normal scheduler.</p>
+</section>
+<section id="scheduling-behaviour">
+<h2>Scheduling behaviour<a class="headerlink" href="#scheduling-behaviour" title="Link to this heading">¶</a></h2>
+<p>Each <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> maintains:</p>
+<ul class="simple">
+<li><p>a pending-task cursor, <code class="docutils literal notranslate"><span class="pre">next_task_to_dispatch_</span></code></p></li>
+<li><p>a queue of idle workers, <code class="docutils literal notranslate"><span class="pre">available_workers_</span></code></p></li>
+</ul>
+<p>When a worker finishes, it is immediately returned to the idle queue and the
+next pending task is dispatched. This greedy policy keeps workers occupied
+while remaining simple and predictable.</p>
+</section>
+<section id="public-api-summary">
+<h2>Public API summary<a class="headerlink" href="#public-api-summary" title="Link to this heading">¶</a></h2>
+<p>These are the key types in <code class="docutils literal notranslate"><span class="pre">include/miaow.hpp</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code>: abstract model-agnostic execution interface</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry</span></code>: registers units and returns <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TaskMetadata</span></code>: string labels preserved for reporting and postprocessing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Task</span></code>: carries <code class="docutils literal notranslate"><span class="pre">simulation_unit_id_</span></code>, positional <code class="docutils literal notranslate"><span class="pre">args_</span></code>,
+descriptive <code class="docutils literal notranslate"><span class="pre">metadata_</span></code>, and runtime-set output fields</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>: simulation-unit status, message, and artifact paths</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code>: runtime task ID, simulation unit ID, metadata, result, and
+runtime</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Runtime</span></code>: submits jobs and returns non-blocking <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>: run ID, job ID, task records, and job runtime</p></li>
+</ul>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Distributed-memory parallelism is not currently supported.</p></li>
+<li><p>Target workloads are embarrassingly parallel tasks without inter-task
+communication.</p></li>
+<li><p>Windows is not supported and there is no plan to add such support.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/miaow_logo.svg" alt="Logo of MIAOW"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">MIAOW</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#orchestration-model">Orchestration model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scheduling-behaviour">Scheduling behaviour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#public-api-summary">Public API summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bmi.html">Basic Model Interface (BMI) integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">MIAOW: Model-Independent Actor Orchestration Workflows for Scientific Computing</a></li>
+      <li>Next: <a href="bmi.html" title="next chapter">Basic Model Interface (BMI) integration</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
