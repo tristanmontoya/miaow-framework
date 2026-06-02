@@ -38,11 +38,11 @@
 <h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
 <section id="orchestration-model">
 <h2>Orchestration model<a class="headerlink" href="#orchestration-model" title="Link to this heading">¶</a></h2>
-<p>MIAOW executes simulation workflows with the following actor hierarchy, which is inspired
-by [SUMMA-Actors](<a class="reference external" href="https://github.com/uofs-simlab/Summa-Actors">https://github.com/uofs-simlab/Summa-Actors</a>)
-([Klenk and Spiteri, 2024](<a class="reference external" href="https://doi.org/10.1007/s10586-024-04318-5">https://doi.org/10.1007/s10586-024-04318-5</a>)), but differs in
-that simulation units write their own outputs rather than using a centralized file access
-actor:</p>
+<p>MIAOW executes simulation workflows with the following actor hierarchy, which is
+inspired by <a class="reference external" href="https://github.com/uofs-simlab/Summa-Actors">SUMMA-Actors</a>
+(<a class="reference external" href="https://doi.org/10.1007/s10586-024-04318-5">Klenk and Spiteri, 2024</a>),
+but differs in that simulation units write their own outputs rather than using
+a centralized file access actor:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Runtime (shared for process lifetime)
 `-- orchestrator_actor (shared, one per Runtime)
     `-- job_actor (one per submitted job)

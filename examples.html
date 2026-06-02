@@ -65,24 +65,6 @@ using the CSDMS heat examples</p></li>
 execution and one MIAOW task per staged catchment feature described by a
 NextGen-style realization</p></li>
 </ul>
-<p>The SUMMA example runs in a subprocess and is built through its upstream
-<code class="docutils literal notranslate"><span class="pre">summabmi</span></code> target. The example CMake file fetches the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch into
-<code class="docutils literal notranslate"><span class="pre">third_party/summa</span></code> and builds directly from SUMMA’s <code class="docutils literal notranslate"><span class="pre">build/CMakeLists.txt</span></code>.</p>
-</section>
-<section id="summa-test-data">
-<h2>SUMMA test data<a class="headerlink" href="#summa-test-data" title="Link to this heading">¶</a></h2>
-<p>The SUMMA example provides a small test configuration with five
-catchments from the Oyster River <code class="docutils literal notranslate"><span class="pre">gauge_01073000</span></code> case. The configuration
-consists of these files:
-<code class="docutils literal notranslate"><span class="pre">data/configs/cat-*.input</span></code>, <code class="docutils literal notranslate"><span class="pre">data/forcings/*_forcing.csv</span></code>,
-<code class="docutils literal notranslate"><span class="pre">data/settings/SUMMA/*</span></code>, <code class="docutils literal notranslate"><span class="pre">data/catchments.geojson</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">data/realization_config.json</span></code>.</p>
-<p>After fetching SUMMA and creating the preprocessing environment, regenerate the
-forcing CSVs manually with this command:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./scripts/preprocessing/.venv/bin/python<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>./scripts/preprocessing/stage_summa_gauge_forcing_csvs.py
-</pre></div>
-</div>
 </section>
 <section id="example-layout">
 <h2>Example layout<a class="headerlink" href="#example-layout" title="Link to this heading">¶</a></h2>
@@ -219,7 +201,6 @@ these errors, print the message, and exit with status <code class="docutils lite
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#included-examples">Included examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#summa-test-data">SUMMA test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-layout">Example layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#configuring-model-examples-independently">Configuring model examples independently</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-command-line-options">Example command-line options</a></li>
