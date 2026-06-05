@@ -64,6 +64,53 @@ a centralized file access actor:</p>
 unknown <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> values fail individually; other tasks in the same
 job continue through the normal scheduler.</p>
 </section>
+<section id="subprocess-actor-system">
+<h2>Subprocess actor system<a class="headerlink" href="#subprocess-actor-system" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> keeps the parent scheduler unchanged
+while moving one BMI task lifecycle into a fresh subprocess. The parent process
+still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal
+<code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers. When a BMI pipeline task selects subprocess
+execution, the parent worker launches the configured subprocess executable and
+uses CAF remote actor messaging for the task exchange.</p>
+<p>The current subprocess implementation is POSIX-specific: the parent passes an
+inherited file descriptor to the child process for the endpoint exchange.</p>
+<p>The subprocess path has two CAF actor systems:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Parent process
+`-- Runtime actor_system
+    `-- simulation_unit_actor
+        `-- launches subprocess executable for one task
+
+Subprocess
+`-- subprocess actor_system
+    `-- BMI worker actor
+</pre></div>
+</div>
+<p>A single-task subprocess run follows this sequence:</p>
+<ol class="arabic simple">
+<li><p>The parent creates a one-way POSIX pipe, which is an anonymous byte buffer
+managed by the operating system kernel. The pipe is exposed through two
+<a class="reference external" href="https://en.wikipedia.org/wiki/File_descriptor">file descriptors</a>: a read
+end and a write end. Note that these just describe the two ends of the pipe and
+are not “files” in the sense of the filesystem. The parent launches the subprocess
+with <code class="docutils literal notranslate"><span class="pre">--connection-fd</span></code> naming the write end as it appears inside the subprocess.
+The parent keeps the read end.</p></li>
+<li><p>The subprocess initializes its own CAF actor system, spawns the BMI worker
+actor, and publishes that worker on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> through the CAF middleman.</p></li>
+<li><p>The subprocess writes one newline-delimited JSON endpoint message to the
+inherited write descriptor. The message contains the host and TCP port where
+the BMI worker actor is published, and the parent reads those bytes from the
+pipe’s read end.</p></li>
+<li><p>The parent reads the endpoint, connects to the published worker with
+<code class="docutils literal notranslate"><span class="pre">remote_actor(...)</span></code>, and sends the serialized <code class="docutils literal notranslate"><span class="pre">Task</span></code> over CAF.</p></li>
+<li><p>The BMI worker validates the task, constructs the <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside the
+subprocess, runs the BMI lifecycle, returns one <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>, and quits.</p></li>
+<li><p>The parent waits for subprocess exit, then lets the normal <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>
+aggregation path record the task result.</p></li>
+</ol>
+<p>This design isolates BMI model construction and execution from the parent
+process without changing job scheduling or <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code> aggregation. Subprocess
+stdout, stderr, and endpoint diagnostics are described in <a class="reference internal" href="bmi.html"><span class="doc">BMI integration</span></a>.</p>
+</section>
 <section id="scheduling-behaviour">
 <h2>Scheduling behaviour<a class="headerlink" href="#scheduling-behaviour" title="Link to this heading">¶</a></h2>
 <p>Each <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> maintains:</p>
@@ -134,6 +181,7 @@ communication.</p></li>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#orchestration-model">Orchestration model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subprocess-actor-system">Subprocess actor system</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scheduling-behaviour">Scheduling behaviour</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#public-api-summary">Public API summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>

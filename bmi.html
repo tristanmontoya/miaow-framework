@@ -47,8 +47,8 @@ pipeline, runs the BMI lifecycle, writes artifacts, and returns a
 <li><p><code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;DynamicBmiModel&gt;</span></code> runs one BMI model loaded from a
 dynamic plugin per task.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;BmiPipeline&gt;</span></code> runs a complete pipeline described by the
-task config, which may be obtained from partitioning a NextGen-style
-realization file.</p></li>
+task config, which may be obtained from partitioning a
+<a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization file.</p></li>
 </ul>
 <p>Each BMI task starts from one typed <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code>, converted to a
 <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code> before being stored in the task:</p>
@@ -106,9 +106,46 @@ paths.</p>
 <span class="w">    </span><span class="p">{</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">bmi_pipeline_config_to_value</span><span class="p">(</span><span class="n">pipeline_config</span><span class="p">)}};</span>
 </pre></div>
 </div>
-<p>Use the C++ backend for plugins that export <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and
-<code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code>. Use the Fortran backend for plugins that export
-<code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked procedural BMI bridge.</p>
+<p>For consistency with NextGen, the C++ backend expects plugins to export
+C-linkage symbols named <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code>.
+The Fortran backend expects plugins to export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked
+<a class="reference external" href="https://github.com/NOAA-OWP/iso_c_fortran_bmi">NOAA-OWP iso_c_fortran_bmi bridge</a>.</p>
+<p>For C++ plugins, export the creation and destruction functions with C linkage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="n">bmi</span><span class="o">::</span><span class="n">Bmi</span><span class="o">*</span><span class="w"> </span><span class="n">bmi_model_create</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">YourBmiModel</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">bmi_model_destroy</span><span class="p">(</span><span class="n">bmi</span><span class="o">::</span><span class="n">Bmi</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For Fortran plugins, export <code class="docutils literal notranslate"><span class="pre">register_bmi</span></code> with <code class="docutils literal notranslate"><span class="pre">bind(C)</span></code>:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">function </span><span class="n">register_bmi</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">bmi_status</span><span class="p">)</span><span class="w"> </span><span class="k">bind</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;register_bmi&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">iso_c_binding</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="kt">c_int</span><span class="p">,</span><span class="w"> </span><span class="nb">c_loc</span><span class="p">,</span><span class="w"> </span><span class="kt">c_ptr</span>
+<span class="kt">    </span><span class="k">use </span><span class="n">bmif_2_0_iso</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">BMI_FAILURE</span><span class="p">,</span><span class="w"> </span><span class="n">BMI_SUCCESS</span>
+<span class="w">    </span><span class="k">use </span><span class="n">your_model_module</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">your_bmi_model</span>
+<span class="w">    </span><span class="k">use </span><span class="n">iso_c_bmif_2_0</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">box</span>
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    type</span><span class="p">(</span><span class="kt">c_ptr</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="kt">c_int</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bmi_status</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">your_bmi_model</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bmi_model</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">box</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bmi_box</span>
+
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">bmi_model</span><span class="p">)</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">)</span>
+<span class="w">    </span><span class="n">bmi_box</span><span class="p">%</span><span class="n">ptr</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">bmi_model</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">%</span><span class="n">ptr</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">c_loc</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">)</span>
+<span class="w">        </span><span class="n">bmi_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BMI_SUCCESS</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">        </span><span class="n">bmi_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BMI_FAILURE</span>
+<span class="w">    </span><span class="k">end if</span>
+<span class="k">end function </span><span class="n">register_bmi</span>
+</pre></div>
+</div>
 </section>
 <section id="executing-a-realization-driven-bmi-pipeline">
 <h2>Executing a realization-driven BMI pipeline<a class="headerlink" href="#executing-a-realization-driven-bmi-pipeline" title="Link to this heading">¶</a></h2>
@@ -119,19 +156,22 @@ workflows and by pipelines with more than one model module.</p>
 
 <span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiSimulationUnit</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipeline</span><span class="o">&gt;&gt;</span><span class="p">(</span>
-<span class="w">        </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiExecutionMode</span><span class="o">::</span><span class="n">subprocess</span><span class="p">);</span>
+<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiSimulationUnit</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipeline</span><span class="o">&gt;&gt;</span><span class="p">();</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="o">=</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="o">=</span>
 <span class="w">    </span><span class="n">miaow</span><span class="o">::</span><span class="n">build_bmi_realization_tasks</span><span class="p">(</span><span class="n">realization</span><span class="p">,</span><span class="w"> </span><span class="n">pipeline</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">tasks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">task</span><span class="p">.</span><span class="n">execution_mode_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">ExecutionMode</span><span class="o">::</span><span class="n">single_task_subprocess</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">PartitionedBmiRealization</span></code> reads a NextGen-style realization and produces
-one <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> per feature. <code class="docutils literal notranslate"><span class="pre">build_bmi_realization_tasks(...)</span></code>
-turns those feature configs into MIAOW tasks for the registered pipeline unit.</p>
-<p>Subprocess mode runs one BMI lifecycle in a child process, which is useful for
-BMI models that are not safe to run concurrently in one process. The SUMMA
-example uses subprocess mode.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PartitionedBmiRealization</span></code> reads a
+<a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization and produces one
+<code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> per feature. <code class="docutils literal notranslate"><span class="pre">build_bmi_realization_tasks(...)</span></code> turns
+those feature configs into MIAOW tasks for the registered pipeline unit.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> runs one BMI lifecycle in a subprocess,
+which is useful for BMI models that are not safe to run concurrently in one
+process. The SUMMA example uses single-task subprocess mode.</p>
 <p>For hand-built dynamic pipelines, construct a <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> from a
 vector of <code class="docutils literal notranslate"><span class="pre">BmiModuleConfig</span></code> entries. Each module config carries the module
 name, backend, plugin path, initialization config, optional variable map, and
@@ -188,9 +228,10 @@ silently ignored. In <code class="docutils literal notranslate"><span class="pre
 matched and mismatched combinations of model end time and forcing series
 length: a matched 512-day run, a 512-day run whose 1-day forcing is exhausted
 early, and a 1-day run that stops well before its 512-day forcing ends.</p>
-<p>In global NextGen-style realization files, <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing enables
-MIAOW-managed CSV forcing for each feature. Partitioning resolves that global
-forcing entry to per-task <code class="docutils literal notranslate"><span class="pre">CsvFile</span></code> forcing.</p>
+<p>In global <a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization
+files, <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing enables MIAOW-managed CSV forcing for each
+feature. Partitioning resolves that global forcing entry to per-task <code class="docutils literal notranslate"><span class="pre">CsvFile</span></code>
+forcing.</p>
 </section>
 <section id="diagnostics-and-artifacts">
 <h2>Diagnostics and artifacts<a class="headerlink" href="#diagnostics-and-artifacts" title="Link to this heading">¶</a></h2>
@@ -224,13 +265,16 @@ task’s descriptive <code class="docutils literal notranslate"><span class="pre
 contents. If a task has non-empty <code class="docutils literal notranslate"><span class="pre">metadata_[&quot;feature_id&quot;]</span></code>, that value
 becomes the output file stem; otherwise the runtime uses <code class="docutils literal notranslate"><span class="pre">task_&lt;task_id&gt;</span></code>.
 Output stems must be unique within one job and cannot contain path separators.</p>
-<p>Subprocess BMI tasks use task-specific <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_*_input.json</span></code>,
-<code class="docutils literal notranslate"><span class="pre">bmi_subprocess_*_result.json</span></code>, <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_*_stdout.log</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">bmi_subprocess_*_stderr.log</span></code> files as parent-child control files. These
-files are removed after the parent reads a succeeded child result; if setup,
-launch, result parsing, or task execution fails, remaining control files are
-left in place for diagnostics. When no task output directory is assigned, these
-subprocess control files use a temporary directory instead.</p>
+<p>Subprocess tasks use a dedicated subprocess-to-parent pipe for the CAF endpoint
+exchange, plus task-specific <code class="docutils literal notranslate"><span class="pre">subprocess_*_stdout.log</span></code> and
+<code class="docutils literal notranslate"><span class="pre">subprocess_*_stderr.log</span></code> files for diagnostics. The parent launches the
+subprocess, reads one endpoint JSON line from the pipe, sends the <code class="docutils literal notranslate"><span class="pre">Task</span></code> to
+the subprocess actor over CAF, and receives one <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code> reply. Diagnostic
+logs are removed after a succeeded subprocess result; if setup, launch, actor
+exchange, or task execution fails, remaining logs are left in place for
+diagnostics. Parent-side process failures report <code class="docutils literal notranslate"><span class="pre">Subprocess</span> <span class="pre">error</span></code>. When no
+task output directory is assigned, these subprocess logs use a temporary
+directory instead.</p>
 </section>
 </section>
 
