@@ -57,6 +57,9 @@ a centralized file access actor:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code> spawns one <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> for that job.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">job_actor</span></code> greedily dispatches tasks to available
 <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p></li>
+<li><p>Each worker resolves <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code>. In-process tasks construct a fresh
+<code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance, while subprocess tasks use worker-owned
+subprocess state.</p></li>
 <li><p>Completed task results are wrapped into one <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p></li>
 <li><p>Runtime fulfils the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p></li>
 </ol>
@@ -66,19 +69,25 @@ job continue through the normal scheduler.</p>
 </section>
 <section id="subprocess-actor-system">
 <h2>Subprocess actor system<a class="headerlink" href="#subprocess-actor-system" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> keeps the parent scheduler unchanged
-while moving one BMI task lifecycle into a fresh subprocess. The parent process
-still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal
-<code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers. When a BMI pipeline task selects subprocess
-execution, the parent worker launches the configured subprocess executable and
-uses CAF remote actor messaging for the task exchange.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> keep the parent scheduler unchanged
+while moving BMI task lifecycles into subprocesses. The parent process still
+owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal
+<code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers. For each task, the parent worker resolves the
+registered <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code>, constructs a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> and
+passes it an <code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code>. BMI pipeline units use that context to launch
+or reuse the resolved subprocess executable and exchange the task with CAF
+remote actor messaging.</p>
+<p>The resolved executable is the <code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code> field on the task
+being executed when non-empty, otherwise the compile-time default
+<code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code> runner path.</p>
 <p>The current subprocess implementation is POSIX-specific: the parent passes an
 inherited file descriptor to the child process for the endpoint exchange.</p>
 <p>The subprocess path has two CAF actor systems:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Parent process
 `-- Runtime actor_system
     `-- simulation_unit_actor
-        `-- launches subprocess executable for one task
+        `-- launches or reuses subprocess executable
 
 Subprocess
 `-- subprocess actor_system
@@ -103,10 +112,22 @@ pipe’s read end.</p></li>
 <li><p>The parent reads the endpoint, connects to the published worker with
 <code class="docutils literal notranslate"><span class="pre">remote_actor(...)</span></code>, and sends the serialized <code class="docutils literal notranslate"><span class="pre">Task</span></code> over CAF.</p></li>
 <li><p>The BMI worker validates the task, constructs the <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside the
-subprocess, runs the BMI lifecycle, returns one <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>, and quits.</p></li>
-<li><p>The parent waits for subprocess exit, then lets the normal <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>
+subprocess, runs the BMI lifecycle, and returns one <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>.</p></li>
+<li><p>The parent stops the subprocess and lets the normal <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>
 aggregation path record the task result.</p></li>
 </ol>
+<p>Persistent subprocess mode follows the same endpoint exchange for the first
+persistent task handled by a worker. The subprocess worker backend is the same
+as task-scoped mode; only the parent-owned lifetime changes. Later persistent
+tasks with the same resolved subprocess path reuse that worker’s subprocess and
+remote actor. Changing <code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code> stops the current worker
+process and starts one with the new path. Launch, process, or CAF request
+failures fail the active task with <code class="docutils literal notranslate"><span class="pre">Subprocess</span> <span class="pre">error</span></code> and clear the worker
+process state; the next persistent task launches a replacement. Each task still
+constructs and finalizes a fresh <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside the subprocess.
+Persistent subprocesses are scoped to one submitted job, and each job worker
+owns at most one active subprocess, so <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code> bounds
+their concurrency.</p>
 <p>This design isolates BMI model construction and execution from the parent
 process without changing job scheduling or <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code> aggregation. Subprocess
 stdout, stderr, and endpoint diagnostics are described in <a class="reference internal" href="bmi.html"><span class="doc">BMI integration</span></a>.</p>
@@ -121,12 +142,19 @@ stdout, stderr, and endpoint diagnostics are described in <a class="reference in
 <p>When a worker finishes, it is immediately returned to the idle queue and the
 next pending task is dispatched. This greedy policy keeps workers occupied
 while remaining simple and predictable.</p>
+<p>Each task constructs a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance and calls
+<code class="docutils literal notranslate"><span class="pre">execute(...)</span></code> with an <code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code>. Persistent subprocess state is
+owned by the worker actor and is exposed to simulation units through the
+context, not through <code class="docutils literal notranslate"><span class="pre">Task</span></code> or <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> storage. BMI units construct
+and finalize fresh BMI model lifecycles per task.</p>
 </section>
 <section id="public-api-summary">
 <h2>Public API summary<a class="headerlink" href="#public-api-summary" title="Link to this heading">¶</a></h2>
 <p>These are the key types in <code class="docutils literal notranslate"><span class="pre">include/miaow.hpp</span></code>:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code>: abstract model-agnostic execution interface</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code>: runtime-local worker services passed to
+<code class="docutils literal notranslate"><span class="pre">SimulationUnit::execute(...)</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry</span></code>: registers units and returns <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TaskMetadata</span></code>: string labels preserved for reporting and postprocessing</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Task</span></code>: carries <code class="docutils literal notranslate"><span class="pre">simulation_unit_id_</span></code>, positional <code class="docutils literal notranslate"><span class="pre">args_</span></code>,
