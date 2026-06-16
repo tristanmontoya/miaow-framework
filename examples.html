@@ -64,6 +64,14 @@ using the CSDMS heat examples</p></li>
 <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline
 execution and one MIAOW task per staged catchment feature described by a
 NextGen-style realization</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional libtrixi dynamic BMI plugin example
+using the external <code class="docutils literal notranslate"><span class="pre">libtrixi-bmi</span></code> package. It is not built by default; enable
+it by adding <code class="docutils literal notranslate"><span class="pre">05_libtrixi_bmi</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> and provide
+<code class="docutils literal notranslate"><span class="pre">LIBTRIXI_PREFIX</span></code> plus <code class="docutils literal notranslate"><span class="pre">LIBTRIXI_PROJECT_DIR</span></code>. CMake resolves
+<code class="docutils literal notranslate"><span class="pre">libtrixi-bmi</span></code> under <code class="docutils literal notranslate"><span class="pre">third_party/libtrixi-bmi</span></code> unless
+<code class="docutils literal notranslate"><span class="pre">MIAOW_LIBTRIXI_BMI_ROOT</span></code> points to a local checkout. The optional
+<code class="docutils literal notranslate"><span class="pre">LIBTRIXI_JULIA_DEPOT_PATH</span></code> CMake option provides a <code class="docutils literal notranslate"><span class="pre">JULIA_DEPOT_PATH</span></code>
+fallback when the runtime environment does not already set one</p></li>
 </ul>
 </section>
 <section id="example-layout">

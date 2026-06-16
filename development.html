@@ -72,28 +72,33 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code></p></td>
 <td><p>Build all example programs</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_PROVIDER</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00_hello;01_heat;02_soil_freeze_thaw;03_dynamic_bmi;04_summa</span></code></p></td>
+<td><p>Semicolon-separated list of examples to build when <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code> is
+enabled</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_PROVIDER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 <td><p>Boost provider: <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch</span></code>, or <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_VERSION</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_VERSION</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.86.0</span></code></p></td>
 <td><p>Boost version used by the <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> fallback</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_PROVIDER</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_PROVIDER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 <td><p>CAF provider: <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch</span></code>, or <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_VERSION</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_VERSION</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.1.0</span></code></p></td>
 <td><p>CAF version used by <code class="docutils literal notranslate"><span class="pre">find_package</span></code> and <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_DEFAULT_MODEL_BASE_DIR</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_DEFAULT_MODEL_BASE_DIR</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">${PROJECT_SOURCE_DIR}/third_party</span></code></p></td>
 <td><p>Default base directory where external model sources are resolved or
 fetched</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code></p></td>
 <td><p>empty</p></td>
 <td><p>Optional explicit path to a valid local
 <code class="docutils literal notranslate"><span class="pre">NOAA-OWP/iso_c_fortran_bmi</span></code> checkout</p></td>
