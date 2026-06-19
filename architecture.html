@@ -91,7 +91,7 @@ inherited file descriptor to the child process for the endpoint exchange.</p>
 
 Subprocess
 `-- subprocess actor_system
-    `-- BMI worker actor
+    `-- worker_actor
 </pre></div>
 </div>
 <p>A single-task subprocess run follows this sequence:</p>
@@ -103,15 +103,15 @@ end and a write end. Note that these just describe the two ends of the pipe and
 are not “files” in the sense of the filesystem. The parent launches the subprocess
 with <code class="docutils literal notranslate"><span class="pre">--connection-fd</span></code> naming the write end as it appears inside the subprocess.
 The parent keeps the read end.</p></li>
-<li><p>The subprocess initializes its own CAF actor system, spawns the BMI worker
+<li><p>The subprocess initializes its own CAF actor system, spawns the worker
 actor, and publishes that worker on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> through the CAF middleman.</p></li>
 <li><p>The subprocess writes one newline-delimited JSON endpoint message to the
 inherited write descriptor. The message contains the host and TCP port where
-the BMI worker actor is published, and the parent reads those bytes from the
+the worker actor is published, and the parent reads those bytes from the
 pipe’s read end.</p></li>
 <li><p>The parent reads the endpoint, connects to the published worker with
 <code class="docutils literal notranslate"><span class="pre">remote_actor(...)</span></code>, and sends the serialized <code class="docutils literal notranslate"><span class="pre">Task</span></code> over CAF.</p></li>
-<li><p>The BMI worker validates the task, constructs the <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside the
+<li><p>The worker validates the task, constructs the <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside the
 subprocess, runs the BMI lifecycle, and returns one <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>.</p></li>
 <li><p>The parent stops the subprocess and lets the normal <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>
 aggregation path record the task result.</p></li>
