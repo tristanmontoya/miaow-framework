@@ -65,15 +65,86 @@ using the CSDMS heat examples</p></li>
 <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline
 execution and one MIAOW task per staged catchment feature described by a
 NextGen-style realization</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional libtrixi dynamic BMI plugin example
-using the external <code class="docutils literal notranslate"><span class="pre">libtrixi-bmi</span></code> package. It is not built by default; enable
-it by adding <code class="docutils literal notranslate"><span class="pre">05_libtrixi_bmi</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> and provide
-<code class="docutils literal notranslate"><span class="pre">LIBTRIXI_PREFIX</span></code> plus <code class="docutils literal notranslate"><span class="pre">LIBTRIXI_PROJECT_DIR</span></code>. CMake resolves
-<code class="docutils literal notranslate"><span class="pre">libtrixi-bmi</span></code> under <code class="docutils literal notranslate"><span class="pre">third_party/libtrixi-bmi</span></code> unless
-<code class="docutils literal notranslate"><span class="pre">MIAOW_LIBTRIXI_BMI_ROOT</span></code> points to a local checkout. The optional
-<code class="docutils literal notranslate"><span class="pre">LIBTRIXI_JULIA_DEPOT_PATH</span></code> CMake option provides a <code class="docutils literal notranslate"><span class="pre">JULIA_DEPOT_PATH</span></code>
-fallback when the runtime environment does not already set one</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional
+<a class="reference external" href="https://github.com/trixi-framework/libtrixi">libtrixi</a> dynamic BMI plugin
+example</p></li>
 </ul>
+</section>
+<section id="summa-example">
+<h2>SUMMA example<a class="headerlink" href="#summa-example" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code> example builds a SUMMA BMI library from a SUMMA source
+tree and runs the packaged gauge realization by default.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.8%" />
+<col style="width: 27.3%" />
+<col style="width: 40.9%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_SUMMA_MODEL_ROOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${MIAOW_DEFAULT_MODEL_BASE_DIR}/summa</span></code></p></td>
+<td><p>Local or fetched SUMMA source tree</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_SUMMA_LIBRARY_LINKS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-framework</span> <span class="pre">Accelerate</span></code> on macOS, empty otherwise</p></td>
+<td><p>LAPACK/BLAS link flags passed to SUMMA</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="libtrixi-example">
+<h2><code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> example<a class="headerlink" href="#libtrixi-example" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code> example runs
+<a class="reference external" href="https://github.com/trixi-framework/libtrixi">libtrixi</a> through MIAOW’s
+dynamic BMI plugin path. It is not built by default. Enable it by adding
+<code class="docutils literal notranslate"><span class="pre">05_libtrixi_bmi</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-DMIAOW_EXAMPLES<span class="o">=</span>05_libtrixi_bmi
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_libtrixi_bmi
+</pre></div>
+</div>
+<p>These flags control the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> paths:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.8%" />
+<col style="width: 27.3%" />
+<col style="width: 40.9%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_LIBTRIXI_BMI_ROOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${MIAOW_DEFAULT_MODEL_BASE_DIR}/libtrixi-bmi</span></code></p></td>
+<td><p>Local or fetched <code class="docutils literal notranslate"><span class="pre">libtrixi-bmi</span></code> checkout</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DLIBTRIXI_INSTALL_DIR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;libtrixi-bmi&gt;/build/libtrixi-install</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> installation root</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DLIBTRIXI_PROJECT_DIR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;libtrixi-bmi&gt;/build/libtrixi-julia</span></code></p></td>
+<td><p>Julia project directory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DLIBTRIXI_JULIA_DEPOT_PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;libtrixi-bmi&gt;/build/julia-depot</span></code></p></td>
+<td><p>Julia depot fallback</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DLIBTRIXI_CONFIG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi/advection_basic_1d.jl</span></code></p></td>
+<td><p>Default <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> config path</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="example-layout">
 <h2>Example layout<a class="headerlink" href="#example-layout" title="Link to this heading">¶</a></h2>
@@ -210,6 +281,8 @@ these errors, print the message, and exit with status <code class="docutils lite
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#included-examples">Included examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summa-example">SUMMA example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#libtrixi-example"><code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-layout">Example layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#configuring-model-examples-independently">Configuring model examples independently</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-command-line-options">Example command-line options</a></li>
