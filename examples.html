@@ -36,7 +36,7 @@
             
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
-<p>Run examples from their own <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;</span></code> directories:</p>
+<p>Run built examples from their own <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;</span></code> directories:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/00_hello
 ./miaow_hello
 <span class="nb">cd</span><span class="w"> </span>../01_heat
@@ -45,9 +45,6 @@
 ./miaow_soil_freeze_thaw<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
 <span class="nb">cd</span><span class="w"> </span>../03_dynamic_bmi
 ./miaow_dynamic_bmi<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
-<span class="nb">cd</span><span class="w"> </span>../04_summa
-./miaow_summa<span class="w"> </span>--realization<span class="w"> </span>data/gauge_01073000/realization_config.json<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--output_root<span class="w"> </span>./output
 </pre></div>
 </div>
 <section id="included-examples">
@@ -61,19 +58,34 @@
 with per-task forcing, including matched, short, and long forcing cases</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code>: dynamic C++ and Fortran BMI plugin integration
 using the CSDMS heat examples</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code>:
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code>: optional
 <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline
 execution and one MIAOW task per staged catchment feature described by a
 NextGen-style realization</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional
-<a class="reference external" href="https://github.com/trixi-framework/libtrixi">libtrixi</a> dynamic BMI plugin
-example</p></li>
+<a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the
+<code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin</p></li>
 </ul>
 </section>
 <section id="summa-example">
 <h2>SUMMA example<a class="headerlink" href="#summa-example" title="Link to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code> example builds a SUMMA BMI library from a SUMMA source
-tree and runs the packaged gauge realization by default.</p>
+tree and runs the packaged gauge realization by default. It is not built by
+default. SUMMA requires
+<a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF</a> C/Fortran and
+BLAS/LAPACK support. Enable it by adding <code class="docutils literal notranslate"><span class="pre">04_summa</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-DMIAOW_EXAMPLES<span class="o">=</span>04_summa
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_summa
+</pre></div>
+</div>
+<p>Then run it from the example directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/04_summa
+./miaow_summa<span class="w"> </span>--realization<span class="w"> </span>data/gauge_01073000/realization_config.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_root<span class="w"> </span>./output
+</pre></div>
+</div>
+<p>These flags control the SUMMA build:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 31.8%" />
@@ -98,12 +110,12 @@ tree and runs the packaged gauge realization by default.</p>
 </tbody>
 </table>
 </section>
-<section id="libtrixi-example">
-<h2><code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> example<a class="headerlink" href="#libtrixi-example" title="Link to this heading">¶</a></h2>
+<section id="trixi-jl-example">
+<h2>Trixi.jl example<a class="headerlink" href="#trixi-jl-example" title="Link to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code> example runs
-<a class="reference external" href="https://github.com/trixi-framework/libtrixi">libtrixi</a> through MIAOW’s
-dynamic BMI plugin path. It is not built by default. Enable it by adding
-<code class="docutils literal notranslate"><span class="pre">05_libtrixi_bmi</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>:</p>
+<a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> configs through
+MIAOW’s <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin path. It is not built by default. Enable
+it by adding <code class="docutils literal notranslate"><span class="pre">05_libtrixi_bmi</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-DMIAOW_EXAMPLES<span class="o">=</span>05_libtrixi_bmi
 cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_libtrixi_bmi
@@ -277,12 +289,12 @@ these errors, print the message, and exit with status <code class="docutils lite
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#included-examples">Included examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#summa-example">SUMMA example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#libtrixi-example"><code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trixi-jl-example">Trixi.jl example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-layout">Example layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#configuring-model-examples-independently">Configuring model examples independently</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-command-line-options">Example command-line options</a></li>

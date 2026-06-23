@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/index.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Overview" href="architecture.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -54,7 +54,7 @@ the core library and subprocess runner:</p>
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>Build all examples and run the test suite:</p>
+<p>Build the default examples and run the test suite:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
@@ -65,9 +65,9 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Overview</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#orchestration-model">Orchestration model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#subprocess-actor-system">Subprocess actor system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#subprocess-execution">Subprocess execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#scheduling-behaviour">Scheduling behaviour</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#public-api-summary">Public API summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#limitations">Limitations</a></li>
@@ -84,7 +84,7 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#included-examples">Included examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#summa-example">SUMMA example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#libtrixi-example"><code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#trixi-jl-example">Trixi.jl example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#example-layout">Example layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#configuring-model-examples-independently">Configuring model examples independently</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#example-command-line-options">Example command-line options</a></li>
@@ -148,7 +148,7 @@ in Hydrology (CIROH)</a>.</p>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -159,7 +159,7 @@ in Hydrology (CIROH)</a>.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="architecture.html" title="next chapter">Overview</a></li>
+      <li>Next: <a href="architecture.html" title="next chapter">Architecture</a></li>
   </ul></li>
 </ul>
 </div>
