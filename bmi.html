@@ -36,222 +36,114 @@
             
   <section id="bmi-integration">
 <h1>BMI integration<a class="headerlink" href="#bmi-integration" title="Link to this heading">¶</a></h1>
-<p>Use <code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;BmiModelType&gt;</span></code> from <code class="docutils literal notranslate"><span class="pre">include/miaow_bmi.hpp</span></code> to run
-BMI-compatible models. The simulation unit creates one task-level model or
-pipeline, runs the BMI lifecycle, writes artifacts, and returns a
-<code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>.</p>
-<p>There are two common registration patterns:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;YourModel&gt;</span></code> runs one linked BMI model per task, where
-<code class="docutils literal notranslate"><span class="pre">YourModel</span></code> is a subtype of <code class="docutils literal notranslate"><span class="pre">miaow::bmi_api::Bmi</span></code> linked into the
-executable and supplied directly to the task pipeline.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;BmiPipeline&gt;</span></code> runs a complete pipeline described by the
-task config. The config may contain dynamic plugin modules, multiple modules,
-or modules obtained from partitioning a
-<a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization file.</p></li>
-</ul>
-<p>Each BMI task starts from one typed <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code>, converted to a
-<code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code> before being stored in the task:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">task</span><span class="p">.</span><span class="n">args_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">bmi_pipeline_config_to_value</span><span class="p">(</span><span class="n">pipeline_config</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>During execution, MIAOW writes that config beside the task results as
-<code class="docutils literal notranslate"><span class="pre">&lt;task_output_name&gt;.json</span></code>. The pipeline uses that file for the BMI lifecycle:</p>
+<p>MIAOW runs statically typed C++ BMI models and dynamically loaded C++ or Fortran BMI plugins through the same task interface. Use this page to configure tasks, select dynamic-task execution, and understand workflow behaviour. See <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> for constructor, member, and function details.</p>
+<section id="bmi-task-lifecycle">
+<h2>BMI task lifecycle<a class="headerlink" href="#bmi-task-lifecycle" title="Link to this heading">¶</a></h2>
+<p>Build individual tasks with <code class="docutils literal notranslate"><span class="pre">make_bmi_task(...)</span></code> and task sets with <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Both functions translate typed BMI configuration into the generic <code class="docutils literal notranslate"><span class="pre">Task</span></code> representation used by the runtime.</p>
+<p>During execution, MIAOW writes the resolved BMI configuration beside the task results as <code class="docutils literal notranslate"><span class="pre">&lt;task_output_name&gt;.json</span></code> and runs the BMI lifecycle:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Initialize(&lt;task_output_name&gt;.json)</span></code></p></li>
 <li><p>zero or more <code class="docutils literal notranslate"><span class="pre">Update()</span></code> calls</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Finalize()</span></code></p></li>
 </ol>
-<p>Within those calls, the pipeline calls the corresponding BMI methods for each
-module in order.</p>
-<section id="executing-a-static-bmi-model">
-<h2>Executing a static BMI model<a class="headerlink" href="#executing-a-static-bmi-model" title="Link to this heading">¶</a></h2>
-<p>Use <code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;YourModel&gt;</span></code> when the BMI model class is linked into
-the executable. The simulation unit constructs one model object per task. The
-task config comes from <code class="docutils literal notranslate"><span class="pre">make_bmi_model_config(...)</span></code>, which records the model
-initialization file plus optional forcing and variable mapping. Linked model
-units execute in the parent process because the subprocess worker only receives
-serialized <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> task data.</p>
+<p>Static and dynamic tasks use the same forcing, output, and artifact handling.</p>
+</section>
+<section id="minimal-setup-patterns">
+<h2>Minimal setup patterns<a class="headerlink" href="#minimal-setup-patterns" title="Link to this heading">¶</a></h2>
+<p>Choose a setup pattern based on where the BMI model implementation comes from: a statically typed C++ model, a dynamic plugin, or a realization file.</p>
+<section id="static-bmi-model">
+<h3>Static BMI model<a class="headerlink" href="#static-bmi-model" title="Link to this heading">¶</a></h3>
+<p>Use this path when the concrete BMI model type is known when compiling the executable. <code class="docutils literal notranslate"><span class="pre">StaticBmiSimulationUnit&lt;YourModel&gt;</span></code> constructs one fresh model object per task.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">heat</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiSimulationUnit</span><span class="o">&lt;</span><span class="n">BmiHeat</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">StaticBmiSimulationUnit</span><span class="o">&lt;</span><span class="n">BmiHeat</span><span class="o">&gt;&gt;</span><span class="p">();</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipelineConfig</span><span class="w"> </span><span class="n">pipeline_config</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_model_config</span><span class="p">(</span><span class="n">heat_config</span><span class="p">);</span>
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="p">{</span>
-<span class="w">    </span><span class="p">{</span><span class="n">heat</span><span class="p">,</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">bmi_pipeline_config_to_value</span><span class="p">(</span><span class="n">pipeline_config</span><span class="p">)}};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">StaticBmiConfig</span><span class="w"> </span><span class="n">config</span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">init_config_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">heat_config</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_task</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>At execution time, MIAOW wraps the model in <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> so the same
-lifecycle, forcing, output writing, and artifact tracking are used for BMI
-work.</p>
+<p>Static BMI model units always execute in the parent process.</p>
 </section>
-<section id="executing-a-dynamic-bmi-model">
-<h2>Executing a dynamic BMI model<a class="headerlink" href="#executing-a-dynamic-bmi-model" title="Link to this heading">¶</a></h2>
-<p>Use <code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;BmiPipeline&gt;</span></code> when the task should run one or more BMI
-models loaded from plugin libraries. <code class="docutils literal notranslate"><span class="pre">BmiModuleConfig</span></code> describes each plugin
-module, including the initialization config path used for that task.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiModuleConfig</span><span class="w"> </span><span class="n">module_config</span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;bmi_fortran&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiBackend</span><span class="o">::</span><span class="k">fortran</span><span class="p">,</span><span class="w"> </span><span class="n">plugin_path</span><span class="p">,</span>
-<span class="w">    </span><span class="n">init_config</span><span class="p">);</span>
+<section id="dynamic-bmi-plugin">
+<h3>Dynamic BMI plugin<a class="headerlink" href="#dynamic-bmi-plugin" title="Link to this heading">¶</a></h3>
+<p>Use this path when the model is loaded from a C++ or Fortran plugin library. <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig</span></code> contains the plugin, model, forcing, output, and execution settings for one task.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">dynamic_bmi</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiSimulationUnit</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiConfig</span><span class="w"> </span><span class="n">config</span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">backend_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiBackend</span><span class="o">::</span><span class="k">fortran</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">plugin_path_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin_path</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">init_config_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">init_config</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">execution_mode_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">ExecutionMode</span><span class="o">::</span><span class="n">persistent_subprocess</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_task</span><span class="p">(</span><span class="n">dynamic_bmi</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Dynamic C++ plugins must export C-linkage <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code> symbols. Dynamic Fortran plugins must export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked <a class="reference external" href="https://github.com/NOAA-OWP/iso_c_fortran_bmi">NOAA-OWP iso_c_fortran_bmi bridge</a>. See <code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code> for concrete C++ and Fortran plugin exports.</p>
+</section>
+<section id="nextgen-style-realization-driven-task-creation">
+<h3>NextGen-style realization-driven task creation<a class="headerlink" href="#nextgen-style-realization-driven-task-creation" title="Link to this heading">¶</a></h3>
+<p>Use this path when a <a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization should produce one dynamic BMI task per feature (e.g., per catchment).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">PartitionedBmiRealization</span><span class="w"> </span><span class="nf">realization</span><span class="p">(</span><span class="n">realization_path</span><span class="p">);</span>
 
 <span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiSimulationUnit</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipeline</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">dynamic_bmi</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiSimulationUnit</span><span class="o">&gt;</span><span class="p">();</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipelineConfig</span><span class="w"> </span><span class="n">pipeline_config</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipelineConfig</span><span class="p">({</span><span class="n">module_config</span><span class="p">});</span>
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="p">{</span>
-<span class="w">    </span><span class="p">{</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">bmi_pipeline_config_to_value</span><span class="p">(</span><span class="n">pipeline_config</span><span class="p">)}};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_tasks</span><span class="p">(</span>
+<span class="w">    </span><span class="n">dynamic_bmi</span><span class="p">,</span><span class="w"> </span><span class="n">realization</span><span class="p">,</span>
+<span class="w">    </span><span class="n">miaow</span><span class="o">::</span><span class="n">ExecutionMode</span><span class="o">::</span><span class="n">persistent_subprocess</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>At execution time, <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> constructs <code class="docutils literal notranslate"><span class="pre">DynamicBmiModel</span></code> modules from
-the serialized config. This is the same execution path used for realization
-workflows, hand-built multi-model pipelines, and subprocess tasks.</p>
-<p>For consistency with NextGen, the C++ backend expects plugins to export
-C-linkage symbols named <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code>.
-The Fortran backend expects plugins to export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the
-linked
-<a class="reference external" href="https://github.com/NOAA-OWP/iso_c_fortran_bmi">NOAA-OWP iso_c_fortran_bmi bridge</a>.</p>
-<p>For C++ plugins, export the creation and destruction functions with C linkage:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="n">bmi</span><span class="o">::</span><span class="n">Bmi</span><span class="o">*</span><span class="w"> </span><span class="n">bmi_model_create</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">YourBmiModel</span><span class="p">();</span>
-<span class="p">}</span>
-
-<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">bmi_model_destroy</span><span class="p">(</span><span class="n">bmi</span><span class="o">::</span><span class="n">Bmi</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>For Fortran plugins, export <code class="docutils literal notranslate"><span class="pre">register_bmi</span></code> with <code class="docutils literal notranslate"><span class="pre">bind(C)</span></code>:</p>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">function </span><span class="n">register_bmi</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">bmi_status</span><span class="p">)</span><span class="w"> </span><span class="k">bind</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;register_bmi&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">iso_c_binding</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="kt">c_int</span><span class="p">,</span><span class="w"> </span><span class="nb">c_loc</span><span class="p">,</span><span class="w"> </span><span class="kt">c_ptr</span>
-<span class="kt">    </span><span class="k">use </span><span class="n">bmif_2_0_iso</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">BMI_FAILURE</span><span class="p">,</span><span class="w"> </span><span class="n">BMI_SUCCESS</span>
-<span class="w">    </span><span class="k">use </span><span class="n">your_model_module</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">your_bmi_model</span>
-<span class="w">    </span><span class="k">use </span><span class="n">iso_c_bmif_2_0</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">box</span>
-<span class="w">    </span><span class="k">implicit none</span>
-
-<span class="k">    type</span><span class="p">(</span><span class="kt">c_ptr</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="kt">c_int</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bmi_status</span>
-<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">your_bmi_model</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bmi_model</span>
-<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">box</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bmi_box</span>
-
-<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">bmi_model</span><span class="p">)</span>
-<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">)</span>
-<span class="w">    </span><span class="n">bmi_box</span><span class="p">%</span><span class="n">ptr</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">bmi_model</span>
-
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">%</span><span class="n">ptr</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">c_loc</span><span class="p">(</span><span class="n">bmi_box</span><span class="p">)</span>
-<span class="w">        </span><span class="n">bmi_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BMI_SUCCESS</span>
-<span class="w">    </span><span class="k">else</span>
-<span class="k">        </span><span class="n">bmi_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BMI_FAILURE</span>
-<span class="w">    </span><span class="k">end if</span>
-<span class="k">end function </span><span class="n">register_bmi</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">PartitionedBmiRealization</span></code> resolves the plugin, initialization, forcing, feature, and output-root values. <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code> builds the dynamic task vector all at once.</p>
 </section>
-<section id="executing-a-realization-driven-bmi-pipeline">
-<h2>Executing a realization-driven BMI pipeline<a class="headerlink" href="#executing-a-realization-driven-bmi-pipeline" title="Link to this heading">¶</a></h2>
-<p>Use <code class="docutils literal notranslate"><span class="pre">BmiSimulationUnit&lt;BmiPipeline&gt;</span></code> when the task’s <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code>
-describes the model modules directly. This is the path used by realization
-workflows and by pipelines with more than one model module.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">miaow</span><span class="o">::</span><span class="n">PartitionedBmiRealization</span><span class="w"> </span><span class="nf">realization</span><span class="p">(</span><span class="n">realization_path</span><span class="p">);</span>
-
-<span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiSimulationUnit</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiPipeline</span><span class="o">&gt;&gt;</span><span class="p">();</span>
-
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">miaow</span><span class="o">::</span><span class="n">build_bmi_realization_tasks</span><span class="p">(</span><span class="n">realization</span><span class="p">,</span><span class="w"> </span><span class="n">pipeline</span><span class="p">);</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">tasks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">task</span><span class="p">.</span><span class="n">execution_mode_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">ExecutionMode</span><span class="o">::</span><span class="n">persistent_subprocess</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">PartitionedBmiRealization</span></code> reads a
-<a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization and produces one
-<code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> per feature. <code class="docutils literal notranslate"><span class="pre">build_bmi_realization_tasks(...)</span></code> turns
-those feature configs into MIAOW tasks for the registered pipeline unit.</p>
-<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> runs one BMI lifecycle in a subprocess
-and stops the subprocess after the task result. This is useful for BMI models
-that require a fresh process for every task. An empty <code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code>
-uses the compile-time default <code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code> runner path; a non-empty
-value selects that subprocess executable for the task.</p>
-<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> is available for serialized
-<code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> tasks. It uses the same subprocess worker backend as
-single-task mode and reuses one subprocess process per job worker, while each
-task still constructs and finalizes a fresh <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside that process.
-Persistent subprocesses are scoped to one submitted job and are bounded by
-<code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code>. The SUMMA example uses persistent subprocess
-mode.</p>
-<p>For hand-built dynamic pipelines, construct a <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> from a
-vector of <code class="docutils literal notranslate"><span class="pre">BmiModuleConfig</span></code> entries. Each module config carries the module
-name, backend, plugin path, initialization config, optional variable map, and
-optional CSV output variable list.</p>
 </section>
-<section id="reading-forcing-data">
-<h2>Reading forcing data<a class="headerlink" href="#reading-forcing-data" title="Link to this heading">¶</a></h2>
-<p>Forcing is represented in the pipeline config as <code class="docutils literal notranslate"><span class="pre">global.forcing</span></code>, then
-normalized into an internal BMI forcing module. The forcing module is always
-appended after the realization module; when no forcing is configured, it is
-initialized with an empty config and acts as a no-op. With configured forcing,
-the module reads a CSV file and exposes data columns as BMI outputs.
-<code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> derives explicit scalar couplings from each module’s
-<code class="docutils literal notranslate"><span class="pre">variables_names_map</span></code>, applies those couplings immediately before the target
-model updates, and advances the forcing source later in the same ordered update
-loop.</p>
-<p>The BMI pipeline config forcing object uses the following fields:</p>
+<section id="choose-where-dynamic-tasks-run">
+<h2>Choose where dynamic tasks run<a class="headerlink" href="#choose-where-dynamic-tasks-run" title="Link to this heading">¶</a></h2>
+<p>Set <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::execution_mode_</span></code> for direct dynamic tasks or pass an execution mode to the realization overload of <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Static BMI units always run in the parent process.</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 25.0%" />
-<col style="width: 75.0%" />
+<col style="width: 30.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Key</p></th>
-<th class="head"><p>Purpose</p></th>
+<tr class="row-odd"><th class="head"><p>Execution mode</p></th>
+<th class="head"><p>Use when</p></th>
+<th class="head"><p>Behaviour to know</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">provider</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">CsvFile</span></code> for resolved task-local forcing</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::in_process</span></code></p></td>
+<td><p>The plugin can run safely in the parent process</p></td>
+<td><p>This is the default task execution mode.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">file</span></code></p></td>
-<td><p>Path to the CSV forcing file</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code></p></td>
+<td><p>Each task needs a fresh process</p></td>
+<td><p>The subprocess stops after one task result.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code></p></td>
+<td><p>Tasks benefit from process reuse while keeping parent-process isolation</p></td>
+<td><p>One process is reused per job worker; each task still gets a fresh BMI lifecycle.</p></td>
 </tr>
 </tbody>
 </table>
-<p>Each BMI module may include <code class="docutils literal notranslate"><span class="pre">variables_names_map</span></code> in its <code class="docutils literal notranslate"><span class="pre">params</span></code> object.
-The map is interpreted as <code class="docutils literal notranslate"><span class="pre">BMI</span> <span class="pre">input</span> <span class="pre">variable</span> <span class="pre">-&gt;</span> <span class="pre">CSV</span> <span class="pre">header</span></code>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">variables_names_map</span></code> is omitted, MIAOW derives a model-authoritative
-identity map from <code class="docutils literal notranslate"><span class="pre">GetInputVarNames()</span></code> and expects same-named CSV headers.
-Explicit map entries override that identity behaviour completely.</p>
-<p>Each BMI module may also include <code class="docutils literal notranslate"><span class="pre">output_variables</span></code>, an ordered list of BMI
-output names written to task CSV output. When omitted, CSV output uses all
-names returned by <code class="docutils literal notranslate"><span class="pre">GetOutputVarNames()</span></code>.</p>
-<p>MIAOW’s external forcing reader currently only supports CSV files. The file must define a
-<code class="docutils literal notranslate"><span class="pre">time</span></code> or <code class="docutils literal notranslate"><span class="pre">Time</span></code> column plus all required numeric data columns. Supported
-timestamp formats are <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:MM:SS</span></code> and <code class="docutils literal notranslate"><span class="pre">YYYY/MM/DD</span> <span class="pre">HH:MM:SS</span></code>.
-MIAOW treats the first forcing row as the model-start forcing values. Later
-forcing rows are streamed as the model advances; each row-to-row timestamp
-delta must match the receiving BMI model timestep after unit normalization.</p>
-<p>Exhausting the forcing data before the model’s <code class="docutils literal notranslate"><span class="pre">end_time</span></code> fails the task
-with a <code class="docutils literal notranslate"><span class="pre">Forcing</span> <span class="pre">alignment</span> <span class="pre">error</span></code>; forcing rows beyond <code class="docutils literal notranslate"><span class="pre">end_time</span></code> are
-silently ignored. In <code class="docutils literal notranslate"><span class="pre">examples/02_soil_freeze_thaw</span></code>, three tasks exercise
-matched and mismatched combinations of model end time and forcing series
-length: a matched 512-day run, a 512-day run whose 1-day forcing is exhausted
-early, and a 1-day run that stops well before its 512-day forcing ends.</p>
-<p>In global <a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization
-files, <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing enables MIAOW-managed CSV forcing for each
-feature. Partitioning resolves that global forcing entry to per-task <code class="docutils literal notranslate"><span class="pre">CsvFile</span></code>
-forcing.</p>
+<p>Subprocess modes are available for dynamic BMI tasks. <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::subprocess_path_</span></code> selects a non-default subprocess executable. See <a class="reference internal" href="architecture.html#subprocess-execution"><span class="std std-ref">Subprocess execution</span></a> for process ownership, reuse, lifetime, and concurrency behaviour.</p>
+</section>
+<section id="reading-forcing-data">
+<h2>Reading forcing data<a class="headerlink" href="#reading-forcing-data" title="Link to this heading">¶</a></h2>
+<p>Set <code class="docutils literal notranslate"><span class="pre">forcing_file_</span></code> in <code class="docutils literal notranslate"><span class="pre">StaticBmiConfig</span></code> or <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig</span></code> to enable the internal BMI forcing module. Currently, the forcing module is always appended after the model in the BMI pipeline, although it actually runs before the model’s <code class="docutils literal notranslate"><span class="pre">Update()</span></code> calls. When no forcing is configured, it is initialized with an empty config and acts as a no-op. With configured forcing, the module reads a <code class="docutils literal notranslate"><span class="pre">CsvFile</span></code> entry and exposes data columns as BMI outputs. MIAOW derives explicit scalar couplings from <code class="docutils literal notranslate"><span class="pre">variables_names_map_</span></code>, applies them immediately before model updates, and then advances the forcing source.</p>
+<p>The variable map is interpreted as <code class="docutils literal notranslate"><span class="pre">BMI</span> <span class="pre">input</span> <span class="pre">variable</span> <span class="pre">-&gt;</span> <span class="pre">CSV</span> <span class="pre">header</span></code>. If it is empty, MIAOW derives an identity map from <code class="docutils literal notranslate"><span class="pre">GetInputVarNames()</span></code> and expects CSV headers with the same names as the corresponding variables. The <code class="docutils literal notranslate"><span class="pre">output_variables_</span></code> field controls which BMI output names are written to task CSV output; when empty, CSV output uses all names returned by <code class="docutils literal notranslate"><span class="pre">GetOutputVarNames()</span></code>.</p>
+<p>MIAOW’s external forcing reader currently only supports CSV files. The file must define a <code class="docutils literal notranslate"><span class="pre">time</span></code> or <code class="docutils literal notranslate"><span class="pre">Time</span></code> column plus all required numeric data columns. Supported timestamp formats are <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:MM:SS</span></code> and <code class="docutils literal notranslate"><span class="pre">YYYY/MM/DD</span> <span class="pre">HH:MM:SS</span></code>. MIAOW treats the first forcing row as the model-start forcing values. Later forcing rows are streamed as the model advances; each row-to-row timestamp delta must match the receiving BMI model timestep after unit normalization.</p>
+<p>Exhausting the forcing data before the model’s <code class="docutils literal notranslate"><span class="pre">end_time</span></code> fails the task with a <code class="docutils literal notranslate"><span class="pre">Forcing</span> <span class="pre">alignment</span> <span class="pre">error</span></code>; forcing rows beyond <code class="docutils literal notranslate"><span class="pre">end_time</span></code> are silently ignored. The <code class="docutils literal notranslate"><span class="pre">examples/02_soil_freeze_thaw</span></code> workflow includes matched and mismatched model end time and forcing series lengths.</p>
+<p>In global <a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization files, <code class="docutils literal notranslate"><span class="pre">CsvPerFeature</span></code> forcing enables MIAOW-managed CSV forcing for each feature. Realization parsing resolves that entry to per-task <code class="docutils literal notranslate"><span class="pre">CsvFile</span></code> forcing.</p>
 </section>
 <section id="diagnostics-and-artifacts">
 <h2>Diagnostics and artifacts<a class="headerlink" href="#diagnostics-and-artifacts" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(...)</span></code> returns a non-blocking <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code>; <code class="docutils literal notranslate"><span class="pre">get()</span></code>
-yields a <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code> with per-task records and job runtime. An output write
-failure for <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> is reported by <code class="docutils literal notranslate"><span class="pre">JobHandle::get()</span></code> as an
-exception and does not change task statuses. If <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::output_root_</span></code>
-or CLI <code class="docutils literal notranslate"><span class="pre">--output_root</span></code> is set, MIAOW writes:</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::output_root_</span></code> or CLI <code class="docutils literal notranslate"><span class="pre">--output_root</span></code> is set, MIAOW writes the following directory structure:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;output_root&gt;/
 `-- run_&lt;run_id&gt;/
     `-- job_&lt;job_id&gt;/
@@ -261,33 +153,8 @@ or CLI <code class="docutils literal notranslate"><span class="pre">--output_roo
             `-- &lt;feature_id or task_&lt;task_id&gt;&gt;.csv
 </pre></div>
 </div>
-<p>Persisted run directories start at <code class="docutils literal notranslate"><span class="pre">run_0</span></code>. When an output root already
-contains run directories, the next run uses the largest existing run ID plus
-one so as not to overwrite any existing output.</p>
-<p>Each task receives <code class="docutils literal notranslate"><span class="pre">Task::task_output_dir_</span></code> for the job <code class="docutils literal notranslate"><span class="pre">results/</span></code>
-directory and <code class="docutils literal notranslate"><span class="pre">Task::task_output_name_</span></code> for task-specific artifact filenames.
-BMI tasks write the resolved BMI pipeline config in the job directory and one
-CSV file per task under <code class="docutils literal notranslate"><span class="pre">results/</span></code>. When a module declares
-<code class="docutils literal notranslate"><span class="pre">output_variables</span></code>, those BMI variables are written as CSV columns in
-declaration order; otherwise all <code class="docutils literal notranslate"><span class="pre">GetOutputVarNames()</span></code> variables are written.</p>
-<p>Tasks report job-relative filenames such as <code class="docutils literal notranslate"><span class="pre">cat-552.json</span></code> and
-<code class="docutils literal notranslate"><span class="pre">results/cat-552.csv</span></code> in <code class="docutils literal notranslate"><span class="pre">TaskResult::artifact_paths_</span></code>. <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code>
-records those paths under each task record’s <code class="docutils literal notranslate"><span class="pre">result</span></code> field and records each
-task’s descriptive <code class="docutils literal notranslate"><span class="pre">Task::metadata_</span></code>, but it does not embed artifact file
-contents. If a task has non-empty <code class="docutils literal notranslate"><span class="pre">metadata_[&quot;feature_id&quot;]</span></code>, that value
-becomes the output file stem; otherwise the runtime uses <code class="docutils literal notranslate"><span class="pre">task_&lt;task_id&gt;</span></code>.
-Output stems must be unique within one job and cannot contain path separators.</p>
-<p>Subprocess tasks use a dedicated subprocess-to-parent pipe for the CAF endpoint
-exchange, plus <code class="docutils literal notranslate"><span class="pre">subprocess_*_stdout.log</span></code> and <code class="docutils literal notranslate"><span class="pre">subprocess_*_stderr.log</span></code> files
-for diagnostics. The parent launches the subprocess, reads one endpoint JSON
-line from the pipe, sends <code class="docutils literal notranslate"><span class="pre">Task</span></code> values to the subprocess actor over CAF, and
-receives <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code> replies. Task-scoped subprocess logs are removed after a
-succeeded task result and subprocess stop. Persistent subprocess logs are
-removed when the job worker stops the process after all tasks handled by that
-process succeeded. If setup, launch, actor exchange, subprocess shutdown, or
-task execution fails, remaining logs are left in place for diagnostics.
-Parent-side process failures report <code class="docutils literal notranslate"><span class="pre">Subprocess</span> <span class="pre">error</span></code>. When no task output
-directory is assigned, these subprocess logs use a temporary directory instead.</p>
+<p>Persisted run directories start at <code class="docutils literal notranslate"><span class="pre">run_0</span></code> and advance to the largest existing run ID plus one. BMI tasks write the resolved BMI config in the job directory and one CSV file per task under <code class="docutils literal notranslate"><span class="pre">results/</span></code>. A non-empty <code class="docutils literal notranslate"><span class="pre">metadata_[&quot;feature_id&quot;]</span></code> becomes the output file stem; otherwise MIAOW uses <code class="docutils literal notranslate"><span class="pre">task_&lt;task_id&gt;</span></code>. Output stems must be unique within one job and cannot contain path separators.</p>
+<p>Subprocess tasks also write <code class="docutils literal notranslate"><span class="pre">subprocess_*_stdout.log</span></code> and <code class="docutils literal notranslate"><span class="pre">subprocess_*_stderr.log</span></code> diagnostics. Logs are removed after successful task or persistent-worker shutdown, and retained when setup, launch, actor exchange, shutdown, or task execution fails.</p>
 </section>
 </section>
 
@@ -323,9 +190,9 @@ directory is assigned, these subprocess logs use a temporary directory instead.<
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">BMI integration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#executing-a-static-bmi-model">Executing a static BMI model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#executing-a-dynamic-bmi-model">Executing a dynamic BMI model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#executing-a-realization-driven-bmi-pipeline">Executing a realization-driven BMI pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bmi-task-lifecycle">BMI task lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#minimal-setup-patterns">Minimal setup patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choose-where-dynamic-tasks-run">Choose where dynamic tasks run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-forcing-data">Reading forcing data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#diagnostics-and-artifacts">Diagnostics and artifacts</a></li>
 </ul>

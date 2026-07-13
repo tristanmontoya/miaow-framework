@@ -35,31 +35,11 @@
             
   <section id="miaow-model-independent-actor-orchestration-workflows-for-scientific-computing">
 <h1>MIAOW: Model-Independent Actor Orchestration Workflows for Scientific Computing<a class="headerlink" href="#miaow-model-independent-actor-orchestration-workflows-for-scientific-computing" title="Link to this heading">¶</a></h1>
-<p>Managing concurrent numerical simulation tasks with dynamic workloads and
-heterogeneous hardware can feel like herding cats.
-<a class="reference external" href="https://github.com/uofs-simlab/miaow-framework">MIAOW</a> embraces that reality
-by using actor-based asynchronous orchestration so tasks run when they are
-ready, maximizing utilization across available resources.</p>
-<p>MIAOW targets the <a class="reference external" href="https://en.cppreference.com/w/cpp/20.html">C++20 standard</a>,
-uses the <a class="reference external" href="https://www.actor-framework.org/">C++ Actor Framework (CAF)</a> as its
-actor backend, relies on <a class="reference external" href="https://www.boost.org/">Boost</a> for process
-management and JSON support, and includes C++/Fortran
-<a class="reference external" href="https://bmi.csdms.io/en/stable/">Basic Model Interface (BMI)</a> integration
-paths.</p>
-<section id="quick-start">
-<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
-<p>See the repository README for platform-specific dependency installation. Build
-the core library and subprocess runner:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>OFF
-cmake<span class="w"> </span>--build<span class="w"> </span>build
-</pre></div>
-</div>
-<p>Build the default examples and run the test suite:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
-cmake<span class="w"> </span>--build<span class="w"> </span>build
-ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
-</pre></div>
-</div>
+<p>Managing concurrent numerical simulation tasks with dynamic workloads and heterogeneous hardware can feel like herding cats. <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework">MIAOW</a> embraces that reality by using actor-based asynchronous orchestration so tasks run when they are ready, maximizing utilization across available resources.</p>
+<p>MIAOW targets the <a class="reference external" href="https://en.cppreference.com/w/cpp/20.html">C++20 standard</a>, uses the <a class="reference external" href="https://www.actor-framework.org/">C++ Actor Framework (CAF)</a> as its actor backend, relies on <a class="reference external" href="https://www.boost.org/">Boost</a> for process management and JSON support, and includes C++/Fortran <a class="reference external" href="https://bmi.csdms.io/en/stable/">Basic Model Interface (BMI)</a> integration paths.</p>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="development.html"><span class="doc">Development</span></a> for requirements, build options, and testing. See <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> for runnable workflows and model-specific setup.</p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
@@ -69,14 +49,13 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#orchestration-model">Orchestration model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#subprocess-execution">Subprocess execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#scheduling-behaviour">Scheduling behaviour</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#public-api-summary">Public API summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#limitations">Limitations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bmi.html#executing-a-static-bmi-model">Executing a static BMI model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bmi.html#executing-a-dynamic-bmi-model">Executing a dynamic BMI model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bmi.html#executing-a-realization-driven-bmi-pipeline">Executing a realization-driven BMI pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#bmi-task-lifecycle">BMI task lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#minimal-setup-patterns">Minimal setup patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bmi.html#choose-where-dynamic-tasks-run">Choose where dynamic tasks run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bmi.html#reading-forcing-data">Reading forcing data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bmi.html#diagnostics-and-artifacts">Diagnostics and artifacts</a></li>
 </ul>
@@ -85,7 +64,6 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <li class="toctree-l2"><a class="reference internal" href="examples.html#included-examples">Included examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#summa-example">SUMMA example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#trixi-jl-example">Trixi.jl example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#example-layout">Example layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#configuring-model-examples-independently">Configuring model examples independently</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#example-command-line-options">Example command-line options</a></li>
 </ul>
@@ -94,7 +72,6 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <li class="toctree-l2"><a class="reference internal" href="development.html#build-and-test">Build and test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#build-options">Build options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#documentation-build">Documentation build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development.html#code-structure">Code structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#namespace-layout">Namespace layout</a></li>
 </ul>
 </li>
@@ -110,11 +87,7 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </section>
 <section id="authors-and-funding">
 <h2>Authors and funding<a class="headerlink" href="#authors-and-funding" title="Link to this heading">¶</a></h2>
-<p>MIAOW was developed at the University of Saskatchewan by
-<a class="reference external" href="https://tjbmontoya.com/">Tristan Montoya</a> and
-<a class="reference external" href="https://www.cs.usask.ca/people/faculty%20profiles/ray-spiteri.php">Raymond Spiteri</a>,
-with funding support from the <a class="reference external" href="https://ciroh.ua.edu/">Cooperative Institute for Research to Operations
-in Hydrology (CIROH)</a>.</p>
+<p>MIAOW was developed at the University of Saskatchewan with funding support from the <a class="reference external" href="https://ciroh.ua.edu/">Cooperative Institute for Research to Operations in Hydrology (CIROH)</a>.</p>
 </section>
 </section>
 

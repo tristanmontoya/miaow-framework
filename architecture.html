@@ -38,101 +38,44 @@
 <h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h1>
 <section id="orchestration-model">
 <h2>Orchestration model<a class="headerlink" href="#orchestration-model" title="Link to this heading">¶</a></h2>
-<p>MIAOW executes simulation workflows with the following actor hierarchy, which is
-inspired by <a class="reference external" href="https://github.com/uofs-simlab/Summa-Actors">SUMMA-Actors</a>
-(<a class="reference external" href="https://doi.org/10.1007/s10586-024-04318-5">Klenk and Spiteri, 2024</a>):</p>
-<figure class="align-center" id="id1">
-<a class="reference internal image-reference" href="_images/orchestration_overview_tikz.png"><img alt="MIAOW orchestration actor hierarchy" src="_images/orchestration_overview_tikz.png" style="width: 95%;" />
+<p>MIAOW executes simulation workflows through an actor hierarchy inspired by <a class="reference external" href="https://github.com/uofs-simlab/Summa-Actors">SUMMA-Actors</a> (<a class="reference external" href="https://doi.org/10.1007/s10586-024-04318-5">Klenk and Spiteri, 2024</a>), as illustrated below.</p>
+<a class="reference internal image-reference" href="_images/orchestration_overview_tikz.png"><img alt="MIAOW orchestration actor hierarchy" class="align-center" src="_images/orchestration_overview_tikz.png" style="width: 95%;" />
 </a>
-<figcaption>
-<p><span class="caption-text">MIAOW orchestration from job submission through worker task execution.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
 <p>A typical workflow includes the following steps:</p>
 <ol class="arabic simple">
 <li><p>Caller invokes <code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(tasks)</span></code>.</p></li>
-<li><p>Runtime assigns a <code class="docutils literal notranslate"><span class="pre">job_id</span></code> and sends <code class="docutils literal notranslate"><span class="pre">(job_id,</span> <span class="pre">tasks)</span></code> to
-<code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>.</p></li>
+<li><p>Runtime assigns a <code class="docutils literal notranslate"><span class="pre">job_id</span></code> and sends <code class="docutils literal notranslate"><span class="pre">(job_id,</span> <span class="pre">tasks)</span></code> to <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code> spawns one <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> for that job.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">job_actor</span></code> greedily dispatches tasks to available
-<code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p></li>
-<li><p>Each worker resolves <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code>. In-process tasks construct a fresh
-<code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance, while subprocess tasks use worker-owned
-subprocess state.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">job_actor</span></code> greedily dispatches tasks to available <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p></li>
+<li><p>Each worker resolves <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code>. In-process tasks construct a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance, while subprocess tasks use worker-owned subprocess state.</p></li>
 <li><p>Completed task results are wrapped into one <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p></li>
 <li><p>Runtime fulfils the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p></li>
 </ol>
-<p>Multiple <code class="docutils literal notranslate"><span class="pre">submit_job(...)</span></code> calls can be running concurrently. Tasks with
-unknown <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> values fail individually; other tasks in the same
-job continue through the normal scheduler.</p>
+<p>Multiple <code class="docutils literal notranslate"><span class="pre">submit_job(...)</span></code> calls can be running concurrently.</p>
 </section>
 <section id="subprocess-execution">
-<h2>Subprocess execution<a class="headerlink" href="#subprocess-execution" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> and
-<code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> keep the parent scheduler unchanged
-while isolating BMI model execution from the parent process. The parent process
-still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal
-<code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p>
-<p>For subprocess tasks, the parent worker constructs the registered
-<code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> and passes it an <code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code>. BMI pipeline units use
-that context to launch or reuse the resolved subprocess executable, send the
-serialized <code class="docutils literal notranslate"><span class="pre">Task</span></code> to a subprocess worker actor, and receive one
-<code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>. An empty <code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code> uses the compile-time
-<code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code> runner path; a non-empty value selects the subprocess
-executable for that task.</p>
-<p>Single-task subprocess mode stops the subprocess after each task. Persistent
-subprocess mode reuses one subprocess per job worker for tasks with the same
-resolved subprocess path. Each task still constructs and finalizes a fresh
-<code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> inside the subprocess. Persistent subprocesses are scoped to one
-submitted job, and <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code> bounds their concurrency.</p>
+<span id="id1"></span><h2>Subprocess execution<a class="headerlink" href="#subprocess-execution" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> and <code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> isolate model execution from the parent process. The parent process still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers, but defer the actual model execution to a subprocess with its own actor system.</p>
+<p>Single-task subprocess mode stops the subprocess after each task. Persistent subprocess mode reuses one subprocess per job worker for tasks with the same resolved subprocess path.</p>
 </section>
 <section id="scheduling-behaviour">
 <h2>Scheduling behaviour<a class="headerlink" href="#scheduling-behaviour" title="Link to this heading">¶</a></h2>
-<figure class="align-center" id="id2">
-<a class="reference internal image-reference" href="_images/task_scheduling_tikz.png"><img alt="MIAOW task scheduling queue and worker dispatch" src="_images/task_scheduling_tikz.png" style="width: 35%;" />
+<p>MIAOW uses a simple greedy scheduling strategy to dispatch tasks to available workers, as illustrated below.</p>
+<a class="reference internal image-reference" href="_images/task_scheduling_tikz.png"><img alt="MIAOW task scheduling queue and worker dispatch" class="align-center" src="_images/task_scheduling_tikz.png" style="width: 35%;" />
 </a>
-<figcaption>
-<p><span class="caption-text">Greedy task dispatch from the pending task queue to available workers.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
 <p>Each <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> maintains:</p>
 <ul class="simple">
 <li><p>a pending-task cursor, <code class="docutils literal notranslate"><span class="pre">next_task_to_dispatch_</span></code></p></li>
 <li><p>a queue of idle workers, <code class="docutils literal notranslate"><span class="pre">available_workers_</span></code></p></li>
 </ul>
-<p>When a worker finishes, it is immediately returned to the idle queue and the
-next pending task is dispatched. Each task constructs a fresh
-<code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance and calls <code class="docutils literal notranslate"><span class="pre">execute(...)</span></code> with an
-<code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code>. Persistent subprocess state is owned by the worker actor
-and is exposed to simulation units through the context, not through <code class="docutils literal notranslate"><span class="pre">Task</span></code> or
-<code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> storage. BMI units construct and finalize fresh BMI model
-lifecycles per task.</p>
-</section>
-<section id="public-api-summary">
-<h2>Public API summary<a class="headerlink" href="#public-api-summary" title="Link to this heading">¶</a></h2>
-<p>These are the key types in <code class="docutils literal notranslate"><span class="pre">include/miaow.hpp</span></code>:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code>: abstract model-agnostic execution interface</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code>: runtime-local worker services passed to
-<code class="docutils literal notranslate"><span class="pre">SimulationUnit::execute(...)</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry</span></code>: registers units and returns <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">TaskMetadata</span></code>: string labels preserved for reporting and postprocessing</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Task</span></code>: carries <code class="docutils literal notranslate"><span class="pre">simulation_unit_id_</span></code>, positional <code class="docutils literal notranslate"><span class="pre">args_</span></code>,
-descriptive <code class="docutils literal notranslate"><span class="pre">metadata_</span></code>, and runtime-set output fields</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>: simulation-unit status, message, and artifact paths</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code>: runtime task ID, simulation unit ID, metadata, result, and
-runtime</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Runtime</span></code>: submits jobs and returns non-blocking <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>: run ID, job ID, task records, and job runtime</p></li>
-</ul>
+<p>When a worker finishes, it is immediately returned to the idle queue and the next pending task is dispatched. Each task constructs a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance and calls the corresponding <code class="docutils literal notranslate"><span class="pre">execute(...)</span></code> method, which takes a <code class="docutils literal notranslate"><span class="pre">Task</span></code> and <code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code> and returns a <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>. The <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance is destroyed after the task completes, although tasks run in a subprocess may reuse the subprocess for later tasks.</p>
 </section>
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Distributed-memory parallelism is not currently supported.</p></li>
-<li><p>Target workloads are embarrassingly parallel tasks without inter-task
-communication.</p></li>
-<li><p>Windows is not supported, and there is no plan to add such support.</p></li>
+<li><p>Target workloads are embarrassingly parallel tasks without inter-task communication.</p></li>
+<li><p>Windows is not currently supported.</p></li>
 </ul>
 </section>
 </section>
@@ -171,7 +114,6 @@ communication.</p></li>
 <li class="toctree-l2"><a class="reference internal" href="#orchestration-model">Orchestration model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#subprocess-execution">Subprocess execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scheduling-behaviour">Scheduling behaviour</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#public-api-summary">Public API summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
 </li>

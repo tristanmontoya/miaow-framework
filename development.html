@@ -74,8 +74,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">00_hello;01_heat;02_soil_freeze_thaw;03_dynamic_bmi</span></code></p></td>
-<td><p>Semicolon-separated list of examples to build when <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code> is
-enabled</p></td>
+<td><p>Semicolon-separated list of examples to build when <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code> is enabled</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_PROVIDER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
@@ -95,87 +94,32 @@ enabled</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_DEFAULT_MODEL_BASE_DIR</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">${PROJECT_SOURCE_DIR}/third_party</span></code></p></td>
-<td><p>Default base directory where external model sources are resolved or
-fetched</p></td>
+<td><p>Default base directory where external model sources are resolved or fetched</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code></p></td>
 <td><p>empty</p></td>
-<td><p>Optional explicit path to a valid local
-<code class="docutils literal notranslate"><span class="pre">NOAA-OWP/iso_c_fortran_bmi</span></code> checkout</p></td>
+<td><p>Optional explicit path to a valid local <code class="docutils literal notranslate"><span class="pre">NOAA-OWP/iso_c_fortran_bmi</span></code> checkout</p></td>
 </tr>
 </tbody>
 </table>
-<p>When <code class="docutils literal notranslate"><span class="pre">MIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code> is empty, CMake looks for
-<code class="docutils literal notranslate"><span class="pre">iso_c_fortran_bmi</span></code> under <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code> and fetches it
-into that location if missing.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">MIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code> is empty, CMake looks for <code class="docutils literal notranslate"><span class="pre">iso_c_fortran_bmi</span></code> under <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code> and fetches it into that location if missing.</p>
 <p>Provider values are interpreted as follows:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">system</span></code>: require <code class="docutils literal notranslate"><span class="pre">find_package(...)</span></code> to provide the dependency</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">fetch</span></code>: skip <code class="docutils literal notranslate"><span class="pre">find_package(...)</span></code> and use <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">auto</span></code>: try <code class="docutils literal notranslate"><span class="pre">find_package(...)</span></code>, then use <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> if not found</p></li>
 </ul>
-<p>A Conan-based CI-style setup uses these commands:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--output-folder<span class="o">=</span>build/conan<span class="w"> </span>--build<span class="o">=</span>missing
-cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-DMIAOW_BOOST_PROVIDER<span class="o">=</span>system<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-DMIAOW_CAF_PROVIDER<span class="o">=</span>system
-cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
-</pre></div>
-</div>
 </section>
 <section id="documentation-build">
 <h2>Documentation build<a class="headerlink" href="#documentation-build" title="Link to this heading">¶</a></h2>
-<p>Generated API documentation uses Doxygen for C++ docstring extraction and
-Sphinx with Breathe for HTML rendering. Doxygen must be installed separately
-and available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<p>Generated API documentation uses Doxygen for C++ docstring extraction and Sphinx with Breathe for HTML rendering. Doxygen must be installed separately and available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
 <p>Build the docs from a dedicated Python environment:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>docs/.venv
 docs/.venv/bin/pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
-rm<span class="w"> </span>-rf<span class="w"> </span>docs/_build/html<span class="w"> </span>docs/_build/doctrees
-docs/.venv/bin/sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>-d<span class="w"> </span>docs/_build/doctrees<span class="w"> </span>docs<span class="w"> </span>docs/_build/html
+docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>-d<span class="w"> </span>docs/_build/doctrees<span class="w"> </span>docs<span class="w"> </span>docs/_build/html
 </pre></div>
 </div>
 <p>The generated HTML entry point is <code class="docutils literal notranslate"><span class="pre">docs/_build/html/index.html</span></code>.</p>
-</section>
-<section id="code-structure">
-<h2>Code structure<a class="headerlink" href="#code-structure" title="Link to this heading">¶</a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>include/
-  miaow.hpp              # public runtime/task API
-  miaow_bmi.hpp          # BMI simulation-unit wrapper and realization contracts
-  miaow_io.hpp           # public I/O, diagnostics, and CLI API
-
-src/
-  core/
-    runtime.cpp          # Runtime submit path and output tree setup
-    actors.cpp           # orchestrator/job/worker actor behaviour
-    process.cpp          # subprocess launch, connection, and process reuse
-    internal.hpp         # core-private actor declarations and JobState
-
-  bmi/
-    execute.cpp          # BMI pipeline lifecycle execution
-    dynamic.cpp          # DynamicBmiModel adapter for C++/Fortran plugins
-    forcing.cpp          # streaming external BMI forcing CSV source
-    io.cpp               # BMI config, artifact, and output CSV helpers
-    pipeline.cpp         # ordered BMI module pipeline and coupling application
-    realization.cpp      # BMI realization parsing, task, and registration helpers
-    subprocess.cpp       # BMI subprocess executable entry point
-    internal.hpp         # BMI-private forcing and output declarations
-
-  io/
-    cli.cpp              # runtime command-line option parsing
-    csv.cpp              # CSV parsing plus shared forcing helper utilities
-    diagnostics.cpp      # diagnostics formatting and printing helpers
-    job_record.cpp       # runtime job record output writing
-    internal.hpp         # IO-private declarations and helpers
-
-examples/
-  00_hello/
-  01_heat/
-  02_soil_freeze_thaw/
-  03_dynamic_bmi/
-  04_summa/
-</pre></div>
-</div>
 </section>
 <section id="namespace-layout">
 <h2>Namespace layout<a class="headerlink" href="#namespace-layout" title="Link to this heading">¶</a></h2>
@@ -184,8 +128,7 @@ examples/
 <li><p>Core internals: <code class="docutils literal notranslate"><span class="pre">miaow::core</span></code></p></li>
 <li><p>BMI internals: <code class="docutils literal notranslate"><span class="pre">miaow::bmi</span></code></p></li>
 <li><p>Internal I/O helpers: <code class="docutils literal notranslate"><span class="pre">miaow::io</span></code></p></li>
-<li><p>The external <a class="reference external" href="https://github.com/csdms/bmi-cxx/tree/master">BMI C++ API</a>
-is available through the <code class="docutils literal notranslate"><span class="pre">miaow::bmi_api</span> <span class="pre">=</span> <span class="pre">::bmi</span></code> alias.</p></li>
+<li><p>The external <a class="reference external" href="https://github.com/csdms/bmi-cxx/tree/master">BMI C++ API</a> is available through the <code class="docutils literal notranslate"><span class="pre">miaow::bmi_api</span> <span class="pre">=</span> <span class="pre">::bmi</span></code> alias.</p></li>
 </ul>
 </section>
 </section>
@@ -227,7 +170,6 @@ is available through the <code class="docutils literal notranslate"><span class=
 <li class="toctree-l2"><a class="reference internal" href="#build-and-test">Build and test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-options">Build options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-build">Documentation build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#code-structure">Code structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#namespace-layout">Namespace layout</a></li>
 </ul>
 </li>
