@@ -47,7 +47,7 @@
 <li><p>Runtime assigns a <code class="docutils literal notranslate"><span class="pre">job_id</span></code> and sends <code class="docutils literal notranslate"><span class="pre">(job_id,</span> <span class="pre">tasks)</span></code> to <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code> spawns one <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> for that job.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">job_actor</span></code> greedily dispatches tasks to available <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p></li>
-<li><p>Each worker resolves <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code>. In-process tasks construct a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance, while subprocess tasks use worker-owned subprocess state.</p></li>
+<li><p>Each worker resolves <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code>. In-process tasks construct a fresh <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> instance, whereas subprocess tasks use worker-owned subprocess state.</p></li>
 <li><p>Completed task results are wrapped into one <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p></li>
 <li><p>Runtime fulfils the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p></li>
 </ol>
@@ -55,7 +55,8 @@
 </section>
 <section id="subprocess-execution">
 <span id="id1"></span><h2>Subprocess execution<a class="headerlink" href="#subprocess-execution" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> and <code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> execution modes isolate model execution from the parent process. When using these modes, the parent process still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers, but defers the actual model execution to a subprocess with its own actor system. In <code class="docutils literal notranslate"><span class="pre">single_task_subprocess</span></code> mode, the subprocess is stopped after each task, while <code class="docutils literal notranslate"><span class="pre">persistent_subprocess</span></code> mode reuses one subprocess per job worker for tasks with the same resolved subprocess path.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> and <code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> execution modes isolate model execution from the parent process. When using these modes, the parent process still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers, but defers the actual model execution to a subprocess with its own actor system.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">single_task_subprocess</span></code> mode, the subprocess is stopped after each task, whereas <code class="docutils literal notranslate"><span class="pre">persistent_subprocess</span></code> mode reuses one subprocess per job worker for tasks with the same resolved subprocess path.</p>
 </section>
 <section id="scheduling-behaviour">
 <h2>Scheduling behaviour<a class="headerlink" href="#scheduling-behaviour" title="Link to this heading">¶</a></h2>
@@ -72,7 +73,7 @@
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>While subprocess execution is currently supported using remote actors, MIAOW does not currently support distributed-memory parallelism across multiple nodes. This is a planned feature for future releases.</p></li>
+<li><p>Although subprocess execution is currently supported using remote actors, MIAOW does not currently support distributed-memory parallelism across multiple nodes. This is a planned feature for future releases.</p></li>
 <li><p>MIAOW currently targets embarrassingly parallel workflows. A future release will support more complex workflows involving task dependencies.</p></li>
 <li><p>Microsoft Windows is not currently supported, and there are no immediate plans to support it. MIAOW has been tested on Linux and macOS, and future releases will continue to support these platforms.</p></li>
 </ul>
