@@ -62,7 +62,7 @@
 <p>MIAOW uses a simple greedy scheduling strategy to dispatch tasks to available workers, as illustrated in the figure below, where the orange cat icons represent tasks:</p>
 <a class="reference internal image-reference" href="_images/task_scheduling_tikz.png"><img alt="MIAOW task scheduling queue and worker dispatch" class="align-center" src="_images/task_scheduling_tikz.png" style="width: 45%;" />
 </a>
-<p>Each <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> maintains:</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> maintains the following state to manage task dispatch:</p>
 <ul class="simple">
 <li><p>a pending-task cursor, <code class="docutils literal notranslate"><span class="pre">next_task_to_dispatch_</span></code></p></li>
 <li><p>a queue of idle workers, <code class="docutils literal notranslate"><span class="pre">available_workers_</span></code></p></li>
