@@ -85,7 +85,7 @@
 <p>Dynamic C++ plugins must export C-linkage <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code> symbols. Dynamic Fortran plugins must export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked <a class="reference external" href="https://github.com/NOAA-OWP/iso_c_fortran_bmi">NOAA-OWP iso_c_fortran_bmi bridge</a>. See <code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code> for concrete C++ and Fortran plugin exports.</p>
 </section>
 <section id="nextgen-style-realization-driven-task-creation">
-<h3>NextGen-style realization-driven task creation<a class="headerlink" href="#nextgen-style-realization-driven-task-creation" title="Link to this heading">¶</a></h3>
+<span id="realization-driven-task-creation"></span><h3>NextGen-style realization-driven task creation<a class="headerlink" href="#nextgen-style-realization-driven-task-creation" title="Link to this heading">¶</a></h3>
 <p>Use this path when a <a class="reference external" href="https://noaa-owp.github.io/ngen/">NextGen</a>-style realization should produce one dynamic BMI task per feature (e.g., per catchment).</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">PartitionedBmiRealization</span><span class="w"> </span><span class="nf">realization</span><span class="p">(</span><span class="n">realization_path</span><span class="p">);</span>
 
@@ -103,7 +103,7 @@
 </section>
 <section id="choose-where-dynamic-tasks-run">
 <h2>Choose where dynamic tasks run<a class="headerlink" href="#choose-where-dynamic-tasks-run" title="Link to this heading">¶</a></h2>
-<p>Set <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::execution_mode_</span></code> for direct dynamic tasks or pass an execution mode to the realization overload of <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Static BMI units always run in the parent process.</p>
+<p>Dynamic BMI tasks can execute in the parent process or in an isolated subprocess, the latter being useful for models that are not thread safe. To choose the execution mode, set <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::execution_mode_</span></code> when creating a single dynamic task with <code class="docutils literal notranslate"><span class="pre">make_bmi_task(...)</span></code> or multiple dynamic tasks from a configuration vector with <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Each configuration in a vector controls the execution mode of its corresponding task, so tasks in the same vector can use different modes. When <a class="reference internal" href="#realization-driven-task-creation"><span class="std std-ref">creating tasks from a realization</span></a>, pass one execution mode to <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>; the selected mode applies to every generated task. Static BMI units always run in the parent process. The following table describes the features of each execution mode:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 30.0%" />
@@ -118,7 +118,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::in_process</span></code></p></td>
-<td><p>The plugin can run safely in the parent process</p></td>
+<td><p>The plugin can run safely in the parent process (i.e., it is thread safe) and you want to avoid the overhead of subprocesses.</p></td>
 <td><p>This is the default task execution mode.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code></p></td>
