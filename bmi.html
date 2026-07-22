@@ -36,7 +36,7 @@
             
   <section id="bmi-integration">
 <h1>BMI integration<a class="headerlink" href="#bmi-integration" title="Link to this heading">¶</a></h1>
-<p>MIAOW runs statically typed C++ BMI models and dynamically loaded C++ or Fortran BMI plugins through the same task interface. Use this page to configure tasks, select dynamic-task execution, and understand workflow behaviour. See <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> for constructor, member, and function details.</p>
+<p>MIAOW runs statically typed C++ BMI models and dynamically loaded C++ or Fortran BMI plugins through a common task interface, where each task is a single BMI model run with its own configuration, forcing, and output. This page describes the BMI integration paths and how to configure tasks for different BMI model execution patterns. See the <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> section for concrete workflows and the <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> for constructor, member, and function details.</p>
 <section id="bmi-task-lifecycle">
 <h2>BMI task lifecycle<a class="headerlink" href="#bmi-task-lifecycle" title="Link to this heading">¶</a></h2>
 <p>Build individual tasks with <code class="docutils literal notranslate"><span class="pre">make_bmi_task(...)</span></code> and task sets with <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Both functions translate typed BMI configuration into the generic <code class="docutils literal notranslate"><span class="pre">Task</span></code> representation used by the runtime.</p>
@@ -48,8 +48,8 @@
 </ol>
 <p>Static and dynamic tasks use the same forcing, output, and artifact handling.</p>
 </section>
-<section id="minimal-setup-patterns">
-<h2>Minimal setup patterns<a class="headerlink" href="#minimal-setup-patterns" title="Link to this heading">¶</a></h2>
+<section id="task-configuration-options">
+<h2>Task configuration options<a class="headerlink" href="#task-configuration-options" title="Link to this heading">¶</a></h2>
 <p>Choose a setup pattern based on where the BMI model implementation comes from: a statically typed C++ model, a dynamic plugin, or a realization file.</p>
 <section id="static-bmi-model">
 <h3>Static BMI model<a class="headerlink" href="#static-bmi-model" title="Link to this heading">¶</a></h3>
@@ -122,12 +122,12 @@
 <td><p>This is the default task execution mode.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code></p></td>
-<td><p>Each task needs a fresh process</p></td>
-<td><p>The subprocess stops after one task result.</p></td>
+<td><p>Each task needs a fresh process, for example, due to persistent global state in the plugin.</p></td>
+<td><p>The subprocess stops after one task result, whether the task succeeds or fails, and the next task gets a fresh process and BMI lifecycle.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code></p></td>
 <td><p>Tasks benefit from process reuse while keeping parent-process isolation</p></td>
-<td><p>One process is reused per job worker; each task still gets a fresh BMI lifecycle.</p></td>
+<td><p>One process is reused per job worker if the task succeeds; each task still gets a fresh BMI lifecycle.</p></td>
 </tr>
 </tbody>
 </table>
@@ -190,7 +190,7 @@
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">BMI integration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#bmi-task-lifecycle">BMI task lifecycle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#minimal-setup-patterns">Minimal setup patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-configuration-options">Task configuration options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#choose-where-dynamic-tasks-run">Choose where dynamic tasks run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-forcing-data">Reading forcing data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#diagnostics-and-artifacts">Diagnostics and artifacts</a></li>
