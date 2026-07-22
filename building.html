@@ -5,14 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Development &#8212; MIAOW documentation</title>
+    <title>Building and installation &#8212; MIAOW documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=5611fc0a" />
     <script src="_static/documentation_options.js?v=7f41d439"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/development.html" />
+    <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/building.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API reference" href="api.html" />
@@ -34,8 +34,21 @@
 
           <div class="body" role="main">
             
-  <section id="development">
-<h1>Development<a class="headerlink" href="#development" title="Link to this heading">¶</a></h1>
+  <section id="building-and-installation">
+<h1>Building and installation<a class="headerlink" href="#building-and-installation" title="Link to this heading">¶</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<p>MIAOW requires <a class="reference external" href="https://cmake.org/">CMake</a> 3.21 or newer, a C++20 compiler, and a Fortran compiler. The Boost and CAF provider options specify where CMake obtains these dependencies: from packages already installed on the system, by fetching and building them from source, or by trying the system first and fetching them if necessary. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for a description of the available provider settings.</p>
+<p>On Ubuntu:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>gfortran
+</pre></div>
+</div>
+<p>On macOS with <a class="reference external" href="https://brew.sh/">Homebrew</a>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>xcode-select<span class="w"> </span>--install<span class="w">  </span><span class="c1"># if Apple&#39;s Command Line Tools are not installed</span>
+brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>gcc
+</pre></div>
+</div>
+</section>
 <section id="repository-development-build">
 <h2>Repository development build<a class="headerlink" href="#repository-development-build" title="Link to this heading">¶</a></h2>
 <p>Configure and build from the repository root:</p>
@@ -164,16 +177,6 @@ docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<
 </div>
 <p>The generated HTML entry point is <code class="docutils literal notranslate"><span class="pre">docs/_build/html/index.html</span></code>.</p>
 </section>
-<section id="namespace-layout">
-<h2>Namespace layout<a class="headerlink" href="#namespace-layout" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>Public API: <code class="docutils literal notranslate"><span class="pre">miaow</span></code></p></li>
-<li><p>Core internals: <code class="docutils literal notranslate"><span class="pre">miaow::core</span></code></p></li>
-<li><p>BMI internals: <code class="docutils literal notranslate"><span class="pre">miaow::bmi</span></code></p></li>
-<li><p>Internal I/O helpers: <code class="docutils literal notranslate"><span class="pre">miaow::io</span></code></p></li>
-<li><p>The external <a class="reference external" href="https://github.com/csdms/bmi-cxx/tree/master">BMI C++ API</a> is available through the <code class="docutils literal notranslate"><span class="pre">miaow::bmi_api</span> <span class="pre">=</span> <span class="pre">::bmi</span></code> alias.</p></li>
-</ul>
-</section>
 </section>
 
 
@@ -209,12 +212,12 @@ docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building and installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#repository-development-build">Repository development build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#library-installation-build">Library installation build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-options">Build options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-build">Documentation build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#namespace-layout">Namespace layout</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
