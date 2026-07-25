@@ -45,6 +45,8 @@
 ./miaow_soil_freeze_thaw<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
 <span class="nb">cd</span><span class="w"> </span>../03_dynamic_bmi
 ./miaow_dynamic_bmi<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
+<span class="nb">cd</span><span class="w"> </span>../07_job_controller
+./miaow_job_controller
 </pre></div>
 </div>
 <section id="included-examples">
@@ -56,6 +58,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code>: dynamic C++ and Fortran BMI plugin integration using the CSDMS heat examples</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code>: optional <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline execution and one MIAOW task per staged catchment feature described by a NextGen-style realization</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/07_job_controller</span></code>: two initial hello tasks with randomized durations; each completion generates one replacement until the five-task budget is reached</p></li>
 </ul>
 </section>
 <section id="summa-example">
@@ -196,7 +199,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">300</span></code></p></td>
-<td><p>Timeout for job result requests, in seconds</p></td>
+<td><p>Maximum runtime for one job, in seconds</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output_root</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
