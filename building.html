@@ -56,6 +56,7 @@ brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w">
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
+<p>The default development build includes the framework tests and does not build examples.</p>
 <p>Run all tests:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
@@ -67,9 +68,9 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 <section id="library-installation-build">
 <h2>Library installation build<a class="headerlink" href="#library-installation-build" title="Link to this heading">¶</a></h2>
-<p>Configure a build without examples and select an installation prefix:</p>
+<p>Configure a build without tests and select an installation prefix. Examples are already disabled by default:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-DBUILD_EXAMPLES<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local&quot;</span>
 
 cmake<span class="w"> </span>--build<span class="w"> </span>build
@@ -119,46 +120,52 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DBUILD_EXAMPLES</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DBUILD_TESTING</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code></p></td>
+<td><p>Build the framework test executables in a top-level repository build</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DBUILD_EXAMPLES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OFF</span></code></p></td>
 <td><p>Build selected example programs</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES</span></code></p></td>
 <td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">00_hello;01_heat;</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">02_soil_freeze_thaw;</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code></div>
 </div>
 </td>
 <td><p>Semicolon-separated list of examples to build when <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code> is enabled</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_PROVIDER</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_PROVIDER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 <td><p>Boost provider: <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch</span></code>, or <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_VERSION</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_VERSION</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.86.0</span></code></p></td>
 <td><p>Boost version used by the <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> fallback</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_PROVIDER</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_PROVIDER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 <td><p>CAF provider: <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch</span></code>, or <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_VERSION</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_CAF_VERSION</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.1.0</span></code></p></td>
 <td><p>CAF version used by <code class="docutils literal notranslate"><span class="pre">find_package</span></code> and <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_DEFAULT_MODEL_BASE_DIR</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_DEFAULT_MODEL_BASE_DIR</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">${PROJECT_SOURCE_DIR}/third_party</span></code></p></td>
 <td><p>Default base directory where external model sources are resolved or fetched</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code></p></td>
 <td><p>empty</p></td>
 <td><p>Optional explicit path to a valid local <code class="docutils literal notranslate"><span class="pre">NOAA-OWP/iso_c_fortran_bmi</span></code> checkout</p></td>
 </tr>
 </tbody>
 </table>
 <p>When <code class="docutils literal notranslate"><span class="pre">MIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code> is empty, CMake looks for <code class="docutils literal notranslate"><span class="pre">iso_c_fortran_bmi</span></code> under <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code> and fetches it into that location if missing.</p>
+<p>Enable the curated example set with <code class="docutils literal notranslate"><span class="pre">-DBUILD_EXAMPLES=ON</span></code>. Override that set by also passing a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=00_hello</span></code>. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> then builds every selected example; <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> is only needed when narrowing the build to that target.</p>
 <p>Provider values are interpreted as follows:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">system</span></code>: require <code class="docutils literal notranslate"><span class="pre">find_package(...)</span></code> to provide the dependency</p></li>

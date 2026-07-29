@@ -36,7 +36,11 @@
             
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
-<p>Run built examples from their own <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;</span></code> directories:</p>
+<p>Examples are opt-in. Configure the curated set, build it, and run examples from their own <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;</span></code> directories:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+</pre></div>
+</div>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/00_hello
 ./miaow_hello
 <span class="nb">cd</span><span class="w"> </span>../01_heat
@@ -54,17 +58,18 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/00_hello</span></code>: minimal orchestration and diagnostics output</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/01_heat</span></code>: BMI integration using the <a class="reference external" href="https://github.com/csdms/bmi-example-cxx">CSDMS heat example</a></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">examples/02_soil_freeze_thaw</span></code>: many-task <a class="reference external" href="https://github.com/NOAA-OWP/SoilFreezeThaw">SoilFreezeThaw</a> workflow with per-task forcing, including matched, short, and long forcing cases</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code>: dynamic C++ and Fortran BMI plugin integration using the CSDMS heat examples</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/02_soil_freeze_thaw</span></code>: static <a class="reference external" href="https://github.com/NOAA-OWP/SoilFreezeThaw">SoilFreezeThaw</a> BMI integration with aligned per-task forcing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code>: in-process dynamic C++ and Fortran BMI plugin integration using the CSDMS heat examples</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code>: optional <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline execution and one MIAOW task per staged catchment feature described by a NextGen-style realization</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">examples/07_job_controller</span></code>: two initial hello tasks with randomized durations; each completion generates one replacement until the five-task budget is reached</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code>: optional <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin in a single-task subprocess</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/07_job_controller</span></code>: one initial hello task whose completion generates two additional tasks</p></li>
 </ul>
 </section>
 <section id="summa-example">
 <h2>SUMMA example<a class="headerlink" href="#summa-example" title="Link to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code> example builds a SUMMA BMI library from a SUMMA source tree and runs the packaged gauge realization by default. It is not built by default. SUMMA requires <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF</a> C/Fortran and BLAS/LAPACK support. Enable it by adding <code class="docutils literal notranslate"><span class="pre">04_summa</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-DBUILD_EXAMPLES<span class="o">=</span>ON<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-DMIAOW_EXAMPLES<span class="o">=</span>04_summa
 cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_summa
 </pre></div>
@@ -103,6 +108,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 <h2>Trixi.jl example<a class="headerlink" href="#trixi-jl-example" title="Link to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code> example runs <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> configs through MIAOW’s <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin path. It is not built by default. Enable it by adding <code class="docutils literal notranslate"><span class="pre">05_libtrixi_bmi</span></code> to <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-DBUILD_EXAMPLES<span class="o">=</span>ON<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-DMIAOW_EXAMPLES<span class="o">=</span>05_libtrixi_bmi
 cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_libtrixi_bmi
 </pre></div>
@@ -170,7 +176,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 </tr>
 </tbody>
 </table>
-<p>The helpers <code class="docutils literal notranslate"><span class="pre">cmake/miaow_bmi_model.cmake</span></code> and <code class="docutils literal notranslate"><span class="pre">cmake/miaow_setup_example.cmake</span></code> provide <code class="docutils literal notranslate"><span class="pre">miaow_add_bmi_model(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">miaow_add_workflow_test(...)</span></code>, respectively, for model integration and workflow tests. Model examples keep their MIAOW-specific source and input files under <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;/</span></code>.</p>
+<p>The helpers <code class="docutils literal notranslate"><span class="pre">cmake/miaow_bmi_model.cmake</span></code> and <code class="docutils literal notranslate"><span class="pre">cmake/miaow_setup_example.cmake</span></code> provide <code class="docutils literal notranslate"><span class="pre">miaow_add_bmi_model(...)</span></code> for model integration and <code class="docutils literal notranslate"><span class="pre">miaow_add_example_smoke_test(...)</span></code> for one successful-run check per example. Model examples keep their MIAOW-specific source and input files under <code class="docutils literal notranslate"><span class="pre">examples/&lt;example_name&gt;/</span></code>.</p>
 <p>External BMI model source is resolved separately: each model-backed example uses its corresponding <code class="docutils literal notranslate"><span class="pre">MIAOW_*_MODEL_ROOT</span></code> override when set, otherwise it resolves to <code class="docutils literal notranslate"><span class="pre">${MIAOW_DEFAULT_MODEL_BASE_DIR}/&lt;model-subdir&gt;</span></code>. If a required source directory is missing and the example declares a Git repository and tag, CMake fetches the model from GitHub into the resolved location under <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code>.</p>
 </section>
 <section id="example-command-line-options">
