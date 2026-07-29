@@ -1,1 +1,5 @@
-/* This file intentionally left blank. */
+/* Allow long code literals to wrap within documentation tables */
+table.docutils code.literal span.pre {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}

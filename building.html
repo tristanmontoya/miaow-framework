@@ -66,6 +66,16 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
 </section>
+<section id="building-examples">
+<span id="id1"></span><h2>Building examples<a class="headerlink" href="#building-examples" title="Link to this heading">¶</a></h2>
+<p>Examples are disabled by default. Enable the default example set from the repository root:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+</pre></div>
+</div>
+<p>Override the default example set with a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=00_hello</span></code>. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> builds every selected example; use <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> only to narrow the build to that target.</p>
+<p>Each model-backed example accepts a <code class="docutils literal notranslate"><span class="pre">MIAOW_&lt;MODEL_NAME&gt;_MODEL_ROOT</span></code> override. When the override is empty, CMake resolves the source beneath <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code>. If the resolved directory is missing and the example declares a Git repository and revision, CMake fetches the model into that directory. See <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> for model-specific dependencies and options.</p>
+</section>
 <section id="library-installation-build">
 <h2>Library installation build<a class="headerlink" href="#library-installation-build" title="Link to this heading">¶</a></h2>
 <p>Configure a build without tests and select an installation prefix. Examples are already disabled by default:</p>
@@ -105,8 +115,8 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 </section>
 <section id="build-options">
-<span id="id1"></span><h2>Build options<a class="headerlink" href="#build-options" title="Link to this heading">¶</a></h2>
-<p>These are the top-level CMake options:</p>
+<span id="id2"></span><h2>Build options<a class="headerlink" href="#build-options" title="Link to this heading">¶</a></h2>
+<p>The following top-level CMake options are available:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 31.8%" />
@@ -165,7 +175,6 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </tbody>
 </table>
 <p>When <code class="docutils literal notranslate"><span class="pre">MIAOW_ISO_C_FORTRAN_BMI_ROOT</span></code> is empty, CMake looks for <code class="docutils literal notranslate"><span class="pre">iso_c_fortran_bmi</span></code> under <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code> and fetches it into that location if missing.</p>
-<p>Enable the curated example set with <code class="docutils literal notranslate"><span class="pre">-DBUILD_EXAMPLES=ON</span></code>. Override that set by also passing a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=00_hello</span></code>. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> then builds every selected example; <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> is only needed when narrowing the build to that target.</p>
 <p>Provider values are interpreted as follows:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">system</span></code>: require <code class="docutils literal notranslate"><span class="pre">find_package(...)</span></code> to provide the dependency</p></li>
@@ -222,6 +231,7 @@ docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Building and installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#repository-development-build">Repository development build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-examples">Building examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#library-installation-build">Library installation build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-options">Build options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-build">Documentation build</a></li>
@@ -252,7 +262,7 @@ docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      
+      &#169;.
       
     </div>
 
