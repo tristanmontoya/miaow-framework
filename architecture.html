@@ -59,7 +59,7 @@
 </section>
 <section id="task-execution-modes">
 <span id="id1"></span><h2>Task execution modes<a class="headerlink" href="#task-execution-modes" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Task::execution_mode_</span></code> determines whether a worker executes a task in the parent process or delegates it to an isolated subprocess. The following table describes the available modes:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Task::execution_mode_</span></code> determines whether a worker executes a task in the parent process or delegates it to an isolated subprocess specified by <code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code>. The following table describes the available modes:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 30.0%" />
@@ -87,7 +87,6 @@
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code> selects a non-default subprocess executable for either subprocess mode.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code> and <code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code> execution modes isolate model execution from the parent process. When using these modes, the parent process still owns <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>, <code class="docutils literal notranslate"><span class="pre">job_actor</span></code>, and the normal <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers, but defers the actual model execution to a subprocess with its own actor system. In <code class="docutils literal notranslate"><span class="pre">single_task_subprocess</span></code> mode, the subprocess is stopped after each task, whereas <code class="docutils literal notranslate"><span class="pre">persistent_subprocess</span></code> mode reuses one subprocess per job worker for tasks with the same resolved subprocess path. When a subprocess task fails, including when its remote request exceeds <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::task_request_timeout_</span></code>, MIAOW preserves the subprocess logs and terminates the process; the worker launches a fresh subprocess for its next task.</p>
 </section>
 <section id="limitations">
