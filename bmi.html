@@ -101,37 +101,15 @@
 <p><code class="docutils literal notranslate"><span class="pre">PartitionedBmiRealization</span></code> resolves the plugin, initialization, forcing, feature, and output-root values. <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code> builds the dynamic task vector all at once.</p>
 </section>
 </section>
-<section id="choose-where-dynamic-tasks-run">
-<h2>Choose where dynamic tasks run<a class="headerlink" href="#choose-where-dynamic-tasks-run" title="Link to this heading">¶</a></h2>
-<p>Static BMI tasks always execute in the parent process. Dynamic BMI tasks can execute in the parent process or in an isolated subprocess, the latter being useful for models that are not thread safe. To choose the execution mode, set <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::execution_mode_</span></code> when creating a single dynamic task with <code class="docutils literal notranslate"><span class="pre">make_bmi_task(...)</span></code> or multiple dynamic tasks from a configuration vector with <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Each configuration in a vector controls the execution mode of its corresponding task, so tasks in the same vector can use different modes. When <a class="reference internal" href="#realization-driven-task-creation"><span class="std std-ref">creating tasks from a realization</span></a>, pass one execution mode to <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>; the selected mode applies to every generated task.  The following table describes the features of each execution mode:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 30.0%" />
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Execution mode</p></th>
-<th class="head"><p>Use when</p></th>
-<th class="head"><p>Behaviour to know</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::in_process</span></code></p></td>
-<td><p>The plugin can run safely in the parent process (i.e., it is thread safe) and you want to avoid the overhead of subprocesses.</p></td>
-<td><p>This is the default task execution mode.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::single_task_subprocess</span></code></p></td>
-<td><p>Each task needs a fresh process, for example, due to persistent global state in the plugin.</p></td>
-<td><p>The subprocess stops after one task result, whether the task succeeds or fails, and the next task gets a fresh process and BMI lifecycle.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ExecutionMode::persistent_subprocess</span></code></p></td>
-<td><p>Tasks benefit from process reuse while keeping parent-process isolation</p></td>
-<td><p>One process is reused per job worker if the task succeeds; each task still gets a fresh BMI lifecycle.</p></td>
-</tr>
-</tbody>
-</table>
-<p>Subprocess modes are available for dynamic BMI tasks. <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::subprocess_path_</span></code> selects a non-default subprocess executable. See <a class="reference internal" href="architecture.html#subprocess-execution"><span class="std std-ref">Subprocess execution</span></a> for process ownership, reuse, lifetime, and concurrency behaviour.</p>
+<section id="configuring-dynamic-task-execution">
+<h2>Configuring dynamic task execution<a class="headerlink" href="#configuring-dynamic-task-execution" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">StaticBmiConfig</span></code> has no execution-mode setting; the <code class="docutils literal notranslate"><span class="pre">make_bmi_task(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code> functions create static BMI tasks with <code class="docutils literal notranslate"><span class="pre">ExecutionMode::in_process</span></code>, and <code class="docutils literal notranslate"><span class="pre">StaticBmiSimulationUnit</span></code> does not support subprocess execution. The dynamic task builders assign execution modes as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">make_bmi_task(simulation_unit_id,</span> <span class="pre">config)</span></code> copies <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::execution_mode_</span></code> to the resulting <code class="docutils literal notranslate"><span class="pre">Task</span></code>. The field defaults to <code class="docutils literal notranslate"><span class="pre">ExecutionMode::in_process</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(simulation_unit_id,</span> <span class="pre">configs)</span></code> builds one task per <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig</span></code> and preserves each configuration’s execution mode. Tasks in the same vector can therefore use different modes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(simulation_unit_id,</span> <span class="pre">realization,</span> <span class="pre">execution_mode)</span></code> applies the supplied mode to every task generated from the realization. The argument defaults to <code class="docutils literal notranslate"><span class="pre">ExecutionMode::in_process</span></code>.</p></li>
+</ul>
+<p>Subprocess modes are available for dynamic BMI tasks. <code class="docutils literal notranslate"><span class="pre">DynamicBmiConfig::subprocess_path_</span></code> is copied to the corresponding <code class="docutils literal notranslate"><span class="pre">Task</span></code> and selects a non-default subprocess executable. See <a class="reference internal" href="architecture.html#task-execution-modes"><span class="std std-ref">Task execution modes</span></a> for execution-mode selection and runtime behaviour.</p>
 </section>
 <section id="reading-forcing-data">
 <h2>Reading forcing data<a class="headerlink" href="#reading-forcing-data" title="Link to this heading">¶</a></h2>
@@ -153,7 +131,6 @@
 </pre></div>
 </div>
 <p>Persisted run directories start at <code class="docutils literal notranslate"><span class="pre">run_0</span></code> and advance to the largest existing run ID plus one. MIAOW writes the resolved BMI config in the job directory and one CSV file per task under <code class="docutils literal notranslate"><span class="pre">results/</span></code>. A non-empty <code class="docutils literal notranslate"><span class="pre">metadata_[&quot;feature_id&quot;]</span></code> becomes the output file stem; otherwise MIAOW uses <code class="docutils literal notranslate"><span class="pre">task_&lt;task_id&gt;</span></code>. Output stems must be unique within one job and cannot contain path separators.</p>
-<p>Subprocess execution also produces <code class="docutils literal notranslate"><span class="pre">subprocess_*_stdout.log</span></code> and <code class="docutils literal notranslate"><span class="pre">subprocess_*_stderr.log</span></code> diagnostics. MIAOW removes these logs after successful single-task execution or orderly persistent-worker shutdown, and retains them when setup, launch, actor exchange, shutdown, or task execution fails.</p>
 </section>
 </section>
 
@@ -191,7 +168,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">BMI integration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#bmi-task-lifecycle">BMI task lifecycle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#task-configuration-options">Task configuration options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#choose-where-dynamic-tasks-run">Choose where dynamic tasks run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-dynamic-task-execution">Configuring dynamic task execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-forcing-data">Reading forcing data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#diagnostics-and-artifacts">Diagnostics and artifacts</a></li>
 </ul>
