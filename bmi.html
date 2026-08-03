@@ -40,11 +40,11 @@
 <section id="bmi-task-lifecycle">
 <h2>BMI task lifecycle<a class="headerlink" href="#bmi-task-lifecycle" title="Link to this heading">¶</a></h2>
 <p>Build individual tasks with <code class="docutils literal notranslate"><span class="pre">make_bmi_task(...)</span></code> and task sets with <code class="docutils literal notranslate"><span class="pre">make_bmi_tasks(...)</span></code>. Both functions translate typed BMI configuration into the generic <code class="docutils literal notranslate"><span class="pre">Task</span></code> representation that MIAOW passes to simulation unit actors for execution. During task execution, <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> initializes directly from the <code class="docutils literal notranslate"><span class="pre">BmiPipelineConfig</span></code> stored in <code class="docutils literal notranslate"><span class="pre">Task::args_</span></code>. When runtime output is enabled, MIAOW also writes the resolved pipeline configuration beside the task results as <code class="docutils literal notranslate"><span class="pre">&lt;task_output_name&gt;.json</span></code>. Task execution does not require this file; it is an optional pipeline configuration artifact that can later be passed to <code class="docutils literal notranslate"><span class="pre">BmiPipeline::Initialize(std::string)</span></code> for file-based initialization, for example, to reproduce a previous run.</p>
-<p>After loading the pipeline configuration, <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> runs the BMI lifecycle for its components. Each model component receives its own <code class="docutils literal notranslate"><span class="pre">init_config_</span></code> through <code class="docutils literal notranslate"><span class="pre">Initialize(std::string)</span></code> rather than receiving the pipeline JSON artifact:</p>
+<p>After loading the pipeline configuration, <code class="docutils literal notranslate"><span class="pre">BmiPipeline</span></code> runs the BMI lifecycle for its components, which currently include a single BMI model and an optional internal forcing module. The pipeline lifecycle, which is implemented in <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/src/bmi/execute.cpp">src/bmi/execute.cpp</a>, consists of three phases:</p>
 <ol class="arabic simple">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">Initialize()</span></code> on every component (including the forcing module if configured) with the component’s <code class="docutils literal notranslate"><span class="pre">init_config_</span></code>.</p></li>
 <li><p>Perform zero or more complete pipeline <code class="docutils literal notranslate"><span class="pre">Update()</span></code> calls, which involve applying the current forcing values, advancing the model, writing output if configured, and advancing the forcing source.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Finalize()</span></code> every initialized component</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Finalize()</span></code> every initialized component.</p></li>
 </ol>
 </section>
 <section id="task-configuration-options">
@@ -63,7 +63,7 @@
 <span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_task</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Static BMI model units always execute in the parent process.</p>
+<p>Static BMI model units always execute in the parent process, rather than in a subprocess.</p>
 </section>
 <section id="dynamic-bmi-plugin">
 <h3>Dynamic BMI plugin<a class="headerlink" href="#dynamic-bmi-plugin" title="Link to this heading">¶</a></h3>
