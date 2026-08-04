@@ -813,6 +813,12 @@
 
 </dd></dl>
 
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow31default_bmi_time_step_toleranceE">
+<span id="_CPPv3N5miaow31default_bmi_time_step_toleranceE"></span><span id="_CPPv2N5miaow31default_bmi_time_step_toleranceE"></span><span id="miaow::default_bmi_time_step_tolerance__double"></span><span class="target" id="miaow__bmi_8hpp_1ad790930738d731538933ec6e6b5ecd1b"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">miaow</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">default_bmi_time_step_tolerance</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-4</span></span><a class="headerlink" href="#_CPPv4N5miaow31default_bmi_time_step_toleranceE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Default absolute tolerance for BMI model time comparisons (in the model’s time unit) </p>
+</dd></dl>
+
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow16BmiForcingConfigE">
 <span id="_CPPv3N5miaow16BmiForcingConfigE"></span><span id="_CPPv2N5miaow16BmiForcingConfigE"></span><span id="miaow::BmiForcingConfig"></span><span class="target" id="structmiaow_1_1BmiForcingConfig"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BmiForcingConfig</span></span></span><a class="headerlink" href="#_CPPv4N5miaow16BmiForcingConfigE" title="Link to this definition">¶</a><br /></dt>
@@ -855,7 +861,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow15BmiOutputConfig10variables_E">
 <span id="_CPPv3N5miaow15BmiOutputConfig10variables_E"></span><span id="_CPPv2N5miaow15BmiOutputConfig10variables_E"></span><span id="miaow::BmiOutputConfig::variables___std::vector:ss:"></span><span class="target" id="structmiaow_1_1BmiOutputConfig_1ac93bf5899caba57ffd9849da09b8c6d5"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variables_</span></span></span><a class="headerlink" href="#_CPPv4N5miaow15BmiOutputConfig10variables_E" title="Link to this definition">¶</a><br /></dt>
-<dd><p>BMI output variables written to the task artifact. </p>
+<dd><p>BMI output variables written to the task artifact; empty selects all outputs. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -882,7 +888,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow15StaticBmiConfig20time_step_tolerance_E">
-<span id="_CPPv3N5miaow15StaticBmiConfig20time_step_tolerance_E"></span><span id="_CPPv2N5miaow15StaticBmiConfig20time_step_tolerance_E"></span><span id="miaow::StaticBmiConfig::time_step_tolerance___double"></span><span class="target" id="structmiaow_1_1StaticBmiConfig_1a42ed13fe7bf668828ae510fde93af8ba"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_step_tolerance_</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="n"><span class="pre">default_bmi_time_step_tolerance</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5miaow15StaticBmiConfig20time_step_tolerance_E" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5miaow15StaticBmiConfig20time_step_tolerance_E"></span><span id="_CPPv2N5miaow15StaticBmiConfig20time_step_tolerance_E"></span><span id="miaow::StaticBmiConfig::time_step_tolerance___double"></span><span class="target" id="structmiaow_1_1StaticBmiConfig_1a42ed13fe7bf668828ae510fde93af8ba"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_step_tolerance_</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><a class="reference internal" href="#_CPPv4N5miaow31default_bmi_time_step_toleranceE" title="miaow::default_bmi_time_step_tolerance"><span class="n"><span class="pre">default_bmi_time_step_tolerance</span></span></a><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5miaow15StaticBmiConfig20time_step_tolerance_E" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Absolute tolerance for model-time comparisons in the model’s time unit. </p>
 </dd></dl>
 
@@ -928,7 +934,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow16DynamicBmiConfig20time_step_tolerance_E">
-<span id="_CPPv3N5miaow16DynamicBmiConfig20time_step_tolerance_E"></span><span id="_CPPv2N5miaow16DynamicBmiConfig20time_step_tolerance_E"></span><span id="miaow::DynamicBmiConfig::time_step_tolerance___double"></span><span class="target" id="structmiaow_1_1DynamicBmiConfig_1a00484e755130c1b538587f8a73eed7f9"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_step_tolerance_</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="n"><span class="pre">default_bmi_time_step_tolerance</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5miaow16DynamicBmiConfig20time_step_tolerance_E" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5miaow16DynamicBmiConfig20time_step_tolerance_E"></span><span id="_CPPv2N5miaow16DynamicBmiConfig20time_step_tolerance_E"></span><span id="miaow::DynamicBmiConfig::time_step_tolerance___double"></span><span class="target" id="structmiaow_1_1DynamicBmiConfig_1a00484e755130c1b538587f8a73eed7f9"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_step_tolerance_</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><a class="reference internal" href="#_CPPv4N5miaow31default_bmi_time_step_toleranceE" title="miaow::default_bmi_time_step_tolerance"><span class="n"><span class="pre">default_bmi_time_step_tolerance</span></span></a><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5miaow16DynamicBmiConfig20time_step_tolerance_E" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Absolute tolerance for model-time comparisons in the model’s time unit. </p>
 </dd></dl>
 
@@ -1183,17 +1189,6 @@
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the realization is malformed or references missing or unusable files. </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">filesystem</span><span class="p">::</span><span class="n">filesystem_error</span></span></span> – if a referenced path cannot be resolved or inspected. </p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5miaow25PartitionedBmiRealization11output_rootEv">
-<span id="_CPPv3NK5miaow25PartitionedBmiRealization11output_rootEv"></span><span id="_CPPv2NK5miaow25PartitionedBmiRealization11output_rootEv"></span><span id="miaow::PartitionedBmiRealization::output_rootC"></span><span class="target" id="classmiaow_1_1PartitionedBmiRealization_1aa6f5d95f3ad4f5f86b9701a75d6aa99f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">output_root</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow25PartitionedBmiRealization11output_rootEv" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Return the resolved runtime output root from the realization. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Resolved output root, or an empty string when none is configured. </p>
 </dd>
 </dl>
 </dd></dl>
