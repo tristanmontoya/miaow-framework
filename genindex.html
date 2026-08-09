@@ -43,6 +43,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#_CPPv4N5miaow19all_tasks_succeededERK9JobRecord">miaow::all_tasks_succeeded (C++ function)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow30bmi_subprocess_executable_pathEv">miaow::bmi_subprocess_executable_path (C++ function)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow13BmiDataFormatE">miaow::BmiDataFormat (C++ enum)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow13BmiDataFormat3csvE">miaow::BmiDataFormat::csv (C++ enumerator)</a>
@@ -81,8 +83,6 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig8backend_E">miaow::DynamicBmiConfig::backend_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig15execution_mode_E">miaow::DynamicBmiConfig::execution_mode_ (C++ member)</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig8forcing_E">miaow::DynamicBmiConfig::forcing_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig12init_config_E">miaow::DynamicBmiConfig::init_config_ (C++ member)</a>
@@ -90,8 +90,6 @@
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig7output_E">miaow::DynamicBmiConfig::output_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig12plugin_path_E">miaow::DynamicBmiConfig::plugin_path_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig16subprocess_path_E">miaow::DynamicBmiConfig::subprocess_path_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig20time_step_tolerance_E">miaow::DynamicBmiConfig::time_step_tolerance_ (C++ member)</a>
 </li>
@@ -102,14 +100,6 @@
       <li><a href="api.html#_CPPv4N5miaow24DynamicBmiSimulationUnit7executeERK4Task">miaow::DynamicBmiSimulationUnit::execute (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow23ensure_expected_run_dirERKNSt6stringE">miaow::ensure_expected_run_dir (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow13ExecutionModeE">miaow::ExecutionMode (C++ enum)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow13ExecutionMode10in_processE">miaow::ExecutionMode::in_process (C++ enumerator)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow13ExecutionMode21persistent_subprocessE">miaow::ExecutionMode::persistent_subprocess (C++ enumerator)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow13ExecutionMode22single_task_subprocessE">miaow::ExecutionMode::single_task_subprocess (C++ enumerator)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow13JobControllerE">miaow::JobController (C++ class)</a>
 </li>
@@ -133,9 +123,7 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow13make_bmi_taskE16SimulationUnitIdRK15StaticBmiConfig">miaow::make_bmi_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow13make_bmi_taskE16SimulationUnitIdRK16DynamicBmiConfig">[1]</a>
 </li>
-      <li><a href="api.html#_CPPv4I0EN5miaow14make_bmi_tasksENSt6vectorI4TaskEE16SimulationUnitIdRKNSt6vectorI9BmiConfigEE">miaow::make_bmi_tasks (C++ function)</a>, <a href="api.html#_CPPv4N5miaow14make_bmi_tasksE16SimulationUnitIdRK25PartitionedBmiRealization13ExecutionMode">[1]</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow19make_forcing_configERKNSt6stringERKNSt3mapINSt6stringENSt6stringEEE">miaow::make_forcing_config (C++ function)</a>
+      <li><a href="api.html#_CPPv4I0EN5miaow14make_bmi_tasksENSt6vectorI4TaskEE16SimulationUnitIdRKNSt6vectorI9BmiConfigEE">miaow::make_bmi_tasks (C++ function)</a>, <a href="api.html#_CPPv4N5miaow14make_bmi_tasksE16SimulationUnitIdRK25PartitionedBmiRealization">[1]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow25parse_runtime_cli_optionsEiA_PcR14RuntimeOptions">miaow::parse_runtime_cli_options (C++ function)</a>
 </li>
@@ -145,16 +133,18 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow17print_job_summaryERK9JobRecord">miaow::print_job_summary (C++ function)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow21run_subprocess_workerEiA_PcNSt8functionIF10TaskResultRK4TaskEEE">miaow::run_subprocess_worker (C++ function)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow7RuntimeE">miaow::Runtime (C++ class)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry">miaow::Runtime::Runtime (C++ function)</a>, <a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEE">miaow::Runtime::submit_job (C++ function)</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEENSt10unique_ptrI13JobControllerEE">[1]</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobERK4Task">[2]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow7RuntimeD0Ev">miaow::Runtime::~Runtime (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptionsE">miaow::RuntimeOptions (C++ struct)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions20job_request_timeout_E">miaow::RuntimeOptions::job_request_timeout_ (C++ member)</a>
@@ -171,17 +161,15 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow14SimulationUnit7executeERK4Task">miaow::SimulationUnit::execute (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow21SimulationUnitFactoryE">miaow::SimulationUnitFactory (C++ type)</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow16SimulationUnitIdE">miaow::SimulationUnitId (C++ type)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow22SimulationUnitRegistryE">miaow::SimulationUnitRegistry (C++ class)</a>
 </li>
       <li><a href="api.html#_CPPv4I0DpEN5miaow22SimulationUnitRegistry3addE16SimulationUnitIdDp15ConstructorArgs">miaow::SimulationUnitRegistry::add (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4NK5miaow22SimulationUnitRegistry5emptyEv">miaow::SimulationUnitRegistry::empty (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow22SimulationUnitRegistry14add_subprocessENSt6stringE18SubprocessLifetime">miaow::SimulationUnitRegistry::add_subprocess (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4NK5miaow22SimulationUnitRegistry12find_factoryE16SimulationUnitId">miaow::SimulationUnitRegistry::find_factory (C++ function)</a>
+      <li><a href="api.html#_CPPv4NK5miaow22SimulationUnitRegistry5emptyEv">miaow::SimulationUnitRegistry::empty (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfigE">miaow::StaticBmiConfig (C++ struct)</a>
 </li>
@@ -199,19 +187,21 @@
 </li>
       <li><a href="api.html#_CPPv4IDpEN5miaow23StaticBmiSimulationUnit23StaticBmiSimulationUnitEDp20ModelConstructorArgs">miaow::StaticBmiSimulationUnit::StaticBmiSimulationUnit (C++ function)</a>, <a href="api.html#_CPPv4N5miaow23StaticBmiSimulationUnit23StaticBmiSimulationUnitEv">[1]</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow18SubprocessLifetimeE">miaow::SubprocessLifetime (C++ enum)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow18SubprocessLifetime10persistentE">miaow::SubprocessLifetime::persistent (C++ enumerator)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow18SubprocessLifetime11single_taskE">miaow::SubprocessLifetime::single_task (C++ enumerator)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow4TaskE">miaow::Task (C++ struct)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task5args_E">miaow::Task::args_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow4Task15execution_mode_E">miaow::Task::execution_mode_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task9metadata_E">miaow::Task::metadata_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task19simulation_unit_id_E">miaow::Task::simulation_unit_id_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4NK5miaow4Task10string_argENSt6size_tE">miaow::Task::string_arg (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow4Task16subprocess_path_E">miaow::Task::subprocess_path_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE">miaow::Task::Task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE12TaskMetadata">[1]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt16initializer_listINSt6stringEEE">[2]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6stringE">[3]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE">[4]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE12TaskMetadata">[5]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskEv">[6]</a>
 </li>
@@ -256,8 +246,6 @@
       <li><a href="api.html#_CPPv4N5miaow10TaskStatus6failedE">miaow::TaskStatus::failed (C++ enumerator)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskStatus9succeededE">miaow::TaskStatus::succeeded (C++ enumerator)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow33write_repeated_hourly_forcing_csvERKNSt6stringERKNSt6stringENSt6size_tE">miaow::write_repeated_hourly_forcing_csv (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>

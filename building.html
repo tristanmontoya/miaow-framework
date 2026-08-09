@@ -39,11 +39,11 @@
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
 <p>MIAOW requires <a class="reference external" href="https://cmake.org/">CMake</a> 3.21 or newer, a C++20 compiler, and a Fortran compiler. The Boost and CAF provider options specify where CMake obtains these dependencies: from packages already installed on the system, by fetching and building them from source, or by trying the system first and fetching them if necessary. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for a description of the available provider settings.</p>
-<p>On Ubuntu:</p>
+<p>On Ubuntu, the required compiler and build tools can be installed with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>gfortran
 </pre></div>
 </div>
-<p>On macOS with <a class="reference external" href="https://brew.sh/">Homebrew</a>:</p>
+<p>On macOS with <a class="reference external" href="https://brew.sh/">Homebrew</a>, the required compiler and build tools can be installed using the following commands:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>xcode-select<span class="w"> </span>--install<span class="w">  </span><span class="c1"># if Apple&#39;s Command Line Tools are not installed</span>
 brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>gcc
 </pre></div>
@@ -51,34 +51,34 @@ brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w">
 </section>
 <section id="repository-development-build">
 <h2>Repository development build<a class="headerlink" href="#repository-development-build" title="Link to this heading">¶</a></h2>
-<p>Configure and build from the repository root:</p>
+<p>The repository can be configured and built with the following commands:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
 <p>The default development build includes the framework tests and does not build examples.</p>
-<p>Run all tests:</p>
+<p>The complete test suite runs with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
 </div>
-<p>Run a single test by name:</p>
+<p>A single test can be selected by name with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>-R<span class="w"> </span>&lt;test_name&gt;<span class="w"> </span>--output-on-failure
 </pre></div>
 </div>
 </section>
 <section id="building-examples">
 <span id="id1"></span><h2>Building examples<a class="headerlink" href="#building-examples" title="Link to this heading">¶</a></h2>
-<p>Examples are disabled by default. Enable the default example set from the repository root:</p>
+<p>Examples are disabled by default. The following configuration enables and builds the default example set:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>Override the default example set with a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=00_hello</span></code>. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> builds every selected example; use <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> only to narrow the build to that target.</p>
+<p>Override the default example set with a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=&quot;00_hello;01_heat&quot;</span></code>. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> builds every selected example; use <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> to narrow the build to that specific target.</p>
 <p>Each model-backed example accepts a <code class="docutils literal notranslate"><span class="pre">MIAOW_&lt;MODEL_NAME&gt;_MODEL_ROOT</span></code> override. When the override is empty, CMake resolves the source beneath <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code>. If the resolved directory is missing and the example declares a Git repository and revision, CMake fetches the model into that directory. See <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> for model-specific dependencies and options.</p>
 </section>
 <section id="library-installation-build">
 <h2>Library installation build<a class="headerlink" href="#library-installation-build" title="Link to this heading">¶</a></h2>
-<p>Configure a build without tests and select an installation prefix. Examples are already disabled by default:</p>
+<p>The following example configures a build without tests and selects <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code> as an example installation prefix. Any writable installation path can be supplied through <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local&quot;</span>
@@ -102,7 +102,12 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 </pre></div>
 </div>
 <p>The imported target supplies the installed MIAOW include directory, requests C++20, and links the required CAF, Boost, and procedural BMI bridge libraries. Source files can include <code class="docutils literal notranslate"><span class="pre">miaow.hpp</span></code>, <code class="docutils literal notranslate"><span class="pre">miaow_bmi.hpp</span></code>, and <code class="docutils literal notranslate"><span class="pre">miaow_io.hpp</span></code> as needed.</p>
-<p>If MIAOW was installed under <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code> and that prefix is outside CMake’s normal search locations, configure and build the downstream project with:</p>
+<p>A custom subprocess worker is another executable linked against <code class="docutils literal notranslate"><span class="pre">miaow::miaow</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">my_worker</span><span class="w"> </span><span class="s">worker.cpp</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_worker</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">miaow::miaow</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When the selected installation prefix is outside CMake’s normal search locations, the downstream configuration supplies the same path through <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local&quot;</span>
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
@@ -110,7 +115,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <p>The MIAOW package locates the required CAF and Boost components when <code class="docutils literal notranslate"><span class="pre">find_package(miaow)</span></code> runs. These dependencies must be discoverable through the system installation, <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, or the downstream project’s CMake toolchain. The installed procedural BMI bridge depends on a compatible Fortran runtime library, such as <code class="docutils literal notranslate"><span class="pre">libgfortran</span></code> when the bridge is built with GNU Fortran. This runtime library must remain available when an application that links to MIAOW runs, but compiling the downstream project does not require a Fortran compiler.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Select the MIAOW installation prefix with <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> during configuration. If the installation prefix is changed after configuration, including with <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span> <span class="pre">--prefix</span></code>, MIAOW continues to search for <code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code> under the configured prefix. To change the default subprocess executable prefix, reconfigure and rebuild MIAOW with the new prefix. Alternatively, set <code class="docutils literal notranslate"><span class="pre">Task::subprocess_path_</span></code> explicitly for individual tasks.</p>
+<p>When MIAOW is configured, CMake supplies <code class="docutils literal notranslate"><span class="pre">MIAOW_SUBPROCESS_PATH</span></code> (the absolute build-tree path to <code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code>) and <code class="docutils literal notranslate"><span class="pre">MIAOW_INSTALLED_SUBPROCESS_PATH</span></code> (the absolute expected installed path derived from <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>) as preprocessor definitions while compiling <code class="docutils literal notranslate"><span class="pre">src/bmi/execute.cpp</span></code>. MIAOW’s <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_executable_path()</span></code> function returns <code class="docutils literal notranslate"><span class="pre">MIAOW_SUBPROCESS_PATH</span></code> when that executable exists, otherwise returns <code class="docutils literal notranslate"><span class="pre">MIAOW_INSTALLED_SUBPROCESS_PATH</span></code> when that executable exists, and throws if neither executable exists. Because <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span> <span class="pre">build</span> <span class="pre">--prefix</span> <span class="pre">&lt;path&gt;</span></code> changes the installation destination without updating <code class="docutils literal notranslate"><span class="pre">MIAOW_INSTALLED_SUBPROCESS_PATH</span></code>, downstream users should configure MIAOW with the correct <code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_PREFIX=&lt;path&gt;</span></code> before building. To switch the install directory, users should reconfigure and rebuild MIAOW or pass the installed executable path directly to <code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry::add_subprocess()</span></code> when registering the subprocess executable, rather than using the default path returned by <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_executable_path()</span></code>.</p>
 </div>
 </section>
 </section>
@@ -184,8 +189,8 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 <section id="documentation-build">
 <h2>Documentation build<a class="headerlink" href="#documentation-build" title="Link to this heading">¶</a></h2>
-<p>Generated API documentation uses Doxygen for C++ docstring extraction and Sphinx with Breathe for HTML rendering. Doxygen must be installed separately and available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
-<p>Build the docs from a dedicated Python environment:</p>
+<p>The generated API documentation uses <a class="reference external" href="https://www.doxygen.nl/">Doxygen</a> for C++ documentation-comment extraction and <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> with <a class="reference external" href="https://breathe.readthedocs.io/">Breathe</a> for HTML rendering. Doxygen must be installed separately and available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<p>The following commands create a dedicated Python environment and build the documentation:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>docs/.venv
 docs/.venv/bin/pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
 docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>-d<span class="w"> </span>docs/_build/doctrees<span class="w"> </span>docs<span class="w"> </span>docs/_build/html
