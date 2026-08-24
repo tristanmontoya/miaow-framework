@@ -64,6 +64,7 @@
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/04_summa">examples/04_summa</a>: <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline execution and one MIAOW task per staged catchment feature described by a NextGen-style realization</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/05_libtrixi_bmi">examples/05_libtrixi_bmi</a>: <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin in a single-task subprocess</p></li>
+<li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/06_fuse_bmi">examples/06_fuse_bmi</a>: deterministic 256-member Saltelli ensemble using the <a class="reference external" href="https://github.com/uofs-simlab/fuse">FUSE</a> dynamic Fortran BMI plugin</p></li>
 </ul>
 <section id="id1">
 <h3>SUMMA<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
@@ -96,6 +97,7 @@
 </tr>
 </tbody>
 </table>
+<p>SUMMA is distributed under the <a class="reference external" href="https://github.com/CH-Earth/summa/blob/master/COPYING">GNU General Public License version 3</a>.</p>
 </section>
 <section id="id2">
 <h3>Trixi.jl<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
@@ -131,6 +133,51 @@
 </tr>
 </tbody>
 </table>
+<p><a class="reference external" href="https://github.com/trixi-framework/Trixi.jl/blob/main/LICENSE.md">Trixi.jl</a> and <a class="reference external" href="https://github.com/trixi-framework/libtrixi/blob/main/LICENSE.md">libtrixi</a> are distributed under the MIT License.</p>
+</section>
+<section id="id5">
+<h3>FUSE<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">examples/06_fuse_bmi</span></code> example runs a deterministic 256-member Saltelli ensemble through FUSE’s dynamic Fortran BMI plugin. It requires NetCDF Fortran and Python 3; the Python script that creates task configurations with machine-specific paths uses only the standard library. The parameter-set NetCDF files are tracked in <code class="docutils literal notranslate"><span class="pre">examples/06_fuse_bmi/data/paramsets</span></code>, while CMake locates or downloads the forcing, elevation-band, and settings data. It is not part of the default example set.</p>
+<p>From the repository root, configure, build, and run the example with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DBUILD_EXAMPLES<span class="o">=</span>ON<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMIAOW_EXAMPLES<span class="o">=</span>06_fuse_bmi<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMIAOW_FUSE_FETCH_DATA<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_fuse_bmi
+<span class="nb">cd</span><span class="w"> </span>examples/06_fuse_bmi
+./miaow_fuse_bmi<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">6</span><span class="w"> </span>--task_request_timeout<span class="w"> </span><span class="m">900</span><span class="w"> </span>--job_request_timeout<span class="w"> </span><span class="m">14400</span>
+</pre></div>
+</div>
+<p>The following example-specific flags control the FUSE model and data paths:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.8%" />
+<col style="width: 27.3%" />
+<col style="width: 40.9%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_FUSE_MODEL_ROOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${MIAOW_DEFAULT_MODEL_BASE_DIR}/fuse</span></code></p></td>
+<td><p>Local FUSE checkout; CMake fetches the pinned revision when it is absent</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_FUSE_DATA_ROOT</span></code></p></td>
+<td><p>Empty</p></td>
+<td><p>Extracted <code class="docutils literal notranslate"><span class="pre">fuse_grid</span></code> dataset; CMake first checks <code class="docutils literal notranslate"><span class="pre">${MIAOW_DEFAULT_MODEL_BASE_DIR}/fuse_grid</span></code> when this is empty</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_FUSE_FETCH_DATA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OFF</span></code></p></td>
+<td><p>Download the verified FUSE grid archive when no local dataset is available</p></td>
+</tr>
+</tbody>
+</table>
+<p>The opt-in download uses the <a class="reference external" href="https://dl.dropboxusercontent.com/s/g5193e0n01ao33d/fuse_grid.zip?dl=0">FUSE grid test case</a>. The archive has SHA-256 <code class="docutils literal notranslate"><span class="pre">96b933943e653a085b792be77c97854a9e04d1747fd60b12f62e882a36416f23</span></code> and is approximately 40.3 MiB compressed or 61 MiB extracted. CMake stores the extracted dataset and generated task configurations under <code class="docutils literal notranslate"><span class="pre">build/fuse_grid_data</span></code>, which is ignored by Git. The parameter sets were generated using FUSE’s <a class="reference external" href="https://github.com/uofs-simlab/fuse/blob/d73d24bb8678908973ca6f82f9d6eb6405cbb85f/bmi/generate_param_sets.py">bmi/generate_param_sets.py</a> script at revision <code class="docutils literal notranslate"><span class="pre">d73d24bb8678908973ca6f82f9d6eb6405cbb85f</span></code> with <code class="docutils literal notranslate"><span class="pre">N_BASE_SAMPLES</span> <span class="pre">=</span> <span class="pre">8</span></code> and <code class="docutils literal notranslate"><span class="pre">CONSTRAINTS_FILE</span></code> set to the <code class="docutils literal notranslate"><span class="pre">settings/fuse_zConstraints_snow.txt</span></code> file from the downloaded <code class="docutils literal notranslate"><span class="pre">fuse_grid</span></code> dataset. The script creates 256 parameter sets in NetCDF format, which are tracked in the repository under <code class="docutils literal notranslate"><span class="pre">examples/06_fuse_bmi/data/paramsets</span></code>.</p>
+<p>The FUSE repository is distributed under GNU GPL version 3.</p>
 </section>
 </section>
 <section id="example-command-line-options">

@@ -150,9 +150,9 @@
 <span class="w">    </span><span class="p">.</span><span class="n">init_config_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model_config</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">forcing_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiForcingConfig</span><span class="p">{</span>
 <span class="w">        </span><span class="p">.</span><span class="n">format_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiDataFormat</span><span class="o">::</span><span class="n">csv</span><span class="p">,</span>
-<span class="w">        </span><span class="p">.</span><span class="n">file_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;forcing.csv&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">file_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"forcing.csv"</span><span class="p">,</span>
 <span class="w">        </span><span class="p">.</span><span class="n">variables_names_map_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="p">{</span><span class="s">&quot;ground_temperature&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TMP_ground_surface&quot;</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="s">"ground_temperature"</span><span class="p">,</span><span class="w"> </span><span class="s">"TMP_ground_surface"</span><span class="p">},</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">};</span>
@@ -169,7 +169,7 @@
 <span class="w">    </span><span class="p">.</span><span class="n">backend_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiBackend</span><span class="o">::</span><span class="k">fortran</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">plugin_path_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin_path</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">output_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">BmiOutputConfig</span><span class="p">{</span>
-<span class="w">        </span><span class="p">.</span><span class="n">variables_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;streamflow&quot;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">.</span><span class="n">variables_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">"streamflow"</span><span class="p">},</span>
 <span class="w">        </span><span class="p">.</span><span class="n">interval_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">24.0</span><span class="p">,</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">};</span>

@@ -44,7 +44,7 @@
 </pre></div>
 </div>
 <p>On macOS with <a class="reference external" href="https://brew.sh/">Homebrew</a>, the required compiler and build tools can be installed using the following commands:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>xcode-select<span class="w"> </span>--install<span class="w">  </span><span class="c1"># if Apple&#39;s Command Line Tools are not installed</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>xcode-select<span class="w"> </span>--install<span class="w">  </span><span class="c1"># if Apple's Command Line Tools are not installed</span>
 brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>gcc
 </pre></div>
 </div>
@@ -81,7 +81,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <p>The following example configures a build without tests and selects <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code> as an example installation prefix. Any writable installation path can be supplied through <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local&quot;</span>
+<span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.local"</span>
 
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 cmake<span class="w"> </span>--install<span class="w"> </span>build
@@ -108,7 +108,7 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 </pre></div>
 </div>
 <p>When the selected installation prefix is outside CMake’s normal search locations, the downstream configuration supplies the same path through <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local&quot;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.local"</span>
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
