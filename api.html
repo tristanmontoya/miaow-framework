@@ -252,6 +252,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResultE">
 <span id="_CPPv3N5miaow10TaskResultE"></span><span id="_CPPv2N5miaow10TaskResultE"></span><span id="miaow::TaskResult"></span><span class="target" id="structmiaow_1_1TaskResult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskResult</span></span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskResultE" title="Link to this definition">¶</a><br /></dt>
 <dd><p><code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> returned by one simulation unit task execution. </p>
+<p><code class="docutils literal notranslate"><span class="pre">output_</span></code> stores optional output data as a scalar, list, dictionary, or recursively nested combination. Large or independently consumable files remain artifacts referenced by <code class="docutils literal notranslate"><span class="pre">artifact_paths_</span></code>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -268,7 +269,23 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>status</strong> – Terminal status for this task execution. </p></li>
-<li><p><strong>message</strong> – Message interpreted by <code class="docutils literal notranslate"><span class="pre">status</span></code> as output or failure detail. </p></li>
+<li><p><strong>message</strong> – Human-readable completion or failure detail. </p></li>
+<li><p><strong>artifact_paths</strong> – Relative paths to artifacts under the job directory. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringEN3caf12config_valueENSt6vectorINSt6stringEEE">
+<span id="_CPPv3N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringEN3caf12config_valueENSt6vectorINSt6stringEEE"></span><span id="_CPPv2N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringEN3caf12config_valueENSt6vectorINSt6stringEEE"></span><span id="miaow::TaskResult::TaskResult__TaskStatus.ss.caf::config_value.std::vector:ss:"></span><span class="target" id="structmiaow_1_1TaskResult_1a24e01740628a5833758f59e3440d656b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TaskResult</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow10TaskStatusE" title="miaow::TaskStatus"><span class="n"><span class="pre">TaskStatus</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">status</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span>, <span class="n"><span class="pre">caf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">config_value</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">artifact_paths</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow10TaskResult10TaskResultE10TaskStatusNSt6stringEN3caf12config_valueENSt6vectorINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a <code class="docutils literal notranslate"><a class="reference internal" href="#structmiaow_1_1TaskResult"><span class="std std-ref"><span class="pre">TaskResult</span></span></a></code> from status, message, output, and artifacts. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> – Terminal status for this task execution. </p></li>
+<li><p><strong>message</strong> – Human-readable completion or failure detail. </p></li>
+<li><p><strong>output</strong> – Structured output for controllers and callers. </p></li>
 <li><p><strong>artifact_paths</strong> – Relative paths to artifacts under the job directory. </p></li>
 </ul>
 </dd>
@@ -288,6 +305,12 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResult8message_E">
 <span id="_CPPv3N5miaow10TaskResult8message_E"></span><span id="_CPPv2N5miaow10TaskResult8message_E"></span><span id="miaow::TaskResult::message___ss"></span><span class="target" id="structmiaow_1_1TaskResult_1a282175a0bc0a244994ee72a175a0dae8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">message_</span></span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskResult8message_E" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Message interpreted by <code class="docutils literal notranslate"><span class="pre">status_</span></code> as output or failure detail. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow10TaskResult7output_E">
+<span id="_CPPv3N5miaow10TaskResult7output_E"></span><span id="_CPPv2N5miaow10TaskResult7output_E"></span><span id="miaow::TaskResult::output___caf::config_value"></span><span class="target" id="structmiaow_1_1TaskResult_1a80f1fc3d4aaef8cf1252629921b27539"></span><span class="n"><span class="pre">caf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">config_value</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_</span></span></span><a class="headerlink" href="#_CPPv4N5miaow10TaskResult7output_E" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Structured output available to the <a class="reference internal" href="#classmiaow_1_1JobController"><span class="std std-ref">JobController</span></a> and runtime caller. </p>
 </dd></dl>
 
 <dl class="cpp var">

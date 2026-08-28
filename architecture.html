@@ -57,6 +57,11 @@
 </a>
 <p>When the controller generates new tasks, the job actor counts entries in its task vector that do not yet have a corresponding completed task record and adds workers only if this count exceeds the existing worker count. Workers are not removed while the job is running, so the job retains the largest worker count that has been required at any point during the job, capped by <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code>, until the job completes or shuts down. Idle <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers do not occupy CAF scheduler threads, so retaining them does not reduce scheduler capacity.</p>
 </section>
+<section id="structured-task-output">
+<h2>Structured task output<a class="headerlink" href="#structured-task-output" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">TaskResult::output_</span></code> carries optional structured output as a <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code>. It supports scalar values and recursively nested lists and dictionaries, and remains available through the completed <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code> values passed to <code class="docutils literal notranslate"><span class="pre">JobController::generate_new_tasks()</span></code> and retained by the final <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>. Controllers are responsible for validating the structure and value types defined by their simulation units. Large time series, grids, and model state should be written to files and referenced by <code class="docutils literal notranslate"><span class="pre">TaskResult::artifact_paths_</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::output_root_</span></code> is configured, each task’s structured output (or a <code class="docutils literal notranslate"><span class="pre">null</span></code> value) is included in the <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> written when the job completes.</p>
+</section>
 <section id="simulation-unit-execution">
 <span id="id1"></span><h2>Simulation unit execution<a class="headerlink" href="#simulation-unit-execution" title="Link to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">Task::simulation_unit_id_</span></code> field selects the <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> implementation that
@@ -131,6 +136,7 @@ executes the task. <code class="docutils literal notranslate"><span class="pre">
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#orchestration-model">Orchestration model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structured-task-output">Structured task output</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#simulation-unit-execution">Simulation unit execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
