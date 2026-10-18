@@ -97,7 +97,15 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow13JobControllerE">miaow::JobController (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow13JobController18generate_new_tasksERKNSt6vectorI10TaskRecordEE">miaow::JobController::generate_new_tasks (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow13JobController8finalizeEv">miaow::JobController::finalize (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow13JobController22generate_initial_tasksEv">miaow::JobController::generate_initial_tasks (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow13JobController18generate_new_tasksENSt4spanIK10TaskRecordEE">miaow::JobController::generate_new_tasks (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow13JobController13JobControllerE20TaskGenerationPolicy">miaow::JobController::JobController (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4NK5miaow13JobController22task_generation_policyEv">miaow::JobController::task_generation_policy (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow9JobHandleE">miaow::JobHandle (C++ type)</a>
 </li>
@@ -107,7 +115,9 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow9JobRecord7job_id_E">miaow::JobRecord::job_id_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEENSt6chrono8durationIdEE">miaow::JobRecord::JobRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordEv">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEENSt6chrono8durationIdEEN3caf12config_valueE">miaow::JobRecord::JobRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordEv">[1]</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow9JobRecord7output_E">miaow::JobRecord::output_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow9JobRecord7run_id_E">miaow::JobRecord::run_id_ (C++ member)</a>
 </li>
@@ -133,7 +143,7 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry">miaow::Runtime::Runtime (C++ function)</a>, <a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions">[1]</a>
 </li>
-      <li><a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEE">miaow::Runtime::submit_job (C++ function)</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEENSt10unique_ptrI13JobControllerEE">[1]</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobERK4Task">[2]</a>
+      <li><a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt10unique_ptrI13JobControllerEE">miaow::Runtime::submit_job (C++ function)</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEE">[1]</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEENSt10unique_ptrI13JobControllerEE">[2]</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobERK4Task">[3]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow7RuntimeD0Ev">miaow::Runtime::~Runtime (C++ function)</a>
 </li>
@@ -205,11 +215,19 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow21task_status_to_stringE10TaskStatus">miaow::task_status_to_string (C++ function)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow20TaskGenerationPolicyE">miaow::TaskGenerationPolicy (C++ enum)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow20TaskGenerationPolicy12asynchronousE">miaow::TaskGenerationPolicy::asynchronous (C++ enumerator)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow20TaskGenerationPolicy17batch_synchronousE">miaow::TaskGenerationPolicy::batch_synchronous (C++ enumerator)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow6TaskIdE">miaow::TaskId (C++ type)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow12TaskMetadataE">miaow::TaskMetadata (C++ type)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecordE">miaow::TaskRecord (C++ struct)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord31dispatch_offset_from_job_start_E">miaow::TaskRecord::dispatch_offset_from_job_start_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord9metadata_E">miaow::TaskRecord::metadata_ (C++ member)</a>
 </li>
@@ -223,7 +241,9 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord10task_name_E">miaow::TaskRecord::task_name_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultNSt6chrono8durationIdEE">miaow::TaskRecord::TaskRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordEv">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultNSt6chrono8durationIdEENSt8optionalINSt6chrono8durationIdEEEENSt8optionalINSt6size_tEEE">miaow::TaskRecord::TaskRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordEv">[1]</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10worker_id_E">miaow::TaskRecord::worker_id_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskResultE">miaow::TaskResult (C++ struct)</a>
 </li>

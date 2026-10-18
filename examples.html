@@ -65,6 +65,7 @@
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/04_summa">examples/04_summa</a>: <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline execution and one MIAOW task per staged catchment feature described by a NextGen-style realization</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/05_libtrixi_bmi">examples/05_libtrixi_bmi</a>: <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin in a single-task subprocess</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/06_fuse_bmi">examples/06_fuse_bmi</a>: deterministic 256-member Saltelli ensemble using the <a class="reference external" href="https://github.com/uofs-simlab/fuse">FUSE</a> dynamic Fortran BMI plugin</p></li>
+<li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/08_particle_swarm">examples/08_particle_swarm</a>: compares batch-synchronous and asynchronous particle swarm optimization on Rastrigin, with randomized evaluation delays and Matplotlib playback</p></li>
 </ul>
 <section id="id1">
 <h3>SUMMA<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
@@ -179,10 +180,33 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 <p>The opt-in download uses the <a class="reference external" href="https://dl.dropboxusercontent.com/s/g5193e0n01ao33d/fuse_grid.zip?dl=0">FUSE grid test case</a>. CMake stores the extracted dataset and generated task configurations under <code class="docutils literal notranslate"><span class="pre">build/fuse_grid_data</span></code>, which is ignored by Git. The provided parameter sets were generated using FUSE’s <a class="reference external" href="https://github.com/uofs-simlab/fuse/blob/d73d24bb8678908973ca6f82f9d6eb6405cbb85f/bmi/generate_param_sets.py">bmi/generate_param_sets.py</a> script at revision <code class="docutils literal notranslate"><span class="pre">d73d24bb8678908973ca6f82f9d6eb6405cbb85f</span></code> with <code class="docutils literal notranslate"><span class="pre">N_BASE_SAMPLES</span> <span class="pre">=</span> <span class="pre">8</span></code> and <code class="docutils literal notranslate"><span class="pre">CONSTRAINTS_FILE</span></code> set to the <code class="docutils literal notranslate"><span class="pre">settings/fuse_zConstraints_snow.txt</span></code> file from the downloaded <code class="docutils literal notranslate"><span class="pre">fuse_grid</span></code> dataset. The script creates 256 parameter sets in NetCDF format, which are tracked in this repository under <code class="docutils literal notranslate"><span class="pre">examples/06_fuse_bmi/data/paramsets</span></code>.</p>
 <p>The FUSE repository is distributed under the <a class="reference external" href="https://github.com/uofs-simlab/fuse/blob/master/COPYING">GNU General Public License version 3</a>.</p>
 </section>
+<section id="particle-swarm-optimization">
+<h3>Particle swarm optimization<a class="headerlink" href="#particle-swarm-optimization" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">08_particle_swarm</span></code> example compares two methods for scheduling particle swarm optimization. Each task evaluates one particle’s position on the Rastrigin function, with randomized delays to simulate varying evaluation costs.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_synchronous</span></code>: the controller waits for every particle in a generation to finish, then updates the whole swarm using that generation’s best result and submits the next generation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asynchronous</span></code>: the controller updates each particle as its result arrives, using the best result available at that time, and submits its next evaluation without waiting for the other particles.</p></li>
+</ul>
+<p>The synchronous job runs to completion first, then the asynchronous job starts. Both start from identical particle positions and velocities, using 32 particles and eight workers by default. Each stops submitting work after 30 seconds or 100,000 evaluations; queued and active evaluations finish normally.</p>
+<p>Select, build, and run this additional example from the repository root:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON<span class="w"> </span>-DMIAOW_EXAMPLES<span class="o">=</span>08_particle_swarm
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>miaow_particle_swarm
+<span class="nb">cd</span><span class="w"> </span>examples/08_particle_swarm
+./miaow_particle_swarm
+</pre></div>
+</div>
+<p>Results are saved under <code class="docutils literal notranslate"><span class="pre">output/run_&lt;id&gt;</span></code>. To compare particle histories, worker usage, and convergence, use the provided Python script:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+.venv/bin/python<span class="w"> </span>animate.py<span class="w"> </span><span class="s2">"output/run_&lt;id&gt;"</span>
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;id&gt;</span></code> with the run number in the path printed by the executable (<code class="docutils literal notranslate"><span class="pre">0</span></code> for the first run). Figures are written to its <code class="docutils literal notranslate"><span class="pre">figures</span></code> subdirectory; MP4 export requires FFmpeg.</p>
+</section>
 </section>
 <section id="example-command-line-options">
 <h2>Example command-line options<a class="headerlink" href="#example-command-line-options" title="Link to this heading">¶</a></h2>
-<p>Examples use the following runtime command-line options where applicable:</p>
+<p>Examples accept the following runtime command-line options where applicable. The table shows <code class="docutils literal notranslate"><span class="pre">RuntimeOptions</span></code> defaults; individual examples may override them. For example, <code class="docutils literal notranslate"><span class="pre">08_particle_swarm</span></code> defaults to eight workers and an output root of <code class="docutils literal notranslate"><span class="pre">output</span></code>.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 27.3%" />
@@ -191,7 +215,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Option</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Runtime default</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
@@ -202,11 +226,11 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
-<td><p>Timeout for one task execution, in seconds; MIAOW terminates the child process when a subprocess task exceeds this timeout</p></td>
+<td><p>Task-response timeout, in seconds; timed-out tasks fail. Only subprocess tasks are terminated; running in-process evaluations are not interrupted.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">300</span></code></p></td>
-<td><p>Maximum runtime for one job, in seconds</p></td>
+<td><p>Job timeout, in seconds; unfinished tasks fail and worker shutdown is requested. Only subprocess tasks are terminated; running in-process evaluations are not interrupted.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output_root</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
