@@ -62,46 +62,45 @@
 <section id="additional-examples">
 <h2>Additional examples<a class="headerlink" href="#additional-examples" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/04_summa">examples/04_summa</a>: <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> run using subprocess pipeline execution and one MIAOW task per staged catchment feature described by a NextGen-style realization</p></li>
+<li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/04_summa">examples/04_summa</a>: MIAOW <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> execution for the 52-GRU Bow River fixture, with offline mizuRoute routing</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/05_libtrixi_bmi">examples/05_libtrixi_bmi</a>: <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> workflow using the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin in a single-task subprocess</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/06_fuse_bmi">examples/06_fuse_bmi</a>: deterministic 256-member Saltelli ensemble using the <a class="reference external" href="https://github.com/uofs-simlab/fuse">FUSE</a> dynamic Fortran BMI plugin</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/08_particle_swarm">examples/08_particle_swarm</a>: compares batch-synchronous and asynchronous particle swarm optimization on Rastrigin, with randomized evaluation delays and Matplotlib playback</p></li>
 </ul>
 <section id="id1">
 <h3>SUMMA<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code> example builds a SUMMA BMI library from a SUMMA source tree and runs the packaged gauge realization by default. It is not part of the default example set. SUMMA requires <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF</a> C/Fortran and BLAS/LAPACK support. Select it with <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES=04_summa</span></code>, then run it from the example directory:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/04_summa
-./miaow_summa<span class="w"> </span>--output_root<span class="w"> </span>./output
+<p>The optional <code class="docutils literal notranslate"><span class="pre">examples/04_summa</span></code> example runs <a class="reference external" href="https://github.com/CH-Earth/summa">SUMMA</a> through Fortran BMI in MIAOW, with offline routing through <a class="reference external" href="https://github.com/ESCOMP/mizuRoute">mizuRoute</a>, to simulate the streamflow for the <code class="docutils literal notranslate"><span class="pre">CAN_05BB001</span></code> gauge on the Bow River at Banff, Alberta, Canada using a spatially distributed hydrologic model consisting of 52 grouped response units (GRUs). In addition to the <a class="reference internal" href="building.html"><span class="doc">MIAOW build requirements</span></a>, this example requires GNU Fortran, NetCDF C/Fortran, BLAS/LAPACK, and <code class="docutils literal notranslate"><span class="pre">uv</span></code>. On Ubuntu, these can be installed using the following commands:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libnetcdf-dev<span class="w"> </span>libnetcdff-dev<span class="w"> </span>libopenblas-dev<span class="w"> </span>curl
+curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
 </pre></div>
 </div>
-<p>The following example-specific flags control the SUMMA build:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 31.8%" />
-<col style="width: 27.3%" />
-<col style="width: 40.9%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Flag</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_SUMMA_MODEL_ROOT</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">${MIAOW_DEFAULT_MODEL_BASE_DIR}/summa</span></code></p></td>
-<td><p>Local or fetched SUMMA source tree</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_SUMMA_LIBRARY_LINKS</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">-framework</span> <span class="pre">Accelerate</span></code> on macOS, empty otherwise</p></td>
-<td><p>LAPACK/BLAS link flags passed to SUMMA</p></td>
-</tr>
-</tbody>
-</table>
-<p>SUMMA is distributed under the <a class="reference external" href="https://github.com/CH-Earth/summa/blob/master/COPYING">GNU General Public License version 3</a>.</p>
+<p>On macOS, we can use <a class="reference external" href="https://brew.sh/">Homebrew</a> to install the required dependencies:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>netcdf-fortran<span class="w"> </span>uv
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">run_summa_mizuroute.py</span></code> accepts <code class="docutils literal notranslate"><span class="pre">--max-workers</span> <span class="pre">N</span></code> to set the maximum number of concurrent SUMMA tasks that MIAOW will run (default: 4). To set up and run the workflow, execute the following commands from the repository root:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Set up the Python environment</span>
+uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--project<span class="w"> </span>examples/04_summa<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
+
+<span class="c1"># 2. Configure the model and routing build</span>
+cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build-summa<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DBUILD_EXAMPLES<span class="o">=</span>ON<span class="w"> </span>-DMIAOW_EXAMPLES<span class="o">=</span>04_summa
+
+<span class="c1"># 3. Build the MIAOW driver, SUMMA, and mizuRoute</span>
+cmake<span class="w"> </span>--build<span class="w"> </span>build-summa<span class="w"> </span>--target<span class="w"> </span>miaow_summa<span class="w"> </span>-j<span class="w"> </span><span class="m">6</span>
+
+<span class="c1"># 4. Run SUMMA, prepare runoff, and run mizuRoute</span>
+uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--project<span class="w"> </span>examples/04_summa<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python<span class="w"> </span>examples/04_summa/run_summa_mizuroute.py
+
+<span class="c1"># 5. Calculate the modified Kling-Gupta efficiency (KGE') and plot streamflow</span>
+uv<span class="w"> </span>run<span class="w"> </span>--frozen<span class="w"> </span>--project<span class="w"> </span>examples/04_summa<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python<span class="w"> </span>examples/04_summa/postprocess_streamflow.py
+</pre></div>
+</div>
 </section>
-<section id="id2">
-<h3>Trixi.jl<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<section id="id3">
+<h3>Trixi.jl<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">examples/05_libtrixi_bmi</span></code> example runs <a class="reference external" href="https://github.com/trixi-framework/Trixi.jl">Trixi.jl</a> configs through MIAOW’s <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> dynamic BMI plugin path. It is not part of the default example set, so it should be selected using <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES=05_libtrixi_bmi</span></code>. The following example-specific flags control the <code class="docutils literal notranslate"><span class="pre">libtrixi</span></code> paths:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -136,8 +135,8 @@
 </table>
 <p><a class="reference external" href="https://github.com/trixi-framework/Trixi.jl/blob/main/LICENSE.md">Trixi.jl</a> and <a class="reference external" href="https://github.com/trixi-framework/libtrixi/blob/main/LICENSE.md">libtrixi</a> are distributed under the MIT License.</p>
 </section>
-<section id="id5">
-<h3>FUSE<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<section id="id6">
+<h3>FUSE<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">examples/06_fuse_bmi</span></code> example runs a deterministic 256-member Saltelli ensemble through FUSE’s dynamic Fortran BMI plugin. It requires NetCDF Fortran and Python 3 with no additional packages. The NetCDF parameter files are tracked in <code class="docutils literal notranslate"><span class="pre">examples/06_fuse_bmi/data/paramsets</span></code>, while CMake locates or downloads the forcing, elevation-band, and settings data. This case is not part of the default example set.</p>
 <p>Using six workers, the ensemble can be run from the example root directory with the following commands:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
