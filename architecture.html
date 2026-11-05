@@ -513,7 +513,7 @@ flowchart TB
 config:
   sequence:
     useMaxWidth: true
-    mirrorActors: false
+    mirrorActors: true
     width: 180
     actorMargin: 24
     diagramMarginX: 16
@@ -553,9 +553,11 @@ sequenceDiagram
 
     J-)U: shutdown_atom
     U-&gt;&gt;U: Release executor&lt;br/&gt;For SubprocessTaskExecutor:&lt;br/&gt;terminate child and wait for exit
-    U--&gt;&gt;J: CAF termination notification
+    destroy U
+    U--&gt;&gt;J: CAF termination&lt;br/&gt;notification
     J-&gt;&gt;J: JobController::finalize()
-    J--&gt;&gt;O: JobRecord
+    destroy J
+    J--&gt;&gt;O: JobRecord&lt;br/&gt;then quit()
     O-&gt;&gt;O: Fulfil JobHandle promise
 
     </pre><p>When no tasks are queued or running and the controller adds no more tasks, the job actor tells each simulation-unit actor to shut down and waits for all of them to terminate. It then calls <code class="docutils literal notranslate"><span class="pre">JobController::finalize()</span></code> and returns a <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code> through the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p>
@@ -597,7 +599,7 @@ sequenceDiagram
 config:
   sequence:
     useMaxWidth: true
-    mirrorActors: false
+    mirrorActors: true
     width: 180
     actorMargin: 50
     diagramMarginX: 50
@@ -674,7 +676,7 @@ sequenceDiagram
 config:
   sequence:
     useMaxWidth: true
-    mirrorActors: false
+    mirrorActors: true
     width: 180
     actorMargin: 50
     diagramMarginX: 50
@@ -712,12 +714,15 @@ sequenceDiagram
             U-)U: poll_subprocess_exit_atom&lt;br/&gt;(delayed)
         end
     end
+    destroy P
+    P--&gt;&gt;U: Child exit status&lt;br/&gt;collected by waitpid()
     U-&gt;&gt;U: Release child resources
     opt Task awaiting a response
         U--&gt;&gt;J: TaskResult or CAF error
     end
     U-&gt;&gt;U: quit()
-    U--&gt;&gt;J: CAF termination notification
+    destroy U
+    U--&gt;&gt;J: CAF termination&lt;br/&gt;notification
     J-&gt;&gt;J: unit_terminated()
 
     </pre></section>
@@ -738,14 +743,15 @@ sequenceDiagram
 <section id="runtime-shutdown">
 <h3>Runtime shutdown<a class="headerlink" href="#runtime-shutdown" title="Link to this heading">¶</a></h3>
 <p>Destroying <code class="docutils literal notranslate"><span class="pre">Runtime</span></code> ends execution of its active jobs. Runtime tells the orchestrator to shut down; the orchestrator forwards that request to each job actor and exits. Each job actor tells its unit actors to shut down and waits for them to terminate. Actor-system destruction waits for the remaining actors. Jobs interrupted this way produce no final <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p>
+<p>Termination arrows to the CAF actor system below represent lifecycle events. The system waits for all actors to terminate before its destruction completes.</p>
 <pre align="center" class="mermaid align-center">
         ---
 config:
   sequence:
     useMaxWidth: true
-    mirrorActors: false
+    mirrorActors: true
     width: 180
-    actorMargin: 24
+    actorMargin: 50
     diagramMarginX: 16
     diagramMarginY: 12
     messageMargin: 18
@@ -762,23 +768,32 @@ config:
 ---
 sequenceDiagram
     participant R as Runtime
+    participant S as CAF actor system
     participant O as orchestrator_actor
     participant Reg as subprocess_registration_actor
     participant J as job_actor
     participant U as simulation_unit_actor
 
     R-)O: shutdown_atom
+    R-&gt;&gt;S: Wait for actors&lt;br/&gt;during destruction
     O-)J: shutdown_atom&lt;br/&gt;for each active job
     par Orchestrator shutdown
-        O-)Reg: CAF exit (user_shutdown)
-        O-&gt;&gt;O: quit()
+        O-)Reg: CAF exit&lt;br/&gt;(user_shutdown)
+        destroy O
+        O--&gt;&gt;S: Actor terminates&lt;br/&gt;after quit()
+        destroy Reg
+        Reg--&gt;&gt;S: Actor terminates
     and Job and unit cleanup
         J-)U: shutdown_atom&lt;br/&gt;for each live unit
         U-&gt;&gt;U: Release executor&lt;br/&gt;For SubprocessTaskExecutor:&lt;br/&gt;terminate child and wait for exit
-        U--&gt;&gt;J: CAF termination notification
+        destroy U
+        U--&gt;&gt;J: CAF termination&lt;br/&gt;notification
         Note over J: Wait for all unit actors to terminate
-        J-&gt;&gt;J: Return Runtime shutdown error&lt;br/&gt;then quit()
+        J-&gt;&gt;J: Return Runtime shutdown error
+        destroy J
+        J--&gt;&gt;S: Actor terminates&lt;br/&gt;after quit()
     end
+    S--&gt;&gt;R: All actors terminated
 
     </pre></section>
 </section>
