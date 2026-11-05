@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Building and installation &#8212; MIAOW documentation</title>
+    <title>Building, testing, and installation &#8212; MIAOW documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=5611fc0a" />
@@ -34,11 +34,11 @@
 
           <div class="body" role="main">
             
-  <section id="building-and-installation">
-<h1>Building and installation<a class="headerlink" href="#building-and-installation" title="Link to this heading">¶</a></h1>
+  <section id="building-testing-and-installation">
+<h1>Building, testing, and installation<a class="headerlink" href="#building-testing-and-installation" title="Link to this heading">¶</a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
-<p>MIAOW requires <a class="reference external" href="https://cmake.org/">CMake</a> 3.30 or newer, a C++20 compiler, and a Fortran compiler. The CAF, JSON, and Boost provider options specify where CMake obtains these dependencies: from packages already installed on the system, by fetching and building them from source, or by trying the system first and fetching them if necessary. Boost is needed only when building framework tests. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for a description of the available provider settings.</p>
+<p>MIAOW requires <a class="reference external" href="https://cmake.org/">CMake</a> 3.30 or newer, a C++20 compiler, and a Fortran compiler. The CAF, JSON, and Boost provider options specify where CMake obtains these dependencies: from packages already installed on the system, by fetching and building them from source, or by trying the system first and fetching them if necessary. Boost is needed only when building the job record checker. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for a description of the available provider settings.</p>
 <p>On Ubuntu, the required compiler and build tools can be installed with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>gfortran
 </pre></div>
@@ -56,8 +56,9 @@ brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w">
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>The default development build includes the framework tests and does not build examples.</p>
-<p>The complete test suite runs with the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">CITATION.cff</span></code> is the single source for the software version. Use <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0-dev&quot;</span></code> during development and <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0&quot;</span></code> for a release; CMake extracts <code class="docutils literal notranslate"><span class="pre">0.3.0</span></code> and automatically reconfigures when the citation file changes.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds the <code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code> checker, the lifecycle and BMI dispatch test drivers, and the four examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, and <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
+<p>Run the tests enabled in the current build with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
 </div>
@@ -68,26 +69,353 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 <section id="building-examples">
 <span id="id1"></span><h2>Building examples<a class="headerlink" href="#building-examples" title="Link to this heading">¶</a></h2>
-<p>Examples are disabled by default. The following configuration enables and builds the default example set:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
+<p><code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> always includes the four regression examples. <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=ON</span></code> adds the examples selected by <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>; overlapping selections are built once. To build the selected examples without the regression suite:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>Override the default example set with a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=&quot;00_hello;01_heat&quot;</span></code>. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> builds every selected example; use <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> to narrow the build to that specific target.</p>
+<p>Override the selected example set with a semicolon-separated <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code> value, for example <code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES=&quot;00_hello;01_heat&quot;</span></code>. This selection supplements the required regression examples when testing is enabled. A normal <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">build</span></code> builds every included example; use <code class="docutils literal notranslate"><span class="pre">--target</span> <span class="pre">miaow_hello</span></code> to narrow the build to that specific target.</p>
 <p>Each model-backed example accepts a <code class="docutils literal notranslate"><span class="pre">MIAOW_&lt;MODEL_NAME&gt;_MODEL_ROOT</span></code> override. When the override is empty, CMake resolves the source beneath <code class="docutils literal notranslate"><span class="pre">MIAOW_DEFAULT_MODEL_BASE_DIR</span></code>. If the resolved directory is missing and the example declares a Git repository and revision, CMake fetches the model into that directory. See <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> for model-specific dependencies and options.</p>
+</section>
+<section id="regression-tests">
+<h2>Regression tests<a class="headerlink" href="#regression-tests" title="Link to this heading">¶</a></h2>
+<p>CI runs the simulation-unit lifecycle cases and the regression tests for the default examples on every push and pull request. To run the same suite locally:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_TESTING<span class="o">=</span>ON<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>OFF
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>-L<span class="w"> </span>regression<span class="w"> </span>--output-on-failure
+</pre></div>
+</div>
+<p>CTest runs the examples and test drivers, checks exit codes, and uses Boost.Test to validate saved job records. JSON cases in <code class="docutils literal notranslate"><span class="pre">tests/cases</span></code> define inputs and expected results.</p>
+<p>Tests cover BMI execution, unit removal and replacement, and callback delivery. Lifecycle cases run under both callback policies with one and two workers.</p>
+<section id="default-example-success-tests">
+<h3>Default example success tests<a class="headerlink" href="#default-example-success-tests" title="Link to this heading">¶</a></h3>
+<p>Examples run with their default inputs.</p>
+<table class="regression-tests docutils align-default">
+<colgroup>
+<col style="width: 34.0%" />
+<col style="width: 28.0%" />
+<col style="width: 38.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CTest name</p></th>
+<th class="head"><p>Code executed</p></th>
+<th class="head"><p>Expected result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/CMakeLists.txt">miaow_example_00_hello</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Runs configurable greeting tasks with an in-process executor.</p>
+</td>
+<td><p>Saved tasks 0 and 1 succeed with messages <code class="docutils literal notranslate"><span class="pre">hello</span></code> and <code class="docutils literal notranslate"><span class="pre">hello</span> <span class="pre">again</span></code>, names <code class="docutils literal notranslate"><span class="pre">greeting_task_0</span></code> and <code class="docutils literal notranslate"><span class="pre">message_1_task_1</span></code>, and <code class="docutils literal notranslate"><span class="pre">feature_id=greeting</span></code> on task 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/01_heat/CMakeLists.txt">miaow_example_01_heat</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/01_heat/main.cpp">01_heat/main.cpp</a></p>
+<p>Runs the C++ heat model with a statically linked BMI executor.</p>
+</td>
+<td><p>The statically linked C++ heat model completes 120 updates to its configured 20-second end time; its saved task succeeds</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/CMakeLists.txt">miaow_example_03_dynamic_bmi</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Submits in-process and subprocess runs for the C++ and Fortran heat-model plugins.</p>
+</td>
+<td><p>All four heat tasks succeed after 40 updates to 10 seconds; each plugin uses distinct task executor IDs for in-process and subprocess execution</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/CMakeLists.txt">miaow_example_07_job_controller</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/main.cpp">07_job_controller/main.cpp</a></p>
+<p>Requests Heron iterations until convergence or the iteration limit.</p>
+</td>
+<td><p>Starting from 1, three Heron estimates match 1.5, 17/12, and 577/408 within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code>; the final residual <code class="docutils literal notranslate"><span class="pre">|x^2</span> <span class="pre">-</span> <span class="pre">2|</span></code> is at most <code class="docutils literal notranslate"><span class="pre">1e-5</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="alternative-example-regression-tests">
+<h3>Alternative example regression tests<a class="headerlink" href="#alternative-example-regression-tests" title="Link to this heading">¶</a></h3>
+<p>Successful example runs use JSON input overrides.</p>
+<table class="regression-tests docutils align-default">
+<colgroup>
+<col style="width: 34.0%" />
+<col style="width: 28.0%" />
+<col style="width: 38.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CTest name</p></th>
+<th class="head"><p>Code executed</p></th>
+<th class="head"><p>Expected result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_empty.json">miaow_example_00_hello_empty</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Submits an empty job.</p>
+</td>
+<td><p>Submitting a job with an empty task list succeeds and writes <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> with an empty <code class="docutils literal notranslate"><span class="pre">tasks</span></code> array</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_zero_tolerance.json">miaow_example_03_dynamic_bmi_zero_tolerance</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Submits in-process and subprocess runs for the C++ and Fortran heat-model plugins.</p>
+</td>
+<td><p>With zero clock tolerance, all four tasks succeed after forty 0.25-second updates reach 10 seconds exactly</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_zero_duration.json">miaow_example_03_dynamic_bmi_zero_duration</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Submits in-process and subprocess runs for the C++ and Fortran heat-model plugins.</p>
+</td>
+<td><p>With initial and end times both zero, all four tasks succeed with zero updates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/controller_small_values.json">miaow_example_07_job_controller_small_values</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/main.cpp">07_job_controller/main.cpp</a></p>
+<p>Requests Heron iterations until convergence or the iteration limit.</p>
+</td>
+<td><p>For radicand <code class="docutils literal notranslate"><span class="pre">2e-16</span></code>, saved estimates match <code class="docutils literal notranslate"><span class="pre">1e-8</span> <span class="pre">*</span> <span class="pre">[1.5,</span> <span class="pre">17/12,</span> <span class="pre">577/408]</span></code> within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code> relative error; the final residual is positive and at most <code class="docutils literal notranslate"><span class="pre">1e-21</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-failure-and-recovery-tests">
+<h3>Example failure and recovery tests<a class="headerlink" href="#example-failure-and-recovery-tests" title="Link to this heading">¶</a></h3>
+<p>Examples exercise invalid inputs, deadlines, failed tasks, and recovery.</p>
+<table class="regression-tests docutils align-default">
+<colgroup>
+<col style="width: 34.0%" />
+<col style="width: 28.0%" />
+<col style="width: 38.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CTest name</p></th>
+<th class="head"><p>Code executed</p></th>
+<th class="head"><p>Expected result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_missing_message.json">miaow_example_00_hello_missing_message</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Submits a task without a message followed by a valid greeting, using one worker slot.</p>
+</td>
+<td><p>With one concurrent task slot, an operation without a message fails; the following unit’s operation succeeds with message <code class="docutils literal notranslate"><span class="pre">recovered</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_unknown_executor.json">miaow_example_00_hello_unknown_executor</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Submits greetings using an unregistered executor and a valid executor.</p>
+</td>
+<td><p>A unit selecting unregistered executor 999 fails during activation; the default controller fails the job and no job record is saved</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_duplicate_feature_id.json">miaow_example_00_hello_duplicate_feature_id</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Attempts to declare two greeting units with the same <code class="docutils literal notranslate"><span class="pre">feature_id=greeting</span></code>.</p>
+</td>
+<td><p>Declaring two units with <code class="docutils literal notranslate"><span class="pre">feature_id=greeting</span></code> produces a duplicate unit-label error; no job record is saved</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_feature_id_slash.json">miaow_example_00_hello_feature_id_slash</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Uses a greeting feature label containing a forward slash.</p>
+</td>
+<td><p>A task with <code class="docutils literal notranslate"><span class="pre">feature_id=greeting/1</span></code> is rejected for containing a path separator; no job record is saved</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_feature_id_backslash.json">miaow_example_00_hello_feature_id_backslash</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Uses a greeting feature label containing a backslash.</p>
+</td>
+<td><p>A task whose feature ID contains a backslash is rejected for containing a path separator; no job record is saved</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_task_timeout.json">miaow_example_00_hello_task_timeout</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Runs a 2.5-second greeting with a 1-second task deadline.</p>
+</td>
+<td><p>A 2.5-second operation exceeds its 1-second deadline; the default controller fails the job with <code class="docutils literal notranslate"><span class="pre">request_timeout</span></code> and saves no job record. Shutdown waits for the native call to return</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_job_timeout.json">miaow_example_00_hello_job_timeout</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Queues two 2.5-second greetings with one worker slot and a 1-second job deadline.</p>
+</td>
+<td><p>A 1-second job timeout marks the active 2.5-second task and a queued task failed; the queued record retains its target, has no dispatch offset, and has a zero run time</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_invalid_max_workers.json">miaow_example_00_hello_invalid_max_workers</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Passes <code class="docutils literal notranslate"><span class="pre">--max_workers</span> <span class="pre">0</span></code> to the greeting example.</p>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--max_workers</span> <span class="pre">0</span></code> reports <code class="docutils literal notranslate"><span class="pre">requires</span> <span class="pre">a</span> <span class="pre">positive</span> <span class="pre">integer</span></code>; no job record is saved</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_invalid_task_timeout.json">miaow_example_00_hello_invalid_task_timeout</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Passes <code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span> <span class="pre">0</span></code> to the greeting example.</p>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span> <span class="pre">0</span></code> reports <code class="docutils literal notranslate"><span class="pre">requires</span> <span class="pre">a</span> <span class="pre">positive</span> <span class="pre">integer</span></code>; no job record is saved</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_invalid_job_timeout.json">miaow_example_00_hello_invalid_job_timeout</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<p>Passes <code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span> <span class="pre">0</span></code> to the greeting example.</p>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span> <span class="pre">0</span></code> reports <code class="docutils literal notranslate"><span class="pre">requires</span> <span class="pre">a</span> <span class="pre">positive</span> <span class="pre">integer</span></code>; no job record is saved</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_missing_cpp_plugin.json">miaow_example_03_dynamic_bmi_missing_cpp_plugin</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Submits four plugin tasks with a missing C++ plugin path and a valid Fortran plugin path.</p>
+</td>
+<td><p>A nonexistent C++ plugin path fails both C++ tasks; both Fortran tasks use a valid plugin path and succeed after 40 updates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_missing_fortran_plugin.json">miaow_example_03_dynamic_bmi_missing_fortran_plugin</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Submits four plugin tasks with a missing Fortran plugin path and a valid C++ plugin path.</p>
+</td>
+<td><p>A nonexistent Fortran plugin path fails both Fortran tasks; both C++ tasks use a valid plugin path and succeed after 40 updates</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_invalid_tolerance.json">miaow_example_03_dynamic_bmi_invalid_tolerance</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Sets a 1-second clock tolerance for heat models with a 0.25-second time step.</p>
+</td>
+<td><p>A 1-second clock tolerance exceeds half the 0.25-second time step; all four tasks fail with zero updates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_negative_tolerance.json">miaow_example_03_dynamic_bmi_negative_tolerance</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Sets a clock tolerance of -1 second for all four plugin tasks.</p>
+</td>
+<td><p>A clock tolerance of -1 second fails validation; all four tasks fail with zero updates</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_tolerance_boundary.json">miaow_example_03_dynamic_bmi_tolerance_boundary</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Sets clock tolerance to half the 0.25-second model time step.</p>
+</td>
+<td><p>A clock tolerance of 0.125 seconds equals half the 0.25-second time step; all four tasks fail with zero updates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_overshoot.json">miaow_example_03_dynamic_bmi_overshoot</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<p>Sets the model end time to 0.1 seconds with a 0.25-second time step.</p>
+</td>
+<td><p>With end time 0.1 seconds, all four tasks fail after one 0.25-second update with <code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">passed</span> <span class="pre">the</span> <span class="pre">end</span> <span class="pre">time</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/controller_non_convergence.json">miaow_example_07_job_controller_non_convergence</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/main.cpp">07_job_controller/main.cpp</a></p>
+<p>Limits the Heron controller to one iteration.</p>
+</td>
+<td><p>With the iteration limit set to 1, the controller reports non-convergence after its first iteration; the program exits with code 1 and saves no job record</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tests-using-dedicated-drivers">
+<h3>Tests using dedicated drivers<a class="headerlink" href="#tests-using-dedicated-drivers" title="Link to this heading">¶</a></h3>
+<section id="bmi-task-dispatch-driver">
+<h4>BMI task dispatch driver<a class="headerlink" href="#bmi-task-dispatch-driver" title="Link to this heading">¶</a></h4>
+<p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/bmi_task_dispatch_driver.cpp</span></code>. The five execution paths are a statically linked C++ model, C++ and Fortran plugins in-process, and C++ and Fortran plugins in subprocesses.</p>
+<table class="regression-tests docutils align-default">
+<colgroup>
+<col style="width: 34.0%" />
+<col style="width: 28.0%" />
+<col style="width: 38.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CTest name</p></th>
+<th class="head"><p>Code executed</p></th>
+<th class="head"><p>Expected result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_unknown_operation.json">miaow_bmi_task_dispatch</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Submits an unsupported operation, then a valid run, on each of five BMI execution paths.</p>
+</td>
+<td><p>Five execution paths each reject an unknown operation and then complete a valid run after 40 updates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run.json">miaow_bmi_repeated_run</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Submits two successive runs per unit across five BMI execution paths.</p>
+</td>
+<td><p>Five execution paths each complete two successive runs on the same unit, with 40 updates per run</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run_concurrent.json">miaow_bmi_repeated_run_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Submits two successive runs per unit across five BMI execution paths.</p>
+</td>
+<td><p>With three worker slots, each of the five units completes two successful runs of 40 updates.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="simulation-unit-lifecycle-driver">
+<h4>Simulation unit lifecycle driver<a class="headerlink" href="#simulation-unit-lifecycle-driver" title="Link to this heading">¶</a></h4>
+<p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/simulation_unit_lifecycle_driver.cpp</span></code>.</p>
+<table class="regression-tests docutils align-default">
+<colgroup>
+<col style="width: 34.0%" />
+<col style="width: 28.0%" />
+<col style="width: 38.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CTest name</p></th>
+<th class="head"><p>Code executed</p></th>
+<th class="head"><p>Expected result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work.json">miaow_simulation_unit_removal_with_queued_work</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Queues work, removes the target unit, and continues work on another unit.</p>
+</td>
+<td><p>With one worker slot and asynchronous callbacks, accepted target work drains, new work is rejected, repeated removal is harmless, every task is reported once, and the other unit retains its handle and state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work_concurrent.json">miaow_simulation_unit_removal_with_queued_work_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Queues work, removes the target unit, and continues work on another unit.</p>
+</td>
+<td><p>With two worker slots and asynchronous callbacks, accepted target work drains, new work is rejected, repeated removal is harmless, every task is reported once, and the other unit retains its handle and state.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work_batch_synchronous.json">miaow_simulation_unit_removal_with_queued_work_batch_synchronous</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Queues work, removes the target unit, and continues work on another unit.</p>
+</td>
+<td><p>With one worker slot and batch-synchronous callbacks, one callback reports all four tasks with no unit failures; accepted work drains, new work is rejected, and the other unit retains its handle and state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work_batch_synchronous_concurrent.json">miaow_simulation_unit_removal_with_queued_work_batch_synchronous_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Queues work, removes the target unit, and continues work on another unit.</p>
+</td>
+<td><p>With two worker slots and batch-synchronous callbacks, one callback reports all four tasks with no unit failures; accepted work drains, new work is rejected, and the other unit retains its handle and state.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure.json">miaow_simulation_unit_replacement_after_failure</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Injects executor-construction failure, replaces the unit, and continues work.</p>
+</td>
+<td><p>With one worker slot and asynchronous callbacks, dispatched and queued target tasks fail once with one unit-failure report; the replacement reuses the label with a new handle and fresh state, while the other unit retains its handle and state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_concurrent.json">miaow_simulation_unit_replacement_after_failure_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Injects executor-construction failure, replaces the unit, and continues work.</p>
+</td>
+<td><p>With two worker slots and asynchronous callbacks, dispatched and queued target tasks fail once with one unit-failure report; the replacement reuses the label with a new handle and fresh state, while the other unit retains its handle and state.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_batch_synchronous.json">miaow_simulation_unit_replacement_after_failure_batch_synchronous</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Injects executor-construction failure, replaces the unit, and continues work.</p>
+</td>
+<td><p>With one worker slot, the first batch callback reports two failed tasks, one successful task, and one unit failure; the second reports three successful tasks and no unit failures.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_batch_synchronous_concurrent.json">miaow_simulation_unit_replacement_after_failure_batch_synchronous_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<p>Injects executor-construction failure, replaces the unit, and continues work.</p>
+</td>
+<td><p>With two worker slots, the first batch callback reports two failed tasks, one successful task, and one unit failure; the second reports three successful tasks and no unit failures.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 </section>
 <section id="library-installation-build">
 <h2>Library installation build<a class="headerlink" href="#library-installation-build" title="Link to this heading">¶</a></h2>
 <p>The following example configures a build without tests and selects <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code> as an example installation prefix. Any writable installation path can be supplied through <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DBUILD_EXAMPLES<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.local"</span>
 
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 cmake<span class="w"> </span>--install<span class="w"> </span>build
 </pre></div>
 </div>
-<p>Building MIAOW from source requires C++20 and Fortran compilers. The completed installation can be consumed by a C++-only project without enabling Fortran or requiring a Fortran compiler.</p>
+<p>This configuration builds and installs the <code class="docutils literal notranslate"><span class="pre">miaow</span></code> C++ library, the <code class="docutils literal notranslate"><span class="pre">iso_c_bmi</span></code> Fortran BMI bridge, and the <code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code> BMI worker executable.</p>
+<p>Building MIAOW from source requires C++20 and Fortran compilers. The completed installation can be used by a C++-only project without enabling Fortran or requiring a Fortran compiler.</p>
 <section id="using-the-installed-package">
 <h3>Using the installed package<a class="headerlink" href="#using-the-installed-package" title="Link to this heading">¶</a></h3>
 <p>In another project, define the executable or library that uses MIAOW and link it to the installed <code class="docutils literal notranslate"><span class="pre">miaow::miaow</span></code> target. For example, a minimal downstream <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is:</p>
@@ -112,16 +440,29 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>The MIAOW package locates the required CAF components when <code class="docutils literal notranslate"><span class="pre">find_package(miaow)</span></code> runs. CAF must be discoverable through the system installation, <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, or the downstream project’s CMake toolchain. nlohmann/json is a private header-only build dependency and is not required by installed consumers. The installed procedural BMI bridge depends on a compatible Fortran runtime library, such as <code class="docutils literal notranslate"><span class="pre">libgfortran</span></code> when the bridge is built with GNU Fortran. This runtime library must remain available when an application that links to MIAOW runs, but compiling the downstream project does not require a Fortran compiler.</p>
+<p>The MIAOW package locates the required CAF components when <code class="docutils literal notranslate"><span class="pre">find_package(miaow)</span></code> runs. CAF must be discoverable through the system installation, <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, or the downstream project’s CMake toolchain. <a class="reference external" href="https://json.nlohmann.me/">nlohmann/json</a> is a private header-only build dependency and is not required by installed consumers. The installed procedural BMI bridge depends on a compatible Fortran runtime library, such as <code class="docutils literal notranslate"><span class="pre">libgfortran</span></code> when the bridge is built with GNU Fortran. This runtime library must remain available when an application that links to MIAOW runs, but compiling the downstream project does not require a Fortran compiler.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Configure <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> before building so <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_executable_path()</span></code> can locate the installed worker. Changing only <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span> <span class="pre">build</span> <span class="pre">--prefix</span> <span class="pre">&lt;path&gt;</span></code> does not update this lookup. If you relocate the installation, reconfigure and rebuild MIAOW or pass the installed worker path directly to <code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry::add_subprocess()</span></code>.</p>
+<p>Configure <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> before building so <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_executable_path()</span></code> can locate the installed worker. Changing only <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span> <span class="pre">build</span> <span class="pre">--prefix</span> <span class="pre">&lt;path&gt;</span></code> does not update this lookup. If you relocate the installation, reconfigure and rebuild MIAOW or pass the installed worker path directly to <code class="docutils literal notranslate"><span class="pre">TaskExecutorRegistry::add_subprocess()</span></code>.</p>
 </div>
 </section>
 </section>
 <section id="build-options">
 <span id="id2"></span><h2>Build options<a class="headerlink" href="#build-options" title="Link to this heading">¶</a></h2>
-<p>The following top-level CMake options are available:</p>
+<p>All top-level repository configurations build the following runtime components, which are installed by <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow</span></code>: the static C++ library containing the runtime, job and unit APIs, and BMI task executors.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iso_c_bmi</span></code>: the shared Fortran BMI bridge. It exposes C-compatible functions so MIAOW’s C++ code can call Fortran BMI models, both in-process and in subprocesses.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow_subprocess</span></code>: the built-in BMI worker executable. MIAOW starts it when a subprocess-backed unit first needs it and reuses it for that unit’s tasks.</p></li>
+</ul>
+<p>The standard regression suite is enabled when <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code> is <code class="docutils literal notranslate"><span class="pre">ON</span></code>, and builds the following additional programs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code>: the Boost.Test executable that checks saved job records and controller observations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow_simulation_unit_lifecycle_driver</span></code>: the model-free workload driver for removal, failure recovery, and callback delivery.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow_bmi_dispatch_driver</span></code>: the heat-model workload driver for operation failures and repeated runs across the five BMI execution paths.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, and <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code> example programs, including the heat-model libraries and C++ and Fortran plugins needed by their tests.</p></li>
+</ul>
+<p>The following top-level CMake options are available when building MIAOW:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 31.8%" />
@@ -137,25 +478,24 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DBUILD_TESTING</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code></p></td>
-<td><p>Build the framework test executables in a top-level repository build</p></td>
+<td><p>Build and register the standard regression suite, including its checker, drivers, and required example programs, in a top-level repository build</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DBUILD_EXAMPLES</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">OFF</span></code></p></td>
-<td><p>Build selected example programs</p></td>
+<td><p>Build the examples selected by <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>; if <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code> is also <code class="docutils literal notranslate"><span class="pre">ON</span></code>, required regression examples are built even if not listed in <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_EXAMPLES</span></code></p></td>
 <td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">00_hello;01_heat;</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">02_soil_freeze_thaw;</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi;</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code></div>
 </div>
 </td>
-<td><p>Semicolon-separated list of examples to build when <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code> is enabled</p></td>
+<td><p>Semicolon-separated list of examples selected by <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code>; testing includes its required examples independently</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_PROVIDER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
-<td><p>Boost.Test provider: <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch</span></code>, or <code class="docutils literal notranslate"><span class="pre">auto</span></code>; used only for framework tests</p></td>
+<td><p>Boost.Test provider: <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">fetch</span></code>, or <code class="docutils literal notranslate"><span class="pre">auto</span></code>; used only for the job record checker</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DMIAOW_BOOST_VERSION</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.86.0</span></code></p></td>
@@ -197,7 +537,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 <section id="documentation-build">
 <h2>Documentation build<a class="headerlink" href="#documentation-build" title="Link to this heading">¶</a></h2>
-<p>The generated API documentation uses <a class="reference external" href="https://www.doxygen.nl/">Doxygen</a> for C++ documentation-comment extraction and <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> with <a class="reference external" href="https://breathe.readthedocs.io/">Breathe</a> for HTML rendering. Doxygen must be installed separately and available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<p>The generated API documentation uses <a class="reference external" href="https://www.doxygen.nl/">Doxygen</a> for C++ documentation-comment extraction and <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> with <a class="reference external" href="https://breathe.readthedocs.io/">Breathe</a> for HTML rendering. Architecture diagrams use Mermaid sources in <code class="docutils literal notranslate"><span class="pre">docs/diagrams</span></code>, rendered by <code class="docutils literal notranslate"><span class="pre">sphinxcontrib-mermaid</span></code>. Doxygen must be installed separately and available on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
 <p>The following commands create a dedicated Python environment and build the documentation:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>docs/.venv
 docs/.venv/bin/pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
@@ -241,10 +581,11 @@ docs/.venv/bin/sphinx-build<span class="w"> </span>-E<span class="w"> </span>-n<
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Building and installation</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building, testing, and installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#repository-development-build">Repository development build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#building-examples">Building examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regression-tests">Regression tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#library-installation-build">Library installation build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-options">Build options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-build">Documentation build</a></li>

@@ -12,6 +12,364 @@
     <script src="_static/documentation_options.js?v=7f41d439"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
     <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/architecture.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,74 +396,262 @@
 <h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h1>
 <section id="orchestration-model">
 <h2>Orchestration model<a class="headerlink" href="#orchestration-model" title="Link to this heading">¶</a></h2>
-<p>MIAOW executes simulation workflows through an actor hierarchy inspired by <a class="reference external" href="https://github.com/uofs-simlab/Summa-Actors">SUMMA-Actors</a> (<a class="reference external" href="https://doi.org/10.1007/s10586-024-04318-5">Klenk and Spiteri, 2024</a>), as illustrated in the figure below:</p>
-<a class="reference internal image-reference" href="_images/orchestration_overview_tikz.png"><img alt="MIAOW orchestration actor hierarchy" class="align-center" src="_images/orchestration_overview_tikz.png" style="width: 90%;" />
-</a>
-<p>A typical workflow includes the following steps:</p>
-<ol class="arabic simple">
-<li><p>Caller submits explicit tasks through <code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(task)</span></code> or <code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(tasks)</span></code>, optionally supplying a controller through <code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(tasks,</span> <span class="pre">std::move(job_controller))</span></code>. Alternatively, <code class="docutils literal notranslate"><span class="pre">Runtime::submit_job(std::move(job_controller))</span></code> lets the controller generate its own initial tasks. Runtime takes ownership of the <code class="docutils literal notranslate"><span class="pre">std::unique_ptr&lt;JobController&gt;</span></code>.</p></li>
-<li><p>Runtime assigns a <code class="docutils literal notranslate"><span class="pre">job_id</span></code> and sends the tasks and job controller to <code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">orchestrator_actor</span></code> spawns one <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> for that job. The job actor owns the controller and task vector. For controller-only submission, it calls <code class="docutils literal notranslate"><span class="pre">generate_initial_tasks()</span></code> once at job start. It creates enough reusable <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers for the initial tasks, up to <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code>.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> greedily dispatches tasks to available <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> workers.</p></li>
-<li><p>Each worker resolves <code class="docutils literal notranslate"><span class="pre">Task::simulation_unit_id_</span></code>, constructs a new <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code>, executes the task, and returns a <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code> to the job actor.</p></li>
-<li><p>After each task execution returns a successful or failed <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>, the <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> creates its <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code>. When the controller’s task generation policy permits, it passes a read-only span of new completions to its controller, appends tasks returned by the controller’s <code class="docutils literal notranslate"><span class="pre">generate_new_tasks()</span></code> method to its task vector, and adds workers if needed. It then returns to step 4. This continues until no queued tasks remain to dispatch and no dispatched tasks are awaiting results, and the controller returns no new tasks.</p></li>
-<li><p>Runtime calls <code class="docutils literal notranslate"><span class="pre">JobController::finalize()</span></code> once to collect structured job output. Completed <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code> values are sorted by <code class="docutils literal notranslate"><span class="pre">TaskId</span></code> and stored with this output in one <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p></li>
-<li><p>Runtime fulfils the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p></li>
-</ol>
-<p>Each <code class="docutils literal notranslate"><span class="pre">JobController</span></code> selects a <code class="docutils literal notranslate"><span class="pre">TaskGenerationPolicy</span></code> through its constructor:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">asynchronous</span></code> (default): call <code class="docutils literal notranslate"><span class="pre">generate_new_tasks()</span></code> after each task reports a result.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">batch_synchronous</span></code>: call <code class="docutils literal notranslate"><span class="pre">generate_new_tasks()</span></code> when every task in the current batch has reported a result. The initial task vector forms the first batch, and each returned vector forms the next batch.</p></li>
-</ul>
-<p>Successful and failed results, including task timeouts, count toward batch completion; the controller decides how to handle failures. Both policies pass a <code class="docutils literal notranslate"><span class="pre">std::span&lt;const</span> <span class="pre">TaskRecord&gt;</span></code> containing only new completions to <code class="docutils literal notranslate"><span class="pre">JobController::generate_new_tasks()</span></code>, in completion order: one record for asynchronous callbacks, or the completed batch for batch-synchronous callbacks. The controller is responsible for maintaining its own history-dependent state across multiple invocations of <code class="docutils literal notranslate"><span class="pre">generate_new_tasks()</span></code>.</p>
-<p>Controller policies run serially in the job actor. Controller-only job submission calls <code class="docutils literal notranslate"><span class="pre">generate_initial_tasks()</span></code> before the initial dispatch and finalizes normally if it returns no tasks. Explicit task submission skips <code class="docutils literal notranslate"><span class="pre">generate_initial_tasks()</span></code>, including when an empty vector is supplied. Initialization errors propagate through <code class="docutils literal notranslate"><span class="pre">JobHandle::get()</span></code> and produce no final job record.</p>
-<p>The following figure illustrates the task scheduling process managed by the <code class="docutils literal notranslate"><span class="pre">job_actor</span></code> in steps 4 through 6 of the above workflow, where the orange cat icons represent tasks:</p>
-<a class="reference internal image-reference" href="_images/task_scheduling_tikz.png"><img alt="MIAOW task scheduling queue and worker dispatch" class="align-center" src="_images/task_scheduling_tikz.png" style="width: 67%;" />
-</a>
-<p>The job actor adds workers as needed, up to <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code>, and retains them until the job completes or shuts down. Idle workers do not occupy CAF scheduler threads.</p>
-</section>
-<section id="task-timing">
-<h2>Task timing<a class="headerlink" href="#task-timing" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">TaskRecord::dispatch_offset_from_job_start_</span></code> stores the elapsed seconds from job start to task dispatch, measured using the same monotonic clock as <code class="docutils literal notranslate"><span class="pre">run_time_</span></code>. Dispatch precedes the worker beginning execution.</p>
-<p><code class="docutils literal notranslate"><span class="pre">TaskRecord::worker_id_</span></code> identifies the zero-based worker actor within the job, independently of its scheduler thread or subprocess process ID. A worker can execute multiple tasks. Unassigned worker IDs are <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code> (<code class="docutils literal notranslate"><span class="pre">null</span></code> in JSON).</p>
-<p><code class="docutils literal notranslate"><span class="pre">TaskRecord::run_time_</span></code> measures the interval from dispatch until the job actor records the result or timeout. It includes scheduling and communication overhead and any subprocess startup or cleanup. Adding it to the dispatch offset gives the time relative to job start when the terminal status was recorded.</p>
-<p>Tasks that reach the job timeout before dispatch have a null dispatch offset and zero runtime. Dispatched tasks retain their dispatch offset and elapsed runtime up to the timeout. Unavailable dispatch offsets are <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code> (<code class="docutils literal notranslate"><span class="pre">null</span></code> in JSON).</p>
-</section>
-<section id="structured-task-output">
-<h2>Structured task output<a class="headerlink" href="#structured-task-output" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">TaskResult::output_</span></code> carries optional structured output as a <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code>. It supports scalar values and recursively nested lists and dictionaries, and remains available through the completed <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code> values passed to <code class="docutils literal notranslate"><span class="pre">JobController::generate_new_tasks()</span></code> and retained by the final <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>. Controllers are responsible for validating the structure and value types defined by their simulation units. Large time series, grids, and model state should be written to files and referenced by <code class="docutils literal notranslate"><span class="pre">TaskResult::artifact_paths_</span></code>.</p>
-<p>When <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::output_root_</span></code> is configured, each task’s structured output (or a <code class="docutils literal notranslate"><span class="pre">null</span></code> value) is included in the <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> written when the job completes.</p>
-<p>CAF uses MIAOW’s <code class="docutils literal notranslate"><span class="pre">inspect()</span></code> functions to collect each job record’s fields. nlohmann/json then writes the record to a JSON file. It also handles JSON text parsing and formatting for realization files and GeoJSON. Saved records retain CAF’s type annotations and duration strings, with enough digits to round-trip finite double values. Non-finite numerical values are written as JSON <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
-</section>
-<section id="structured-job-output">
-<h2>Structured job output<a class="headerlink" href="#structured-job-output" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">JobController::finalize()</span></code> returns optional structured output as a <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code>, with null as the default. Runtime retains the result in <code class="docutils literal notranslate"><span class="pre">JobRecord::output_</span></code> and includes it in <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> when output is enabled.</p>
-<p>The job actor calls <code class="docutils literal notranslate"><span class="pre">finalize()</span></code> once when creating the final record, including for empty jobs and job timeouts. At a timeout, the controller can return its accumulated state; synthetic timeout records are not passed to <code class="docutils literal notranslate"><span class="pre">generate_new_tasks()</span></code>. Finalization is serialized with task-generation calls and should return promptly. Controller errors and runtime shutdown produce no final record. Exceptions from controller hooks propagate through <code class="docutils literal notranslate"><span class="pre">JobHandle::get()</span></code>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>With CAF 1.1, task and job output must not contain null list elements or dictionary values: binary deserialization fails. Returning <code class="docutils literal notranslate"><span class="pre">caf::config_value{}</span></code> for the entire output is supported.</p>
-</div>
-</section>
-<section id="simulation-unit-execution">
-<span id="id1"></span><h2>Simulation unit execution<a class="headerlink" href="#simulation-unit-execution" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">Task::simulation_unit_id_</span></code> field selects the <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> implementation that
-executes the task. <code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry::add&lt;SimulationUnitType&gt;(...)</span></code> registers a unit constructed and executed in the parent process, while <code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry::add_subprocess(executable,</span> <span class="pre">lifetime)</span></code> registers an internal <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> implementation that delegates each task to the supplied <code class="docutils literal notranslate"><span class="pre">executable</span></code>.</p>
-<p>Every <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> constructs the selected <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> and calls <code class="docutils literal notranslate"><span class="pre">execute(task)</span></code>. In-process units registered using <code class="docutils literal notranslate"><span class="pre">SimulationUnitRegistry::add&lt;SimulationUnitType&gt;(...)</span></code> return an immediate <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code> or CAF error. A subprocess unit returns a delegated CAF response while its actor-owned state starts or reuses the subprocess, sends the serialized <code class="docutils literal notranslate"><span class="pre">Task</span></code>, receives <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>, and completes required cleanup without blocking a parent scheduler thread. The child process implements the <code class="docutils literal notranslate"><span class="pre">Task</span></code> to <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code> contract through <code class="docutils literal notranslate"><span class="pre">run_subprocess_worker()</span></code> and does not receive the parent registry.</p>
-<p>A subprocess task timeout terminates and reaps the child before returning the failed result. A job timeout marks all unfinished tasks as failed and requests worker shutdown, with subprocess cleanup proceeding asynchronously. Running in-process evaluations are not interrupted by either timeout; their worker actors can shut down only after <code class="docutils literal notranslate"><span class="pre">execute()</span></code> returns.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">SubprocessLifetime</span></code> argument to <code class="docutils literal notranslate"><span class="pre">add_subprocess(...)</span></code> controls whether the child process is started and stopped for each task or retained for reuse across multiple tasks.
-<code class="docutils literal notranslate"><span class="pre">SubprocessLifetime::single_task</span></code> starts one child for a task and stops and reaps it before delivering the result. <code class="docutils literal notranslate"><span class="pre">SubprocessLifetime::persistent</span></code> retains a child only after a successful task. An idle persistent child remains alive and retains its process resources, but MIAOW does not reserve a dedicated CPU core for it. The same idle <code class="docutils literal notranslate"><span class="pre">simulation_unit_actor</span></code> reuses that child only when the next task selects a persistent registration with exactly the same executable string and the child actor remains available. A failure, timeout, single-task registration, different executable, child termination, or worker shutdown prevents reuse. Failures and task timeouts preserve subprocess diagnostics and stop and reap the child before completing the delegated response.</p>
-<section id="custom-subprocess-executables">
-<span id="id2"></span><h3>Custom subprocess executables<a class="headerlink" href="#custom-subprocess-executables" title="Link to this heading">¶</a></h3>
-<p>The following setup registers an exact executable path and uses the returned <code class="docutils literal notranslate"><span class="pre">SimulationUnitId</span></code> when constructing a task:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitId</span><span class="w"> </span><span class="n">custom_unit</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add_subprocess</span><span class="p">(</span><span class="s">"/path/to/my_worker"</span><span class="p">,</span>
-<span class="w">                            </span><span class="n">miaow</span><span class="o">::</span><span class="n">SubprocessLifetime</span><span class="o">::</span><span class="n">persistent</span><span class="p">);</span>
+<p>MIAOW organizes simulation workflows into jobs. A <code class="docutils literal notranslate"><span class="pre">Job</span></code> groups simulation units, tasks to execute on them, and a controller that can add work in response to results.</p>
+<p>A <strong>simulation unit</strong> is the basic unit of computation orchestrated by MIAOW, such as a whole model or a spatial subdomain. A <code class="docutils literal notranslate"><span class="pre">Task</span></code> requests an operation on a particular unit and supplies its arguments. Each unit owns an executor: a C++ object implementing the <code class="docutils literal notranslate"><span class="pre">TaskExecutor</span></code> interface that carries out those operations. The executor can retain state between tasks.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Runtime</span></code> coordinates jobs through an actor hierarchy inspired by <a class="reference external" href="https://github.com/uofs-simlab/Summa-Actors">SUMMA-Actors</a> (<a class="reference external" href="https://doi.org/10.1007/s10586-024-04318-5">Klenk and Spiteri, 2024</a>). The orchestrator creates a job actor for each submitted job. Each job actor manages its <code class="docutils literal notranslate"><span class="pre">Job</span></code> object and creates actors to manage its <code class="docutils literal notranslate"><span class="pre">SimulationUnit</span></code> objects. The job actor dispatches tasks and calls the controller; the unit actors execute the tasks.</p>
+<p>A unit using <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code> runs its task code in a separate process on the same host. Its unit actor and executor remain in the parent process alongside <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>. The hierarchy below includes this subprocess arrangement.</p>
+<pre align="center" class="mermaid align-center">
+        ---
+config:
+  flowchart:
+    wrappingWidth: 320
+    subGraphTitleMargin:
+      top: 4
+      bottom: 12
+---
+flowchart TB
+    subgraph Parent[&quot;Parent process&quot;]
+        R[&quot;Runtime&quot;]
+        subgraph O[&quot;orchestrator_actor&quot;]
+            OS[&quot;Orchestrator&quot;]
+        end
+        subgraph J[&quot;job_actor&quot;]
+            JS[&quot;Job&quot;]
+        end
+        subgraph U[&quot;simulation_unit_actor&quot;]
+            US[&quot;SimulationUnit&quot;]
+        end
+        C[&quot;JobController&quot;]
+        E[&quot;TaskExecutor&quot;]
+        P[&quot;SubprocessState&quot;]
+        subgraph Reg[&quot;subprocess_registration_actor&quot;]
+            RS[&quot;SubprocessRegistration&quot;]
+        end
 
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">{</span><span class="n">custom_unit</span><span class="p">,</span><span class="w"> </span><span class="s">"input"</span><span class="p">};</span>
+        R --&gt;|spawns| O
+        R --&gt;|spawns and publishes| Reg
+        O --&gt;|spawns per job| J
+        J --&gt;|owns| C
+        J --&gt;|spawns for first task| U
+        U --&gt;|owns| E
+        U --&gt;|owns| P
+    end
+
+    subgraph Child[&quot;Persistent subprocess&quot;]
+        direction LR
+        subgraph W[&quot;subprocess_worker_actor&quot;]
+            WS[&quot;SubprocessWorker&quot;]
+        end
+        H[&quot;task_handler_&lt;br/&gt;Task → TaskResult callable&quot;]
+        W --&gt;|owns| H
+    end
+
+    P --&gt;|&quot;launches and supervises&lt;br/&gt;only for SubprocessTaskExecutor&quot;| Child
+
+    classDef actor fill:#edf2f6,stroke:#4a657d,stroke-width:2px,rx:12px,ry:12px
+    classDef object fill:#ffffff,stroke:#4a657d,stroke-width:1px
+    class O,J,U,Reg,W actor
+    class R,OS,JS,US,C,E,P,RS,WS,H object
+    style Reg font-size:14px
+    style Parent fill:transparent,stroke:#cbd5e1
+    style Child fill:transparent,stroke:#cbd5e1
+
+    </pre></section>
+<section id="job-execution">
+<h2>Job execution<a class="headerlink" href="#job-execution" title="Link to this heading">¶</a></h2>
+<p>A caller declares units, assigns tasks to them, and submits the job to <code class="docutils literal notranslate"><span class="pre">Runtime</span></code>. The job actor then schedules those tasks and collects their results.</p>
+<section id="simulation-units">
+<h3>Simulation units<a class="headerlink" href="#simulation-units" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">job.add_unit(feature_id,</span> <span class="pre">executor_id)</span></code> declares a simulation unit and returns a <code class="docutils literal notranslate"><span class="pre">SimulationUnitHandle</span></code> that can be used only with that job. The feature ID labels the scientific unit; the executor ID selects its registered executor. Every task targets a unit in its owning job. For example, with an executor registered as <code class="docutils literal notranslate"><span class="pre">executor</span></code> that accepts an operation named <code class="docutils literal notranslate"><span class="pre">increment</span></code> and an integer argument, we can create a job with two units and submit tasks to them as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">miaow</span><span class="o">::</span><span class="n">Job</span><span class="w"> </span><span class="n">job</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitHandle</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job</span><span class="p">.</span><span class="n">add_unit</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span><span class="w"> </span><span class="n">executor</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitHandle</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job</span><span class="p">.</span><span class="n">add_unit</span><span class="p">(</span><span class="s">"B"</span><span class="p">,</span><span class="w"> </span><span class="n">executor</span><span class="p">);</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="s">"increment"</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">"increment"</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="s">"increment"</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="n">miaow</span><span class="o">::</span><span class="n">JobHandle</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runtime</span><span class="p">.</span><span class="n">submit_job</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">job</span><span class="p">));</span>
 </pre></div>
 </div>
-<p>The parent registry supplies the polymorphic <code class="docutils literal notranslate"><span class="pre">SubprocessSimulationUnit</span></code>. The selected executable links against MIAOW and implements the task contract by supplying any synchronous callable that accepts <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Task&amp;</span></code> and returns <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>:</p>
+</section>
+<section id="task-dispatch-and-executors">
+<span id="task-execution"></span><h3>Task dispatch and executors<a class="headerlink" href="#task-dispatch-and-executors" title="Link to this heading">¶</a></h3>
+<p>The job scans queued tasks in submission order and selects the first whose target unit is idle. It skips tasks for busy units so that tasks for other units can proceed. <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code> limits concurrent tasks in each job, independently of unit count. An idle unit does not reserve a thread.</p>
+<p>When dispatching a unit’s first task, the job creates its actor. The unit constructs one <code class="docutils literal notranslate"><span class="pre">TaskExecutor</span></code> before executing that task and reuses the executor for subsequent tasks. Operations on a unit run serially in the order they are received in the actor’s mailbox.</p>
+<p>A unit’s <code class="docutils literal notranslate"><span class="pre">TaskExecutorId</span></code> selects an executor registered through <code class="docutils literal notranslate"><span class="pre">TaskExecutorRegistry</span></code>. The registration determines where its task code runs:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 35.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Registration</p></th>
+<th class="head"><p>Task executor</p></th>
+<th class="head"><p>Task code runs in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">add&lt;MyTaskExecutor&gt;(...)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MyTaskExecutor</span></code></p></td>
+<td><p>Parent process</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">add_subprocess(executable)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code></p></td>
+<td><p>Child process</p></td>
+</tr>
+</tbody>
+</table>
+<p>The executor object remains in the parent process in both cases. <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code> forwards tasks to a child process, as described under <a class="reference internal" href="#subprocess-execution"><span class="std std-ref">Subprocess execution</span></a>.</p>
+<p>Each BMI <code class="docutils literal notranslate"><span class="pre">&quot;run&quot;</span></code> task creates a fresh model and performs initialize, update, and finalize within that task. Individual BMI operations are not supported yet, so the BMI model does not persist across tasks. See <a class="reference internal" href="bmi.html"><span class="doc">BMI integration</span></a> for the model lifecycle.</p>
+</section>
+<section id="job-lifecycle">
+<h3>Job lifecycle<a class="headerlink" href="#job-lifecycle" title="Link to this heading">¶</a></h3>
+<p>After submission, the job actor calls the controller’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code> hook and begins dispatching tasks. Each executor returns a <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>. The job actor adds the task’s identity and timing to create a <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code>, then passes new records to the controller according to its callback policy. The controller can use those results to add more tasks.</p>
+<p>The sequence below shows one job with one unit. Open arrowheads are asynchronous CAF messages; dashed arrows are replies or termination notifications; filled arrowheads are local calls, actor creation, or labelled OS signals.</p>
+<pre align="center" class="mermaid align-center">
+        ---
+config:
+  sequence:
+    useMaxWidth: true
+    mirrorActors: false
+    width: 180
+    actorMargin: 24
+    diagramMarginX: 16
+    diagramMarginY: 12
+    messageMargin: 18
+    actorFontSize: 14
+    messageFontSize: 14
+    noteFontSize: 14
+  themeVariables:
+    actorBkg: &quot;#edf2f6&quot;
+    actorBorder: &quot;#4a657d&quot;
+    actorTextColor: &quot;#222222&quot;
+    signalColor: &quot;#4a657d&quot;
+    noteBkgColor: &quot;#fff3df&quot;
+    noteBorderColor: &quot;#e8a84b&quot;
+---
+sequenceDiagram
+    participant R as Runtime
+    participant O as orchestrator_actor
+
+    R-)O: get_atom + job submission
+    create participant J as job_actor
+    O-&gt;&gt;J: spawn Job
+    O-)J: get_atom
+    J-&gt;&gt;J: JobController::initialize(job)
+    create participant U as simulation_unit_actor
+    J-&gt;&gt;U: spawn SimulationUnit&lt;br/&gt;on first dispatch
+    U-&gt;&gt;U: Construct TaskExecutor once
+
+    loop Tasks assigned to this unit
+        J-)U: get_atom + Task
+        U-&gt;&gt;U: TaskExecutor::execute(task)
+        U--&gt;&gt;J: TaskResult
+        J-&gt;&gt;J: Create TaskRecord
+        J-&gt;&gt;J: JobController::callback()&lt;br/&gt;according to selected policy
+    end
+
+    J-)U: shutdown_atom
+    U-&gt;&gt;U: Release executor&lt;br/&gt;For SubprocessTaskExecutor:&lt;br/&gt;terminate child and wait for exit
+    U--&gt;&gt;J: CAF termination notification
+    J-&gt;&gt;J: JobController::finalize()
+    J--&gt;&gt;O: JobRecord
+    O-&gt;&gt;O: Fulfil JobHandle promise
+
+    </pre><p>When no tasks are queued or running and the controller adds no more tasks, the job actor tells each simulation-unit actor to shut down and waits for all of them to terminate. It then calls <code class="docutils literal notranslate"><span class="pre">JobController::finalize()</span></code> and returns a <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code> through the caller’s <code class="docutils literal notranslate"><span class="pre">JobHandle</span></code> future.</p>
+</section>
+</section>
+<section id="job-controllers">
+<h2>Job controllers<a class="headerlink" href="#job-controllers" title="Link to this heading">¶</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">JobController</span></code> determines how the workflow proceeds after tasks return results. For example, an optimization controller can submit tasks for a batch of candidate parameters and use their results to choose the next batch. The job actor handles dispatch and unit lifetimes for the work the controller requests.</p>
+<section id="lifecycle-hooks">
+<h3>Lifecycle hooks<a class="headerlink" href="#lifecycle-hooks" title="Link to this heading">¶</a></h3>
+<p>The following controller hooks run serially inside the job actor:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">initialize(Job&amp;)</span></code> runs once before initial dispatch, and may declare units and add tasks alongside caller-provided work. If the job has no tasks after initialization, it calls <code class="docutils literal notranslate"><span class="pre">finalize()</span></code> and returns an empty task-record list.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">callback(Job&amp;,</span> <span class="pre">completed_tasks,</span> <span class="pre">failed_units)</span></code> receives new task records and unit failures. The controller may append tasks or declare, remove, or replace units. The job waits for the callback to return before dispatching any tasks it added.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">finalize()</span></code> runs once when creating the final job record, after units have shut down. It returns structured job output and also runs for empty jobs and job timeouts. Hooks should return promptly.</p></li>
+</ul>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">Job::fail(reason)</span></code> or throwing from a controller hook causes <code class="docutils literal notranslate"><span class="pre">JobHandle::get()</span></code> to throw instead of returning a <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>. Runtime shutdown also produces no final job record.</p>
+</section>
+<section id="callback-policies">
+<h3>Callback policies<a class="headerlink" href="#callback-policies" title="Link to this heading">¶</a></h3>
+<p>Each <code class="docutils literal notranslate"><span class="pre">JobController</span></code> selects a <code class="docutils literal notranslate"><span class="pre">TaskGenerationPolicy</span></code> through its constructor:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">asynchronous</span></code> (default): call <code class="docutils literal notranslate"><span class="pre">callback()</span></code> after a task succeeds or fails, or a unit fails.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_synchronous</span></code>: call <code class="docutils literal notranslate"><span class="pre">callback()</span></code> after every task in the current batch has a success or failure record and no task from that batch is still running. Caller-provided tasks and tasks added during initialization form the first batch; tasks added by each callback form the next batch.</p></li>
+</ul>
+<p>Both policies pass new task records in completion order through <code class="docutils literal notranslate"><span class="pre">std::span&lt;const</span> <span class="pre">TaskRecord&gt;</span></code>. The controller must copy any records it needs after the callback returns. An asynchronous callback receives the newly completed task’s record or the records for tasks affected by a unit failure; a batch callback receives all records from that batch.</p>
+</section>
+</section>
+<section id="subprocess-execution">
+<span id="id1"></span><h2>Subprocess execution<a class="headerlink" href="#subprocess-execution" title="Link to this heading">¶</a></h2>
+<p>Subprocess execution gives each unit a separate address space. Models that use process-global state can therefore run concurrently without sharing that state. MIAOW can also stop a timed-out task by terminating its child process.</p>
+<p>Registering an executable with <code class="docutils literal notranslate"><span class="pre">TaskExecutorRegistry::add_subprocess()</span></code> selects <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code> for units using that registration. Each such unit launches its own child for its first task and reuses it for later tasks. The executor sends each <code class="docutils literal notranslate"><span class="pre">Task</span></code> to a worker actor in the child, where a handler performs the computation and returns a <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>. The unit actor forwards that result to the job actor.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SubprocessState</span></code> manages the child’s launch, communication, and termination inside the unit actor. The unit actor can process messages while waiting for the child; it does not block a parent scheduler thread for the duration of the computation.</p>
+<section id="registration-and-reuse">
+<h3>Registration and reuse<a class="headerlink" href="#registration-and-reuse" title="Link to this heading">¶</a></h3>
+<p>Before the first task can execute, the parent needs the child worker’s actor handle to send it messages. The child registers that handle with <code class="docutils literal notranslate"><span class="pre">subprocess_registration_actor</span></code>, which routes it to the unit that launched the child. The unit then sends the waiting task. Later tasks reuse the same child and handler, invoked serially once per task.</p>
+<pre align="center" class="mermaid align-center">
+        ---
+config:
+  sequence:
+    useMaxWidth: true
+    mirrorActors: false
+    width: 180
+    actorMargin: 24
+    diagramMarginX: 16
+    diagramMarginY: 12
+    messageMargin: 18
+    actorFontSize: 14
+    messageFontSize: 14
+    noteFontSize: 14
+  themeVariables:
+    actorBkg: &quot;#edf2f6&quot;
+    actorBorder: &quot;#4a657d&quot;
+    actorTextColor: &quot;#222222&quot;
+    signalColor: &quot;#4a657d&quot;
+    noteBkgColor: &quot;#fff3df&quot;
+    noteBorderColor: &quot;#e8a84b&quot;
+---
+sequenceDiagram
+    box transparent Parent process
+        participant J as job_actor
+        participant U as simulation_unit_actor
+        participant Reg as subprocess_registration_actor
+    end
+    box transparent Persistent subprocess
+        participant A as caf::scoped_actor
+        participant W as subprocess_worker_actor
+    end
+
+    J-)U: get_atom + first Task
+    U-)Reg: reserve_subprocess_launch_id_atom&lt;br/&gt;owner handle
+    Reg--&gt;&gt;U: SubprocessLaunchId
+    U-&gt;&gt;U: posix_spawn()&lt;br/&gt;with registration endpoint and launch ID
+    Note over A,W: Child starts its actor system&lt;br/&gt;and spawns SubprocessWorker
+    A-)Reg: register_subprocess_worker_atom&lt;br/&gt;launch ID, worker handle
+    Reg-)U: register_subprocess_worker_atom&lt;br/&gt;launch ID, worker handle
+    U-&gt;&gt;U: Monitor worker actor
+    U-)W: get_atom + retained Task
+    W-&gt;&gt;W: task_handler_(task)
+    W--&gt;&gt;U: TaskResult
+    U--&gt;&gt;J: TaskResult
+
+    </pre></section>
+<section id="custom-subprocess-executables">
+<span id="id2"></span><h3>Custom subprocess executables<a class="headerlink" href="#custom-subprocess-executables" title="Link to this heading">¶</a></h3>
+<p>An executable supplies the computation that runs in the child. MIAOW provides a BMI worker (see <a class="reference internal" href="bmi.html"><span class="doc">BMI integration</span></a>); a custom executable can handle other operations. In the parent program, register its path, declare a unit, and append a task:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">miaow</span><span class="o">::</span><span class="n">TaskExecutorRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">TaskExecutorId</span><span class="w"> </span><span class="n">custom_executor_id</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">registry</span><span class="p">.</span><span class="n">add_subprocess</span><span class="p">(</span><span class="s">"/path/to/my_worker"</span><span class="p">);</span>
+
+<span class="n">miaow</span><span class="o">::</span><span class="n">Job</span><span class="w"> </span><span class="n">job</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitHandle</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job</span><span class="p">.</span><span class="n">add_unit</span><span class="p">(</span><span class="s">"custom"</span><span class="p">,</span><span class="w"> </span><span class="n">custom_executor_id</span><span class="p">);</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="s">"run"</span><span class="p">,</span><span class="w"> </span><span class="s">"input"</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The executable links against MIAOW and supplies a synchronous callable accepting <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Task&amp;</span></code> and returning <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>. <code class="docutils literal notranslate"><span class="pre">run_subprocess_worker()</span></code> registers the worker with the parent and invokes this callable for each task it receives:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;miaow.hpp&gt;</span>
 
 <span class="n">miaow</span><span class="o">::</span><span class="n">TaskResult</span><span class="w"> </span><span class="nf">execute_task</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -117,14 +663,157 @@ executes the task. <code class="docutils literal notranslate"><span class="pre">
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The executable’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> must pass its supplied <code class="docutils literal notranslate"><span class="pre">argc</span></code> and <code class="docutils literal notranslate"><span class="pre">argv</span></code> to <code class="docutils literal notranslate"><span class="pre">run_subprocess_worker()</span></code> unchanged because MIAOW uses those arguments for parent registration. Custom configuration travels in <code class="docutils literal notranslate"><span class="pre">Task</span></code> rather than additional command-line arguments. The worker invokes the handler serially once per received task; a persistent subprocess may invoke the same handler object for multiple tasks. An exception from the handler becomes a failed <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>.</p>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">argc</span></code> and <code class="docutils literal notranslate"><span class="pre">argv</span></code> unchanged to <code class="docutils literal notranslate"><span class="pre">run_subprocess_worker()</span></code>; they carry parent-registration settings. Task data and custom configuration arrive through <code class="docutils literal notranslate"><span class="pre">Task</span></code> messages. The child does not receive the parent registry. An exception from the handler becomes a failed <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>.</p>
+</section>
+<section id="cleanup">
+<h3>Cleanup<a class="headerlink" href="#cleanup" title="Link to this heading">¶</a></h3>
+<p>When the child returns a failed <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>, the unit keeps the child available for later tasks and retains its diagnostic files. If child startup fails, the child terminates unexpectedly, or a task times out, the unit stops and reports <code class="docutils literal notranslate"><span class="pre">UnitFailure</span></code>. Unit removal and job completion also stop the child.</p>
+<p>The sequence shows shutdown of a <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code> unit that has launched a child. <code class="docutils literal notranslate"><span class="pre">SubprocessState</span></code> terminates the child and collects its exit status before the unit actor quits. A task timeout or unexpected child termination follows the same cleanup steps.</p>
+<pre align="center" class="mermaid align-center">
+        ---
+config:
+  sequence:
+    useMaxWidth: true
+    mirrorActors: false
+    width: 180
+    actorMargin: 24
+    diagramMarginX: 16
+    diagramMarginY: 12
+    messageMargin: 18
+    actorFontSize: 14
+    messageFontSize: 14
+    noteFontSize: 14
+  themeVariables:
+    actorBkg: &quot;#edf2f6&quot;
+    actorBorder: &quot;#4a657d&quot;
+    actorTextColor: &quot;#222222&quot;
+    signalColor: &quot;#4a657d&quot;
+    noteBkgColor: &quot;#fff3df&quot;
+    noteBorderColor: &quot;#e8a84b&quot;
+---
+sequenceDiagram
+    box transparent Parent process
+        participant J as job_actor
+        participant U as simulation_unit_actor
+        participant Reg as subprocess_registration_actor
+    end
+    box transparent Persistent subprocess
+        participant P as Child process
+    end
+
+    J-)U: shutdown_atom
+    U-&gt;&gt;U: Release TaskExecutor&lt;br/&gt;SubprocessState::shutdown()
+    U-)Reg: release_subprocess_launch_id_atom&lt;br/&gt;launch ID
+    U-&gt;&gt;P: SIGKILL (process)
+    U-)U: poll_subprocess_exit_atom
+    loop Until child is reaped
+        U-&gt;&gt;U: waitpid(pid, WNOHANG)
+        opt Child still running
+            U-)U: poll_subprocess_exit_atom&lt;br/&gt;(delayed)
+        end
+    end
+    U-&gt;&gt;U: Release child resources
+    opt Task awaiting a response
+        U--&gt;&gt;J: TaskResult or CAF error
+    end
+    U-&gt;&gt;U: quit()
+    U--&gt;&gt;J: CAF termination notification
+    J-&gt;&gt;J: unit_terminated()
+
+    </pre></section>
+</section>
+<section id="failures-and-shutdown">
+<h2>Failures and shutdown<a class="headerlink" href="#failures-and-shutdown" title="Link to this heading">¶</a></h2>
+<section id="task-and-unit-failures">
+<h3>Task and unit failures<a class="headerlink" href="#task-and-unit-failures" title="Link to this heading">¶</a></h3>
+<p>An operation failure produces a failed <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>; the unit remains available for later tasks. A <code class="docutils literal notranslate"><span class="pre">UnitFailure</span></code> means that the unit can no longer execute tasks. Failure to construct an executor, unexpected actor termination, and task timeout can cause a unit failure. For a <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code>, failure to start the child or unexpected child termination also causes a unit failure.</p>
+<p><code class="docutils literal notranslate"><span class="pre">UnitFailure</span></code> includes the unit handle and a message describing the cause. Its running and queued tasks each receive one failed record. An idle unit can fail without producing a task record.</p>
+<p>The callback receives the affected records and the <code class="docutils literal notranslate"><span class="pre">UnitFailure</span></code> together. Asynchronous policy reports the failure without waiting for other tasks; batch policy waits until no tasks from the batch remain queued or running. The default controller fails the job. A custom controller may continue other units, remove the failed unit, or construct a replacement. MIAOW does not recreate failed units or retry their tasks automatically.</p>
+</section>
+<section id="timeouts">
+<h3>Timeouts<a class="headerlink" href="#timeouts" title="Link to this heading">¶</a></h3>
+<p>A task timeout makes its unit unavailable and is reported to the controller as a <code class="docutils literal notranslate"><span class="pre">UnitFailure</span></code>. At a job timeout, the job actor marks all unfinished tasks as failed and tells each simulation-unit actor to shut down. The controller cannot extend this deadline. Task records created because of the job timeout are not passed to <code class="docutils literal notranslate"><span class="pre">callback()</span></code>; <code class="docutils literal notranslate"><span class="pre">finalize()</span></code> can return output based on earlier callbacks.</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code>, a task timeout terminates the child and waits for it to exit before reporting <code class="docutils literal notranslate"><span class="pre">UnitFailure</span></code>. Tasks executing in the parent process cannot be interrupted by a task or job timeout. Their actors stop after <code class="docutils literal notranslate"><span class="pre">execute()</span></code> returns, so the job result may arrive after the configured deadline.</p>
+</section>
+<section id="runtime-shutdown">
+<h3>Runtime shutdown<a class="headerlink" href="#runtime-shutdown" title="Link to this heading">¶</a></h3>
+<p>Destroying <code class="docutils literal notranslate"><span class="pre">Runtime</span></code> ends execution of its active jobs. Runtime tells the orchestrator to shut down; the orchestrator forwards that request to each job actor and exits. Each job actor tells its unit actors to shut down and waits for them to terminate. Actor-system destruction waits for the remaining actors. Jobs interrupted this way produce no final <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>.</p>
+<pre align="center" class="mermaid align-center">
+        ---
+config:
+  sequence:
+    useMaxWidth: true
+    mirrorActors: false
+    width: 180
+    actorMargin: 24
+    diagramMarginX: 16
+    diagramMarginY: 12
+    messageMargin: 18
+    actorFontSize: 14
+    messageFontSize: 14
+    noteFontSize: 14
+  themeVariables:
+    actorBkg: &quot;#edf2f6&quot;
+    actorBorder: &quot;#4a657d&quot;
+    actorTextColor: &quot;#222222&quot;
+    signalColor: &quot;#4a657d&quot;
+    noteBkgColor: &quot;#fff3df&quot;
+    noteBorderColor: &quot;#e8a84b&quot;
+---
+sequenceDiagram
+    participant R as Runtime
+    participant O as orchestrator_actor
+    participant Reg as subprocess_registration_actor
+    participant J as job_actor
+    participant U as simulation_unit_actor
+
+    R-)O: shutdown_atom
+    O-)J: shutdown_atom&lt;br/&gt;for each active job
+    par Orchestrator shutdown
+        O-)Reg: CAF exit (user_shutdown)
+        O-&gt;&gt;O: quit()
+    and Job and unit cleanup
+        J-)U: shutdown_atom&lt;br/&gt;for each live unit
+        U-&gt;&gt;U: Release executor&lt;br/&gt;For SubprocessTaskExecutor:&lt;br/&gt;terminate child and wait for exit
+        U--&gt;&gt;J: CAF termination notification
+        Note over J: Wait for all unit actors to terminate
+        J-&gt;&gt;J: Return Runtime shutdown error&lt;br/&gt;then quit()
+    end
+
+    </pre></section>
+</section>
+<section id="results-and-records">
+<h2>Results and records<a class="headerlink" href="#results-and-records" title="Link to this heading">¶</a></h2>
+<section id="task-records">
+<h3>Task records<a class="headerlink" href="#task-records" title="Link to this heading">¶</a></h3>
+<p>The job actor combines each <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code> with the task’s ID, operation, metadata, executor ID, and timing information to create a <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code>. A <code class="docutils literal notranslate"><span class="pre">TaskId</span></code> identifies a task within its job. The final <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code> contains these records sorted by <code class="docutils literal notranslate"><span class="pre">TaskId</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">TaskRecord::unit_</span></code> identifies the task’s target unit, including for tasks that never dispatch. Unit identity is independent of the concurrent-task limit. The saved <code class="docutils literal notranslate"><span class="pre">task_executor_id</span></code> identifies the executor registration used by that unit.</p>
+<p>Operations on a unit share its feature label, with unique task IDs in artifact stems such as <code class="docutils literal notranslate"><span class="pre">A_task_0</span></code> and <code class="docutils literal notranslate"><span class="pre">A_task_2</span></code>.</p>
+</section>
+<section id="task-timing">
+<h3>Task timing<a class="headerlink" href="#task-timing" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">TaskRecord::dispatch_offset_from_job_start_</span></code> stores the elapsed seconds from job start to dispatch, using the same monotonic clock as <code class="docutils literal notranslate"><span class="pre">run_time_</span></code>. Dispatch precedes the unit actor beginning execution. A non-null offset identifies a dispatched task, independently of its scheduler thread or subprocess PID.</p>
+<p><code class="docutils literal notranslate"><span class="pre">TaskRecord::run_time_</span></code> measures the interval from dispatch until the job actor records success or failure. It includes scheduling, communication, and any subprocess startup or cleanup that occurs before the result is recorded. Adding it to the dispatch offset gives the time relative to job start when that result was recorded.</p>
+<p>Tasks that reach the job timeout before dispatch have a null dispatch offset and zero runtime. Dispatched tasks retain their offset and elapsed runtime up to the timeout. Unavailable offsets are <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code> (<code class="docutils literal notranslate"><span class="pre">null</span></code> in JSON).</p>
+</section>
+<section id="structured-output">
+<h3>Structured output<a class="headerlink" href="#structured-output" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">TaskResult::output_</span></code> carries optional structured output as a <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code>. It supports scalar values and nested lists and dictionaries, and remains available through the <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code> values passed to the controller and retained by the final <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>. Controllers validate the structure and value types defined by their task executors. Large time series, grids, and model state belong in files referenced by <code class="docutils literal notranslate"><span class="pre">TaskResult::artifact_paths_</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">JobController::finalize()</span></code> returns optional structured output in the same format, with null as the default. Runtime retains this value in <code class="docutils literal notranslate"><span class="pre">JobRecord::output_</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::output_root_</span></code> is configured, Runtime writes the completed <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>, including task and job output, to <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code>. Finite double values retain enough digits to round-trip; non-finite numerical values are written as JSON <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+<p>Each completed record includes <code class="docutils literal notranslate"><span class="pre">miaow_version</span></code>, captured when the library is built. This uses Git’s description relative to a reachable version tag, such as <code class="docutils literal notranslate"><span class="pre">v0.3.0-5-gabc1234-dirty</span></code>: the tag, number of additional commits, abbreviated commit hash, and <code class="docutils literal notranslate"><span class="pre">-dirty</span></code> for tracked edits. An exact clean tag reports only the tag; a history without a matching tag reports an abbreviated hash.</p>
+<p>Builds without usable Git metadata retain the configured numeric version. Rebuilding refreshes the version without requiring a new CMake configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CAF has a binary-deserialization limitation for null entries in <code class="docutils literal notranslate"><span class="pre">caf::config_value</span></code> lists and dictionaries, which also applies to structured task and job output. A null value for the entire output (<code class="docutils literal notranslate"><span class="pre">caf::config_value{}</span></code>) is supported.</p>
+</div>
 </section>
 </section>
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Although subprocess execution is currently supported using remote actors, MIAOW does not currently support distributed-memory parallelism across multiple nodes. This is a planned feature for future releases.</p></li>
-<li><p>Microsoft Windows is not currently supported, and there are no immediate plans to support it. MIAOW has been tested on Linux and macOS, and future releases will continue to support these platforms.</p></li>
+<li><p>Subprocess actors currently run on the same host. Distributed-memory parallelism across multiple nodes is planned.</p></li>
+<li><p>MIAOW has been tested on Linux and macOS. Microsoft Windows is not currently supported, and there are no immediate plans to support it.</p></li>
 </ul>
 </section>
 </section>
@@ -161,16 +850,17 @@ executes the task. <code class="docutils literal notranslate"><span class="pre">
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#orchestration-model">Orchestration model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#task-timing">Task timing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#structured-task-output">Structured task output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#structured-job-output">Structured job output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simulation-unit-execution">Simulation unit execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#job-execution">Job execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#job-controllers">Job controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subprocess-execution">Subprocess execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#failures-and-shutdown">Failures and shutdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results-and-records">Results and records</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Building and installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building, testing, and installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
 </ul>
 

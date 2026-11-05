@@ -11,6 +11,364 @@
     <script src="_static/documentation_options.js?v=7f41d439"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
     <link rel="canonical" href="https://tjbmontoya.com/miaow-framework/genindex.html" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
@@ -45,26 +403,6 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow30bmi_subprocess_executable_pathEv">miaow::bmi_subprocess_executable_path (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow13BmiDataFormatE">miaow::BmiDataFormat (C++ enum)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow13BmiDataFormat3csvE">miaow::BmiDataFormat::csv (C++ enumerator)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16BmiForcingConfigE">miaow::BmiForcingConfig (C++ struct)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16BmiForcingConfig5file_E">miaow::BmiForcingConfig::file_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16BmiForcingConfig7format_E">miaow::BmiForcingConfig::format_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16BmiForcingConfig20variables_names_map_E">miaow::BmiForcingConfig::variables_names_map_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15BmiOutputConfigE">miaow::BmiOutputConfig (C++ struct)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15BmiOutputConfig7format_E">miaow::BmiOutputConfig::format_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15BmiOutputConfig9interval_E">miaow::BmiOutputConfig::interval_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15BmiOutputConfig10variables_E">miaow::BmiOutputConfig::variables_ (C++ member)</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow39default_bmi_time_step_tolerance_secondsE">miaow::default_bmi_time_step_tolerance_seconds (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow17DynamicBmiBackendE">miaow::DynamicBmiBackend (C++ enum)</a>
@@ -77,45 +415,55 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig8backend_E">miaow::DynamicBmiConfig::backend_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig8forcing_E">miaow::DynamicBmiConfig::forcing_ (C++ member)</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig12init_config_E">miaow::DynamicBmiConfig::init_config_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig7output_E">miaow::DynamicBmiConfig::output_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig12plugin_path_E">miaow::DynamicBmiConfig::plugin_path_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig28time_step_tolerance_seconds_E">miaow::DynamicBmiConfig::time_step_tolerance_seconds_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow24DynamicBmiSimulationUnitE">miaow::DynamicBmiSimulationUnit (C++ class)</a>
+      <li><a href="api.html#_CPPv4N5miaow22DynamicBmiTaskExecutorE">miaow::DynamicBmiTaskExecutor (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow24DynamicBmiSimulationUnit24DynamicBmiSimulationUnitEv">miaow::DynamicBmiSimulationUnit::DynamicBmiSimulationUnit (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow22DynamicBmiTaskExecutor22DynamicBmiTaskExecutorEv">miaow::DynamicBmiTaskExecutor::DynamicBmiTaskExecutor (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow24DynamicBmiSimulationUnit7executeERK4Task">miaow::DynamicBmiSimulationUnit::execute (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow22DynamicBmiTaskExecutor7executeERK4Task">miaow::DynamicBmiTaskExecutor::execute (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow23ensure_expected_run_dirERKNSt6stringE">miaow::ensure_expected_run_dir (C++ function)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow3JobE">miaow::Job (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4IDpEN5miaow3Job8add_taskEv20SimulationUnitHandleNSt6stringEDpRR4Args">miaow::Job::add_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow3Job8add_taskE4Task">[1]</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow3Job8add_unitENSt6stringE14TaskExecutorId">miaow::Job::add_unit (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow3Job4failENSt6stringE">miaow::Job::fail (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow3Job11remove_unitE20SimulationUnitHandle">miaow::Job::remove_unit (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow3Job14set_controllerENSt10unique_ptrI13JobControllerEE">miaow::Job::set_controller (C++ function)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow13JobControllerE">miaow::JobController (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow13JobController8callbackER3JobNSt4spanIK10TaskRecordEENSt4spanIK11UnitFailureEE">miaow::JobController::callback (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow13JobController8finalizeEv">miaow::JobController::finalize (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow13JobController22generate_initial_tasksEv">miaow::JobController::generate_initial_tasks (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow13JobController18generate_new_tasksENSt4spanIK10TaskRecordEE">miaow::JobController::generate_new_tasks (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow13JobController10initializeER3Job">miaow::JobController::initialize (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow13JobController13JobControllerE20TaskGenerationPolicy">miaow::JobController::JobController (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4NK5miaow13JobController22task_generation_policyEv">miaow::JobController::task_generation_policy (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow9JobHandleE">miaow::JobHandle (C++ type)</a>
+      <li><a href="api.html#_CPPv4N5miaow13JobCreationIdE">miaow::JobCreationId (C++ type)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow5JobIdE">miaow::JobId (C++ type)</a>
+      <li><a href="api.html#_CPPv4N5miaow9JobHandleE">miaow::JobHandle (C++ type)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow9JobRecordE">miaow::JobRecord (C++ struct)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow9JobRecord7job_id_E">miaow::JobRecord::job_id_ (C++ member)</a>
+      <li><a href="api.html#_CPPv4N5miaow9JobRecord18job_submission_id_E">miaow::JobRecord::job_submission_id_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordENSt8uint64_tE5JobIdNSt6vectorI10TaskRecordEENSt6chrono8durationIdEEN3caf12config_valueE">miaow::JobRecord::JobRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordEv">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordENSt8uint64_tE15JobSubmissionIdNSt6vectorI10TaskRecordEENSt6chrono8durationIdEEN3caf12config_valueE">miaow::JobRecord::JobRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow9JobRecord9JobRecordEv">[1]</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow9JobRecord14miaow_version_E">miaow::JobRecord::miaow_version_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow9JobRecord7output_E">miaow::JobRecord::output_ (C++ member)</a>
 </li>
@@ -125,15 +473,11 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow9JobRecord6tasks_E">miaow::JobRecord::tasks_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow13make_bmi_taskE16SimulationUnitIdRK15StaticBmiConfig">miaow::make_bmi_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow13make_bmi_taskE16SimulationUnitIdRK16DynamicBmiConfig">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow15JobSubmissionIdE">miaow::JobSubmissionId (C++ type)</a>
 </li>
-      <li><a href="api.html#_CPPv4I0EN5miaow14make_bmi_tasksENSt6vectorI4TaskEE16SimulationUnitIdRKNSt6vectorI9BmiConfigEE">miaow::make_bmi_tasks (C++ function)</a>, <a href="api.html#_CPPv4N5miaow14make_bmi_tasksE16SimulationUnitIdRK25PartitionedBmiRealization">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow13make_bmi_taskE20SimulationUnitHandleRK15StaticBmiConfig">miaow::make_bmi_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow13make_bmi_taskE20SimulationUnitHandleRK16DynamicBmiConfig">[1]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow25parse_runtime_cli_optionsEiA_PcR14RuntimeOptions">miaow::parse_runtime_cli_options (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow25PartitionedBmiRealizationE">miaow::PartitionedBmiRealization (C++ class)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow25PartitionedBmiRealization25PartitionedBmiRealizationERKNSt6stringE">miaow::PartitionedBmiRealization::PartitionedBmiRealization (C++ function)</a>, <a href="api.html#_CPPv4N5miaow25PartitionedBmiRealization25PartitionedBmiRealizationEv">[1]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow17print_job_summaryERK9JobRecord">miaow::print_job_summary (C++ function)</a>
 </li>
@@ -141,9 +485,9 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow7RuntimeE">miaow::Runtime (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry">miaow::Runtime::Runtime (C++ function)</a>, <a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK22SimulationUnitRegistry14RuntimeOptions">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK20TaskExecutorRegistry">miaow::Runtime::Runtime (C++ function)</a>, <a href="api.html#_CPPv4N5miaow7Runtime7RuntimeERK20TaskExecutorRegistry14RuntimeOptions">[1]</a>
 </li>
-      <li><a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt10unique_ptrI13JobControllerEE">miaow::Runtime::submit_job (C++ function)</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEE">[1]</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobENSt6vectorI4TaskEENSt10unique_ptrI13JobControllerEE">[2]</a>, <a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobERK4Task">[3]</a>
+      <li><a href="api.html#_CPPv4NK5miaow7Runtime10submit_jobE3Job">miaow::Runtime::submit_job (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow7RuntimeD0Ev">miaow::Runtime::~Runtime (C++ function)</a>
 </li>
@@ -151,8 +495,6 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions20job_request_timeout_E">miaow::RuntimeOptions::job_request_timeout_ (C++ member)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions12max_workers_E">miaow::RuntimeOptions::max_workers_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions12output_root_E">miaow::RuntimeOptions::output_root_ (C++ member)</a>
@@ -161,41 +503,23 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions21task_request_timeout_E">miaow::RuntimeOptions::task_request_timeout_ (C++ member)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#_CPPv4N5miaow14SimulationUnitE">miaow::SimulationUnit (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow14SimulationUnit7executeERK4Task">miaow::SimulationUnit::execute (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16SimulationUnitIdE">miaow::SimulationUnitId (C++ type)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow22SimulationUnitRegistryE">miaow::SimulationUnitRegistry (C++ class)</a>
-</li>
-      <li><a href="api.html#_CPPv4I0DpEN5miaow22SimulationUnitRegistry3addE16SimulationUnitIdDp15ConstructorArgs">miaow::SimulationUnitRegistry::add (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow22SimulationUnitRegistry14add_subprocessENSt6stringE18SubprocessLifetime">miaow::SimulationUnitRegistry::add_subprocess (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4NK5miaow22SimulationUnitRegistry5emptyEv">miaow::SimulationUnitRegistry::empty (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow20SimulationUnitHandleE">miaow::SimulationUnitHandle (C++ class)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfigE">miaow::StaticBmiConfig (C++ struct)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfig8forcing_E">miaow::StaticBmiConfig::forcing_ (C++ member)</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfig12init_config_E">miaow::StaticBmiConfig::init_config_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfig7output_E">miaow::StaticBmiConfig::output_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfig28time_step_tolerance_seconds_E">miaow::StaticBmiConfig::time_step_tolerance_seconds_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4I0EN5miaow23StaticBmiSimulationUnitE">miaow::StaticBmiSimulationUnit (C++ class)</a>
+      <li><a href="api.html#_CPPv4I0EN5miaow21StaticBmiTaskExecutorE">miaow::StaticBmiTaskExecutor (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow23StaticBmiSimulationUnit7executeERK4Task">miaow::StaticBmiSimulationUnit::execute (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow21StaticBmiTaskExecutor7executeERK4Task">miaow::StaticBmiTaskExecutor::execute (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4IDpEN5miaow23StaticBmiSimulationUnit23StaticBmiSimulationUnitEDp20ModelConstructorArgs">miaow::StaticBmiSimulationUnit::StaticBmiSimulationUnit (C++ function)</a>, <a href="api.html#_CPPv4N5miaow23StaticBmiSimulationUnit23StaticBmiSimulationUnitEv">[1]</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow18SubprocessLifetimeE">miaow::SubprocessLifetime (C++ enum)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow18SubprocessLifetime10persistentE">miaow::SubprocessLifetime::persistent (C++ enumerator)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow18SubprocessLifetime11single_taskE">miaow::SubprocessLifetime::single_task (C++ enumerator)</a>
+      <li><a href="api.html#_CPPv4IDpEN5miaow21StaticBmiTaskExecutor21StaticBmiTaskExecutorEDp20ModelConstructorArgs">miaow::StaticBmiTaskExecutor::StaticBmiTaskExecutor (C++ function)</a>, <a href="api.html#_CPPv4N5miaow21StaticBmiTaskExecutor21StaticBmiTaskExecutorEv">[1]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4TaskE">miaow::Task (C++ struct)</a>
 </li>
@@ -203,17 +527,33 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task9metadata_E">miaow::Task::metadata_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow4Task19simulation_unit_id_E">miaow::Task::simulation_unit_id_ (C++ member)</a>
+      <li><a href="api.html#_CPPv4N5miaow4Task10operation_E">miaow::Task::operation_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4NK5miaow4Task10string_argENSt6size_tE">miaow::Task::string_arg (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE">miaow::Task::Task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdN3caf12config_valueE12TaskMetadata">[1]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt16initializer_listINSt6stringEEE">[2]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6stringE">[3]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE">[4]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE16SimulationUnitIdNSt6vectorIN3caf12config_valueEEE12TaskMetadata">[5]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskEv">[6]</a>
+      <li><a href="api.html#_CPPv4IDpEN5miaow4Task4TaskE20SimulationUnitHandleNSt6stringEDp4Args">miaow::Task::Task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE20SimulationUnitHandleNSt6stringENSt6vectorIN3caf12config_valueEEE">[1]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskEv">[2]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task10task_name_E">miaow::Task::task_name_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task16task_output_dir_E">miaow::Task::task_output_dir_ (C++ member)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow4Task5unit_E">miaow::Task::unit_ (C++ member)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow21task_status_to_stringE10TaskStatus">miaow::task_status_to_string (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow12TaskExecutorE">miaow::TaskExecutor (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow12TaskExecutor7executeERK4Task">miaow::TaskExecutor::execute (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow14TaskExecutorIdE">miaow::TaskExecutorId (C++ type)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow20TaskExecutorRegistryE">miaow::TaskExecutorRegistry (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4I0DpEN5miaow20TaskExecutorRegistry3addE14TaskExecutorIdDp15ConstructorArgs">miaow::TaskExecutorRegistry::add (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow20TaskExecutorRegistry14add_subprocessENSt6stringE">miaow::TaskExecutorRegistry::add_subprocess (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4NK5miaow20TaskExecutorRegistry5emptyEv">miaow::TaskExecutorRegistry::empty (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow20TaskGenerationPolicyE">miaow::TaskGenerationPolicy (C++ enum)</a>
 </li>
@@ -231,19 +571,21 @@
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord9metadata_E">miaow::TaskRecord::metadata_ (C++ member)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10operation_E">miaow::TaskRecord::operation_ (C++ member)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord7result_E">miaow::TaskRecord::result_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord9run_time_E">miaow::TaskRecord::run_time_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow10TaskRecord19simulation_unit_id_E">miaow::TaskRecord::simulation_unit_id_ (C++ member)</a>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord17task_executor_id_E">miaow::TaskRecord::task_executor_id_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord8task_id_E">miaow::TaskRecord::task_id_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskRecord10task_name_E">miaow::TaskRecord::task_name_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordERK4Task6TaskId10TaskResultNSt6chrono8durationIdEENSt8optionalINSt6chrono8durationIdEEEENSt8optionalINSt6size_tEEE">miaow::TaskRecord::TaskRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordEv">[1]</a>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordERK4Task14TaskExecutorId6TaskId10TaskResultNSt6chrono8durationIdEENSt8optionalINSt6chrono8durationIdEEEE">miaow::TaskRecord::TaskRecord (C++ function)</a>, <a href="api.html#_CPPv4N5miaow10TaskRecord10TaskRecordEv">[1]</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow10TaskRecord10worker_id_E">miaow::TaskRecord::worker_id_ (C++ member)</a>
+      <li><a href="api.html#_CPPv4N5miaow10TaskRecord5unit_E">miaow::TaskRecord::unit_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskResultE">miaow::TaskResult (C++ struct)</a>
 </li>
@@ -262,6 +604,12 @@
       <li><a href="api.html#_CPPv4N5miaow10TaskStatus6failedE">miaow::TaskStatus::failed (C++ enumerator)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow10TaskStatus9succeededE">miaow::TaskStatus::succeeded (C++ enumerator)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow11UnitFailureE">miaow::UnitFailure (C++ struct)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow11UnitFailure7reason_E">miaow::UnitFailure::reason_ (C++ member)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow11UnitFailure5unit_E">miaow::UnitFailure::unit_ (C++ member)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -300,7 +648,7 @@
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bmi.html">BMI integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Building and installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building, testing, and installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
 </ul>
 
