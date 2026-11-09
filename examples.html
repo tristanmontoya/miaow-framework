@@ -45,6 +45,8 @@
 ./miaow_dynamic_bmi<span class="w"> </span>--output_root<span class="w"> </span>./output<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
 <span class="nb">cd</span><span class="w"> </span>../07_job_controller
 ./miaow_job_controller
+<span class="nb">cd</span><span class="w"> </span>../09_bmi_operations
+./miaow_bmi_operations
 </pre></div>
 </div>
 <section id="default-examples">
@@ -54,6 +56,7 @@
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/01_heat">examples/01_heat</a>: BMI integration using the <a class="reference external" href="https://github.com/csdms/bmi-example-cxx">CSDMS heat example</a></p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/03_dynamic_bmi">examples/03_dynamic_bmi</a>: C++ and Fortran heat plugins, each run in-process and in its own unit subprocess</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/07_job_controller">examples/07_job_controller</a>: computes a square root using Heron’s method, with the executor retaining its estimate across tasks and the job controller requesting iterations until the residual meets the convergence tolerance</p></li>
+<li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/09_bmi_operations">examples/09_bmi_operations</a>: a controller submits initialization, time queries, two updates, and finalization as separate tasks on one static heat model</p></li>
 </ul>
 <p>The hello, dynamic BMI, and job-controller examples accept an optional <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;file.json&gt;</span></code> alongside the common runtime options. Omitted fields retain the default inputs. This allows tests for successful and failing workflows to use the same programs.</p>
 <table class="docutils align-default" id="id7">

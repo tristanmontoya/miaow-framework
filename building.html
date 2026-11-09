@@ -57,7 +57,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">CITATION.cff</span></code> is the single source for the software version. Use <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0-dev&quot;</span></code> during development and <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0&quot;</span></code> for a release; CMake extracts <code class="docutils literal notranslate"><span class="pre">0.3.0</span></code> and automatically reconfigures when the citation file changes.</p>
-<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds the <code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code> checker, the lifecycle and BMI dispatch test drivers, and the four examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, and <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds the <code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code> checker, the lifecycle and BMI dispatch test drivers, and the five examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, and <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
 <p>Run the tests enabled in the current build with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
@@ -69,7 +69,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 <section id="building-examples">
 <span id="id1"></span><h2>Building examples<a class="headerlink" href="#building-examples" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> always includes the four regression examples. <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=ON</span></code> adds the examples selected by <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>; overlapping selections are built once. To build the selected examples without the regression suite:</p>
+<p><code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> always includes the five regression examples. <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=ON</span></code> adds the examples selected by <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>; overlapping selections are built once. To build the selected examples without the regression suite:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
@@ -126,6 +126,12 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <p>Requests Heron iterations until convergence or the iteration limit.</p>
 </td>
 <td><p>Starting from 1, three Heron estimates match 1.5, 17/12, and 577/408 within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code>; the final residual <code class="docutils literal notranslate"><span class="pre">|x^2</span> <span class="pre">-</span> <span class="pre">2|</span></code> is at most <code class="docutils literal notranslate"><span class="pre">1e-5</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/09_bmi_operations/CMakeLists.txt">miaow_example_09_bmi_operations</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/09_bmi_operations/main.cpp">09_bmi_operations/main.cpp</a></p>
+<p>Submits initialization, time queries, two updates, and finalization on one heat unit.</p>
+</td>
+<td><p>Seven tasks succeed on the same unit; model times match 0, 1/6, and 1/3 seconds within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -299,6 +305,7 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <section id="bmi-task-dispatch-driver">
 <h4>BMI task dispatch driver<a class="headerlink" href="#bmi-task-dispatch-driver" title="Link to this heading">¶</a></h4>
 <p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/bmi_task_dispatch_driver.cpp</span></code>. The five execution paths are a statically linked C++ model, C++ and Fortran plugins in-process, and C++ and Fortran plugins in subprocesses.</p>
+<p>The initialization and finalization failure cases use a custom exception in the static test model. Its destructor records whether the model is still alive, and the saved-record checker requires exception destruction before model destruction. This checks the lifetime ordering needed to keep plugin exception code available.</p>
 <table class="regression-tests docutils align-default">
 <colgroup>
 <col style="width: 34.0%" />
@@ -318,13 +325,67 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </td>
 <td><p>Five execution paths each reject an unknown operation and then complete a valid run after 40 updates</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run.json">miaow_bmi_repeated_run</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_static_lifecycle.json">miaow_bmi_static_lifecycle</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Rejects invalid lifecycle operations on one static heat model, then finalizes and reinitializes it.</p>
+</td>
+<td><p>Updates outside an initialized session, duplicate initialization, and a complete run during a session fail; the active clock is preserved, and a fresh session starts at zero</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_dynamic_cpp_lifecycle.json">miaow_bmi_dynamic_cpp_lifecycle</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Runs the lifecycle sequence with an in-process C++ plugin.</p>
+</td>
+<td><p>The same lifecycle guards hold; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_dynamic_fortran_lifecycle.json">miaow_bmi_dynamic_fortran_lifecycle</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Runs the lifecycle sequence with an in-process Fortran plugin.</p>
+</td>
+<td><p>The same lifecycle guards hold; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_subprocess_cpp_lifecycle.json">miaow_bmi_subprocess_cpp_lifecycle</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Runs the lifecycle sequence with a C++ plugin in a persistent subprocess.</p>
+</td>
+<td><p>Model time persists between tasks; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_subprocess_fortran_lifecycle.json">miaow_bmi_subprocess_fortran_lifecycle</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Runs the lifecycle sequence with a Fortran plugin in a persistent subprocess.</p>
+</td>
+<td><p>Model time persists between tasks; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_initialize_failure.json">miaow_bmi_initialize_failure</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Makes the first instance of a controllable static heat model throw from <code class="docutils literal notranslate"><span class="pre">Initialize()</span></code>.</p>
+</td>
+<td><p>The failed initialization destroys the exception before releasing the model, without finalization. Updates, queries, and finalization report no initialized model; a fresh session works and is finalized and destroyed once.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_update_failure.json">miaow_bmi_update_failure</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Makes the first instance of a controllable static heat model throw from <code class="docutils literal notranslate"><span class="pre">Update()</span></code>.</p>
+</td>
+<td><p>Updates and queries remain blocked until finalization, a fresh session works, and each model is finalized and destroyed once. The existing job record checker verifies the task results and per-model counts collected after unit shutdown.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_get_current_time_failure.json">miaow_bmi_get_current_time_failure</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Makes the first instance of the same test model throw from <code class="docutils literal notranslate"><span class="pre">GetCurrentTime()</span></code>.</p>
+</td>
+<td><p>Both updates and time queries remain blocked until finalization, with no additional model calls. A fresh model updates and reports time 0.25 seconds, and both instances are finalized and destroyed once.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_finalize_failure.json">miaow_bmi_finalize_failure</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<p>Makes the first instance of the same test model throw from <code class="docutils literal notranslate"><span class="pre">Finalize()</span></code>.</p>
+</td>
+<td><p>The failed finalization destroys the exception before releasing the model; subsequent operations report no initialized model. Reinitialization succeeds, the failed instance is never finalized again, and unit shutdown finalizes only the second instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run.json">miaow_bmi_repeated_run</a></p></td>
 <td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
 <p>Submits two successive runs per unit across five BMI execution paths.</p>
 </td>
 <td><p>Five execution paths each complete two successive runs on the same unit, with 40 updates per run</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run_concurrent.json">miaow_bmi_repeated_run_concurrent</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run_concurrent.json">miaow_bmi_repeated_run_concurrent</a></p></td>
 <td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
 <p>Submits two successive runs per unit across five BMI execution paths.</p>
 </td>
@@ -397,6 +458,18 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </td>
 <td><p>With two worker slots, the first batch callback reports two failed tasks, one successful task, and one unit failure; the second reports three successful tasks and no unit failures.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/subprocess_shutdown_within_grace.json">miaow_subprocess_shutdown_within_grace</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a> and <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/subprocess_shutdown_worker.cpp">subprocess_shutdown_worker.cpp</a></p>
+<p>Times out a child task that subsequently returns and completes destructor cleanup within the shutdown grace period.</p>
+</td>
+<td><p>The child exits normally and writes its cleanup marker. The active and queued tasks fail once with one unit-failure report, the queued task never dispatches, new work on the failed unit is rejected, and the worker slot becomes available only after the child is reaped.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/subprocess_shutdown_grace_expired.json">miaow_subprocess_shutdown_grace_expired</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a> and <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/subprocess_shutdown_worker.cpp">subprocess_shutdown_worker.cpp</a></p>
+<p>Times out a child task whose destructor cleanup exceeds the configured grace period.</p>
+</td>
+<td><p>The child starts cleanup but is terminated by SIGKILL before finishing it. The timeout remains the failure cause, the child is reaped, queued work never dispatches, and the independent unit can then use the worker slot.</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -460,7 +533,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <li><p><code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code>: the Boost.Test executable that checks saved job records and controller observations.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">miaow_simulation_unit_lifecycle_driver</span></code>: the model-free workload driver for removal, failure recovery, and callback delivery.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">miaow_bmi_dispatch_driver</span></code>: the heat-model workload driver for operation failures and repeated runs across the five BMI execution paths.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, and <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code> example programs, including the heat-model libraries and C++ and Fortran plugins needed by their tests.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, and <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code> example programs, including the heat-model libraries and C++ and Fortran plugins needed by their tests.</p></li>
 </ul>
 <p>The following top-level CMake options are available when building MIAOW:</p>
 <table class="docutils align-default">
@@ -488,7 +561,8 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">00_hello;01_heat;</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi;</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">07_job_controller;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code></div>
 </div>
 </td>
 <td><p>Semicolon-separated list of examples selected by <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code>; testing includes its required examples independently</p></td>

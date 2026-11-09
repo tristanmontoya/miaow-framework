@@ -403,6 +403,12 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow30bmi_subprocess_executable_pathEv">miaow::bmi_subprocess_executable_path (C++ function)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow15BmiTaskExecutorE">miaow::BmiTaskExecutor (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow15BmiTaskExecutor7executeERK4Task">miaow::BmiTaskExecutor::execute (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow15BmiTaskExecutorD0Ev">miaow::BmiTaskExecutor::~BmiTaskExecutor (C++ function)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow39default_bmi_time_step_tolerance_secondsE">miaow::default_bmi_time_step_tolerance_seconds (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow17DynamicBmiBackendE">miaow::DynamicBmiBackend (C++ enum)</a>
@@ -411,21 +417,9 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow17DynamicBmiBackend7fortranE">miaow::DynamicBmiBackend::fortran (C++ enumerator)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfigE">miaow::DynamicBmiConfig (C++ struct)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig8backend_E">miaow::DynamicBmiConfig::backend_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig12init_config_E">miaow::DynamicBmiConfig::init_config_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig12plugin_path_E">miaow::DynamicBmiConfig::plugin_path_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow16DynamicBmiConfig28time_step_tolerance_seconds_E">miaow::DynamicBmiConfig::time_step_tolerance_seconds_ (C++ member)</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow22DynamicBmiTaskExecutorE">miaow::DynamicBmiTaskExecutor (C++ class)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow22DynamicBmiTaskExecutor22DynamicBmiTaskExecutorEv">miaow::DynamicBmiTaskExecutor::DynamicBmiTaskExecutor (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow22DynamicBmiTaskExecutor7executeERK4Task">miaow::DynamicBmiTaskExecutor::execute (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow23ensure_expected_run_dirERKNSt6stringE">miaow::ensure_expected_run_dir (C++ function)</a>
 </li>
@@ -475,13 +469,11 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow15JobSubmissionIdE">miaow::JobSubmissionId (C++ type)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow13make_bmi_taskE20SimulationUnitHandleRK15StaticBmiConfig">miaow::make_bmi_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow13make_bmi_taskE20SimulationUnitHandleRK16DynamicBmiConfig">[1]</a>
-</li>
       <li><a href="api.html#_CPPv4N5miaow25parse_runtime_cli_optionsEiA_PcR14RuntimeOptions">miaow::parse_runtime_cli_options (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow17print_job_summaryERK9JobRecord">miaow::print_job_summary (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow21run_subprocess_workerEiA_PcNSt8functionIF10TaskResultRK4TaskEEE">miaow::run_subprocess_worker (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow21run_subprocess_workerEiA_PcNSt8functionIFN3caf6resultI10TaskResultEERK4TaskEEE">miaow::run_subprocess_worker (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow7RuntimeE">miaow::Runtime (C++ class)</a>
 </li>
@@ -499,7 +491,9 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions12output_root_E">miaow::RuntimeOptions::output_root_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions14RuntimeOptionsENSt6size_tENSt6chrono12millisecondsENSt6chrono12millisecondsENSt6stringE">miaow::RuntimeOptions::RuntimeOptions (C++ function)</a>
+      <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions14RuntimeOptionsENSt6size_tENSt6chrono12millisecondsENSt6chrono12millisecondsENSt6stringENSt6chrono12millisecondsE">miaow::RuntimeOptions::RuntimeOptions (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions33subprocess_shutdown_grace_period_E">miaow::RuntimeOptions::subprocess_shutdown_grace_period_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions21task_request_timeout_E">miaow::RuntimeOptions::task_request_timeout_ (C++ member)</a>
 </li>
@@ -509,17 +503,9 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow20SimulationUnitHandleE">miaow::SimulationUnitHandle (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfigE">miaow::StaticBmiConfig (C++ struct)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfig12init_config_E">miaow::StaticBmiConfig::init_config_ (C++ member)</a>
-</li>
-      <li><a href="api.html#_CPPv4N5miaow15StaticBmiConfig28time_step_tolerance_seconds_E">miaow::StaticBmiConfig::time_step_tolerance_seconds_ (C++ member)</a>
-</li>
       <li><a href="api.html#_CPPv4I0EN5miaow21StaticBmiTaskExecutorE">miaow::StaticBmiTaskExecutor (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow21StaticBmiTaskExecutor7executeERK4Task">miaow::StaticBmiTaskExecutor::execute (C++ function)</a>
-</li>
-      <li><a href="api.html#_CPPv4IDpEN5miaow21StaticBmiTaskExecutor21StaticBmiTaskExecutorEDp20ModelConstructorArgs">miaow::StaticBmiTaskExecutor::StaticBmiTaskExecutor (C++ function)</a>, <a href="api.html#_CPPv4N5miaow21StaticBmiTaskExecutor21StaticBmiTaskExecutorEv">[1]</a>
+      <li><a href="api.html#_CPPv4IDpEN5miaow21StaticBmiTaskExecutor21StaticBmiTaskExecutorEDp20ModelConstructorArgs">miaow::StaticBmiTaskExecutor::StaticBmiTaskExecutor (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4TaskE">miaow::Task (C++ struct)</a>
 </li>

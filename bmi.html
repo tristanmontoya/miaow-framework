@@ -39,14 +39,53 @@
 <p>MIAOW runs models implementing the Basic Model Interface (BMI) either in the parent process or in a unit-owned subprocess. See <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> for complete programs and <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> for configuration fields and function signatures.</p>
 <section id="bmi-task-lifecycle">
 <h2>BMI task lifecycle<a class="headerlink" href="#bmi-task-lifecycle" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">make_bmi_task(unit,</span> <span class="pre">config)</span></code> creates a task targeting the given unit. It stores <code class="docutils literal notranslate"><span class="pre">&quot;run&quot;</span></code> in <code class="docutils literal notranslate"><span class="pre">Task::operation_</span></code> and the model configuration in <code class="docutils literal notranslate"><span class="pre">Task::args_</span></code>. Add the task to its owning job with <code class="docutils literal notranslate"><span class="pre">job.add_task(...)</span></code>. Each execution performs one complete model run:</p>
+<p><code class="docutils literal notranslate"><span class="pre">job.add_task(unit,</span> <span class="pre">&quot;run&quot;,</span> <span class="pre">config)</span></code> adds a complete-run task targeting the given unit. The configuration is a <code class="docutils literal notranslate"><span class="pre">caf::config_value::dictionary</span></code>, stored as one argument in <code class="docutils literal notranslate"><span class="pre">Task::args_</span></code>. Standalone tasks can be constructed with <code class="docutils literal notranslate"><span class="pre">Task{unit,</span> <span class="pre">&quot;run&quot;,</span> <span class="pre">config}</span></code>. Each execution performs one complete model run:</p>
 <ol class="arabic simple">
-<li><p>Construct or load a fresh BMI model and call <code class="docutils literal notranslate"><span class="pre">Initialize(init_config_)</span></code>.</p></li>
+<li><p>Construct or load a fresh BMI model and call <code class="docutils literal notranslate"><span class="pre">Initialize(init_config)</span></code>.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">Update()</span></code> until the model reaches its end time.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">Finalize()</span></code> and release the model before reporting success.</p></li>
 </ol>
 <p>Models manage their own forcing and scientific output. If a BMI call fails, the runner attempts to finalize a successfully initialized model before releasing it. Results report the number of completed updates.</p>
-<p>A unit retains its executor across operations, but these BMI executors construct a fresh model for every task. Persistent unit or subprocess lifetime does not preserve BMI model state between <code class="docutils literal notranslate"><span class="pre">run</span></code> operations.</p>
+<p>A unit retains its executor across operations. Each <code class="docutils literal notranslate"><span class="pre">run</span></code> operation constructs a fresh model; model state does not persist between complete runs. Static and dynamic BMI executors, including the bundled subprocess worker, also support individual operations on a retained model, as described below.</p>
+<p>Configuration dictionaries use these fields. Fields with defaults may be omitted; supplied values must have the expected type and satisfy the model’s requirements.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 25.0%" />
+<col style="width: 15.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Used by</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">init_config</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">initialize</span></code> and <code class="docutils literal notranslate"><span class="pre">run</span></code></p></td>
+<td><p>Empty string</p></td>
+<td><p>Model initialization-file path string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">time_step_tolerance_seconds</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1e-4</span></code></p></td>
+<td><p>Absolute clock tolerance as a double, in seconds</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">backend</span></code></p></td>
+<td><p>Dynamic <code class="docutils literal notranslate"><span class="pre">initialize</span></code> and <code class="docutils literal notranslate"><span class="pre">run</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;cpp&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;cpp&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;fortran&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">plugin_path</span></code></p></td>
+<td><p>Dynamic <code class="docutils literal notranslate"><span class="pre">initialize</span></code> and <code class="docutils literal notranslate"><span class="pre">run</span></code></p></td>
+<td><p>Required</p></td>
+<td><p>Plugin library path string</p></td>
+</tr>
+</tbody>
+</table>
+<p>When <code class="docutils literal notranslate"><span class="pre">init_config</span></code> is omitted from the configuration dictionary, the model receives an empty initialization path. Models that require an initialization file must still be given its path. Dynamic <code class="docutils literal notranslate"><span class="pre">initialize</span></code> and <code class="docutils literal notranslate"><span class="pre">run</span></code> tasks require the addition of <code class="docutils literal notranslate"><span class="pre">plugin_path</span></code> to specify what plugin library to load.</p>
 </section>
 <section id="static-bmi-model">
 <h2>Static BMI model<a class="headerlink" href="#static-bmi-model" title="Link to this heading">¶</a></h2>
@@ -57,8 +96,9 @@
 <span class="n">miaow</span><span class="o">::</span><span class="n">Runtime</span><span class="w"> </span><span class="nf">runtime</span><span class="p">(</span><span class="n">registry</span><span class="p">);</span>
 <span class="n">miaow</span><span class="o">::</span><span class="n">Job</span><span class="w"> </span><span class="n">job</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitHandle</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job</span><span class="p">.</span><span class="n">add_unit</span><span class="p">(</span><span class="s">"heat"</span><span class="p">,</span><span class="w"> </span><span class="n">heat</span><span class="p">);</span>
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">StaticBmiConfig</span><span class="w"> </span><span class="n">config</span><span class="p">{.</span><span class="n">init_config_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">heat_config</span><span class="p">};</span>
-<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_task</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">));</span>
+<span class="n">caf</span><span class="o">::</span><span class="n">config_value</span><span class="o">::</span><span class="n">dictionary</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="s">"init_config"</span><span class="p">,</span><span class="w"> </span><span class="n">heat_config</span><span class="p">);</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="s">"run"</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
 
 <span class="c1">// Submit the job</span>
 <span class="n">miaow</span><span class="o">::</span><span class="n">JobHandle</span><span class="w"> </span><span class="n">job_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runtime</span><span class="p">.</span><span class="n">submit_job</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">job</span><span class="p">));</span>
@@ -68,6 +108,15 @@
 </pre></div>
 </div>
 <p>For concurrent independent runs, declare one unit per configuration using the same executor registration. Repeated tasks targeting one unit execute sequentially and reuse its executor.</p>
+<section id="individual-bmi-operations">
+<h3>Individual BMI operations<a class="headerlink" href="#individual-bmi-operations" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">StaticBmiTaskExecutor</span></code> and <code class="docutils literal notranslate"><span class="pre">DynamicBmiTaskExecutor</span></code> inherit their operation handling and model ownership from <code class="docutils literal notranslate"><span class="pre">BmiTaskExecutor</span></code>. Use <code class="docutils literal notranslate"><span class="pre">job.add_task(unit,</span> <span class="pre">&quot;initialize&quot;,</span> <span class="pre">config)</span></code> with a configuration dictionary to initialize a retained model, followed by argument-free <code class="docutils literal notranslate"><span class="pre">job.add_task(unit,</span> <span class="pre">&quot;update&quot;)</span></code>, <code class="docutils literal notranslate"><span class="pre">get_current_time</span></code>, and <code class="docutils literal notranslate"><span class="pre">finalize</span></code> tasks. The same dictionary can be used for initialization or a complete run when it includes the required fields. Direct static initialization with <code class="docutils literal notranslate"><span class="pre">job.add_task(unit,</span> <span class="pre">&quot;initialize&quot;,</span> <span class="pre">path)</span></code> is also supported.</p>
+<p>The bundled subprocess worker retains one <code class="docutils literal notranslate"><span class="pre">DynamicBmiTaskExecutor</span></code> in each unit’s child process and supports the same operations and task payloads.</p>
+<p>The exposed individual operations are <code class="docutils literal notranslate"><span class="pre">initialize</span></code>, <code class="docutils literal notranslate"><span class="pre">update</span></code>, <code class="docutils literal notranslate"><span class="pre">get_current_time</span></code>, and <code class="docutils literal notranslate"><span class="pre">finalize</span></code>. Other BMI methods, including value access and grid queries, are not exposed as task operations. Each successful individual operation invokes its corresponding BMI call. <code class="docutils literal notranslate"><span class="pre">get_current_time</span></code> returns a scalar double in <code class="docutils literal notranslate"><span class="pre">TaskResult::output_</span></code>, in the model’s native time units.</p>
+<p>The executor retains the initialized model until finalization and can initialize a fresh model afterward. Dynamic models retain their backend object and loaded plugin for that lifetime. <code class="docutils literal notranslate"><span class="pre">update</span></code>, <code class="docutils literal notranslate"><span class="pre">get_current_time</span></code>, and <code class="docutils literal notranslate"><span class="pre">finalize</span></code> fail when no model is initialized. <code class="docutils literal notranslate"><span class="pre">run</span></code> and a second <code class="docutils literal notranslate"><span class="pre">initialize</span></code> are rejected while a model is initialized, preserving the active model. Clock tolerance applies only to complete runs.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code> example demonstrates controller-generated operations with <code class="docutils literal notranslate"><span class="pre">./miaow_bmi_operations</span></code> from <code class="docutils literal notranslate"><span class="pre">examples/09_bmi_operations</span></code>, using the heat model and configuration from <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>. It initializes one model, queries its current time, performs two updates with a query after each, and explicitly finalizes. The <code class="docutils literal notranslate"><span class="pre">01_heat</span></code> example performs a complete run.</p>
+<p>BMI call exceptions produce failed task results. A failed initialization releases the newly constructed model without retaining it. After an update or query throws, the retained model accepts only finalization. The executor releases the model after a finalization attempt, including a failed attempt. Controllers should explicitly submit <code class="docutils literal notranslate"><span class="pre">finalize</span></code> to receive its result; executor destruction attempts finalization if an initialized model remains, but cannot report those cleanup errors as task results.</p>
+</section>
 </section>
 <section id="dynamic-bmi-plugin">
 <h2>Dynamic BMI plugin<a class="headerlink" href="#dynamic-bmi-plugin" title="Link to this heading">¶</a></h2>
@@ -78,12 +127,11 @@
 <span class="n">miaow</span><span class="o">::</span><span class="n">Runtime</span><span class="w"> </span><span class="nf">runtime</span><span class="p">(</span><span class="n">registry</span><span class="p">);</span>
 <span class="n">miaow</span><span class="o">::</span><span class="n">Job</span><span class="w"> </span><span class="n">job</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">SimulationUnitHandle</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job</span><span class="p">.</span><span class="n">add_unit</span><span class="p">(</span><span class="s">"model"</span><span class="p">,</span><span class="w"> </span><span class="n">executor</span><span class="p">);</span>
-<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiConfig</span><span class="w"> </span><span class="n">config</span><span class="p">{</span>
-<span class="w">    </span><span class="p">.</span><span class="n">backend_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">DynamicBmiBackend</span><span class="o">::</span><span class="k">fortran</span><span class="p">,</span>
-<span class="w">    </span><span class="p">.</span><span class="n">plugin_path_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin_path</span><span class="p">,</span>
-<span class="w">    </span><span class="p">.</span><span class="n">init_config_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">init_config</span><span class="p">,</span>
-<span class="p">};</span>
-<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">miaow</span><span class="o">::</span><span class="n">make_bmi_task</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">));</span>
+<span class="n">caf</span><span class="o">::</span><span class="n">config_value</span><span class="o">::</span><span class="n">dictionary</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="s">"backend"</span><span class="p">,</span><span class="w"> </span><span class="s">"fortran"</span><span class="p">);</span>
+<span class="n">config</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="s">"plugin_path"</span><span class="p">,</span><span class="w"> </span><span class="n">plugin_path</span><span class="p">);</span>
+<span class="n">config</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="s">"init_config"</span><span class="p">,</span><span class="w"> </span><span class="n">init_config</span><span class="p">);</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="s">"run"</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
 
 <span class="c1">// Submit the job</span>
 <span class="n">miaow</span><span class="o">::</span><span class="n">JobHandle</span><span class="w"> </span><span class="n">job_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runtime</span><span class="p">.</span><span class="n">submit_job</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">job</span><span class="p">));</span>
@@ -92,13 +140,15 @@
 <span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">JobRecord</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job_handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 </pre></div>
 </div>
-<p>A subprocess-backed unit keeps its child alive between operations until removal or job completion. Each BMI operation still creates and finalizes its own model. The Julia/Trixi example places one simulation in a dedicated unit subprocess.</p>
+<p>A subprocess-backed unit keeps its child and dynamic executor alive between operations until removal or job completion. Individual operations retain an initialized model and its plugin; complete <code class="docutils literal notranslate"><span class="pre">run</span></code> tasks each create and finalize a fresh model. The Julia/Trixi example places one simulation in a dedicated unit subprocess.</p>
+<p>Schedule <code class="docutils literal notranslate"><span class="pre">finalize</span></code> before normal unit removal or job completion to receive the model’s cleanup result. On unit removal, job completion, task or job timeout, and Runtime destruction, subprocess shutdown requests orderly worker exit. After the active call returns, the bundled worker releases its executor, which attempts finalization if a model remains.</p>
+<p><code class="docutils literal notranslate"><span class="pre">RuntimeOptions::subprocess_shutdown_grace_period_</span></code> allows 5 seconds by default for the active call, finalization, and process exit; expiry forcibly terminates the child. Finalization is best effort and cannot run after forced termination or a process crash. Unexpected child termination also loses the retained model; MIAOW reports a unit failure rather than recreating its state.</p>
 <p>Custom executables can implement the same <a class="reference internal" href="architecture.html#custom-subprocess-executables"><span class="std std-ref">task contract</span></a>.</p>
 <p>Dynamic C++ plugins must export the <code class="docutils literal notranslate"><span class="pre">bmi_model_create()</span></code> and <code class="docutils literal notranslate"><span class="pre">bmi_model_destroy(...)</span></code> symbols as C linkage. Dynamic Fortran plugins must export <code class="docutils literal notranslate"><span class="pre">register_bmi(void**)</span></code> for the linked <a class="reference external" href="https://github.com/NOAA-OWP/iso_c_fortran_bmi">NOAA-OWP iso_c_fortran_bmi bridge</a>. See <code class="docutils literal notranslate"><span class="pre">examples/03_dynamic_bmi</span></code> for examples of concrete C++ and Fortran plugin workflows.</p>
 </section>
 <section id="model-timekeeping">
 <h2>Model timekeeping<a class="headerlink" href="#model-timekeeping" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">time_step_tolerance_seconds_</span></code> defines the absolute tolerance for the final-time comparison, with a default of <code class="docutils literal notranslate"><span class="pre">1e-4</span></code> seconds. It must be finite, non-negative, and less than half the model time step. MIAOW converts the tolerance to the units reported by <code class="docutils literal notranslate"><span class="pre">GetTimeUnits()</span></code>, supporting seconds, minutes, hours, and days with common abbreviations and singular or plural names.</p>
+<p><code class="docutils literal notranslate"><span class="pre">time_step_tolerance_seconds</span></code> defines the absolute tolerance for the final-time comparison. When omitted, it uses <code class="docutils literal notranslate"><span class="pre">miaow::default_bmi_time_step_tolerance_seconds</span></code> (<code class="docutils literal notranslate"><span class="pre">1e-4</span></code> seconds). An explicit value overrides the default. It must be finite, non-negative, and less than half the model time step. MIAOW converts the tolerance to the units reported by <code class="docutils literal notranslate"><span class="pre">GetTimeUnits()</span></code>, supporting seconds, minutes, hours, and days with common abbreviations and singular or plural names.</p>
 <p>The runner calls <code class="docutils literal notranslate"><span class="pre">Update()</span></code> repeatedly and fails the task if an update passes the end time beyond this tolerance. A model already at its end time receives initialization and finalization with no updates.</p>
 </section>
 <section id="diagnostics-and-artifacts">
