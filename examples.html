@@ -47,6 +47,8 @@
 ./miaow_job_controller
 <span class="nb">cd</span><span class="w"> </span>../09_bmi_operations
 ./miaow_bmi_operations
+<span class="nb">cd</span><span class="w"> </span>../10_model_coupling
+./miaow_model_coupling<span class="w"> </span>--max_workers<span class="w"> </span><span class="m">2</span>
 </pre></div>
 </div>
 <section id="default-examples">
@@ -57,8 +59,9 @@
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/03_dynamic_bmi">examples/03_dynamic_bmi</a>: C++ and Fortran heat plugins, each run in-process and in its own unit subprocess</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/07_job_controller">examples/07_job_controller</a>: computes a square root using Heron’s method, with the executor retaining its estimate across tasks and the job controller requesting iterations until the residual meets the convergence tolerance</p></li>
 <li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/09_bmi_operations">examples/09_bmi_operations</a>: a controller submits initialization, time queries, two updates, and finalization as separate tasks on one static heat model</p></li>
+<li><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/tree/main/examples/10_model_coupling">examples/10_model_coupling</a>: a task DAG transfers temperature snapshots between two retained C++ heat models over three time steps by default</p></li>
 </ul>
-<p>The hello, dynamic BMI, and job-controller examples accept an optional <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;file.json&gt;</span></code> alongside the common runtime options. Omitted fields retain the default inputs. This allows tests for successful and failing workflows to use the same programs.</p>
+<p>The hello, dynamic BMI, job-controller, and model-coupling examples accept an optional <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;file.json&gt;</span></code> alongside the common runtime options. Omitted fields retain the default inputs. This allows tests for successful and failing workflows to use the same programs.</p>
 <table class="docutils align-default" id="id7">
 <caption><span class="caption-text">Optional JSON inputs</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
 <colgroup>
@@ -79,6 +82,9 @@
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">radicand</span></code>, <code class="docutils literal notranslate"><span class="pre">initial_estimate</span></code>, <code class="docutils literal notranslate"><span class="pre">residual_tolerance</span></code>, and <code class="docutils literal notranslate"><span class="pre">maximum_iterations</span></code> set the iteration inputs and stopping conditions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">number_of_steps</span></code> sets the non-negative number of coupling time steps (default: 3).</p></td>
 </tr>
 </tbody>
 </table>

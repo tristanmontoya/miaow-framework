@@ -15,6 +15,8 @@
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
 
+import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"
+
 
 
 
@@ -358,6 +360,8 @@ const load = async () => {
 };
 
 
+mermaid.registerLayoutLoaders(elkLayouts);
+
 
 
 
@@ -475,7 +479,8 @@ flowchart TB
 </section>
 <section id="task-dispatch-and-executors">
 <span id="task-execution"></span><h3>Task dispatch and executors<a class="headerlink" href="#task-dispatch-and-executors" title="Link to this heading">¶</a></h3>
-<p>The job scans queued tasks in submission order and selects the first whose target unit is idle. It skips tasks for busy units so that tasks for other units can proceed. <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers_</span></code> limits concurrent tasks in each job, independently of unit count. An idle unit does not reserve a thread.</p>
+<p>The job scans queued tasks in submission order and selects the first whose prerequisites have succeeded and whose target unit is idle. A ready task can overtake an earlier blocked task, including on the same unit. Submission order gives ready tasks priority; required ordering must be expressed through explicit dependencies. <code class="docutils literal notranslate"><span class="pre">RuntimeOptions::max_workers()</span></code> limits concurrent tasks in each job, independently of unit count. An idle unit does not reserve a thread.</p>
+<p>Set the worker limit through the <code class="docutils literal notranslate"><span class="pre">RuntimeOptions</span></code> constructor or <code class="docutils literal notranslate"><span class="pre">set_max_workers()</span></code>; both reject zero with <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>. Read it through <code class="docutils literal notranslate"><span class="pre">max_workers()</span></code>. The default limit is one.</p>
 <p>The workload determines how many units and retained model instances are needed. Choose the concurrent-task limit to suit the available CPUs and the threads used by each model. Idle units retain their executor and model state, so all resident models must fit in memory; the concurrent-task limit does not limit their number.</p>
 <p>When dispatching a unit’s first task, the job creates its actor. The unit constructs one <code class="docutils literal notranslate"><span class="pre">TaskExecutor</span></code> before executing that task and reuses the executor for subsequent tasks. Declaring a unit does not create its actor or initialize a BMI model. BMI initialization occurs when the executor handles an <code class="docutils literal notranslate"><span class="pre">initialize</span></code> or <code class="docutils literal notranslate"><span class="pre">run</span></code> task. The job allows at most one active task per unit, and operations on that unit execute serially.</p>
 <p>A unit’s <code class="docutils literal notranslate"><span class="pre">TaskExecutorId</span></code> selects an executor registered through <code class="docutils literal notranslate"><span class="pre">TaskExecutorRegistry</span></code>. The registration determines where its task code runs:</p>
@@ -505,10 +510,106 @@ flowchart TB
 <p>The unit’s executor object remains in the parent process in both cases. <code class="docutils literal notranslate"><span class="pre">SubprocessTaskExecutor</span></code> forwards tasks to a child process, as described under <a class="reference internal" href="#subprocess-execution"><span class="std std-ref">Subprocess execution</span></a>.</p>
 <p>Each BMI <code class="docutils literal notranslate"><span class="pre">&quot;run&quot;</span></code> task creates a fresh model and performs initialize, update, and finalize within that task. Static and dynamic BMI executors also support individual operations on a model retained between tasks, using their common <code class="docutils literal notranslate"><span class="pre">BmiTaskExecutor</span></code> base. The bundled BMI subprocess worker retains a <code class="docutils literal notranslate"><span class="pre">DynamicBmiTaskExecutor</span></code> in the child and supports the same operations. See <a class="reference internal" href="bmi.html"><span class="doc">BMI integration</span></a> for the model lifecycle.</p>
 </section>
+<section id="task-dependencies-and-output-references">
+<h3>Task dependencies and output references<a class="headerlink" href="#task-dependencies-and-output-references" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Job::add_task()</span></code> returns a copyable <code class="docutils literal notranslate"><span class="pre">TaskHandle</span></code>. Its <code class="docutils literal notranslate"><span class="pre">task_id()</span></code> matches <code class="docutils literal notranslate"><span class="pre">TaskRecord::task_id_</span></code> in controller callbacks. Handles remain valid when the job moves or tasks are appended.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Task</span></code> and <code class="docutils literal notranslate"><span class="pre">job.add_task()</span></code> accept no dependencies, one <code class="docutils literal notranslate"><span class="pre">TaskHandle</span></code>, or a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;TaskHandle&gt;</span></code> before the operation name:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// No dependencies</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">TaskHandle</span><span class="w"> </span><span class="n">source_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="s">"update"</span><span class="p">);</span>
+
+<span class="c1">// One dependency: the source update</span>
+<span class="k">const</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">TaskHandle</span><span class="w"> </span><span class="n">source_get_value</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="n">source_update</span><span class="p">,</span><span class="w"> </span><span class="s">"get_value"</span><span class="p">,</span><span class="w"> </span><span class="n">source_variable</span><span class="p">);</span>
+
+<span class="c1">// Two dependencies: the preceding receiver task and the source read</span>
+<span class="n">job</span><span class="p">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">receiver</span><span class="p">,</span>
+<span class="w">             </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">miaow</span><span class="o">::</span><span class="n">TaskHandle</span><span class="o">&gt;</span><span class="p">{</span><span class="n">previous_receiver_task</span><span class="p">,</span><span class="w"> </span><span class="n">source_get_value</span><span class="p">},</span>
+<span class="w">             </span><span class="s">"set_value"</span><span class="p">,</span><span class="w"> </span><span class="n">receiver_variable</span><span class="p">,</span><span class="w"> </span><span class="n">miaow</span><span class="o">::</span><span class="n">output_of</span><span class="p">(</span><span class="n">source_get_value</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Prerequisites must already belong to the same job and must succeed before the dependent task dispatches. <code class="docutils literal notranslate"><span class="pre">Job::add_task()</span></code> rejects invalid or foreign handles with <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>. Requiring prerequisites to be added first prevents cycles.</p>
+<p>Sharing a unit adds no implicit dependencies. For example, if an earlier <code class="docutils literal notranslate"><span class="pre">update</span></code> task is waiting on another unit, a later <code class="docutils literal notranslate"><span class="pre">get_current_time</span></code> task without dependencies can run first on the same model. To query the time after that update, declare the update’s handle as the query’s prerequisite. Each unit still executes only one task at a time.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">TaskHandle</span></code> used as an operation argument supplies the producer’s complete <code class="docutils literal notranslate"><span class="pre">TaskResult::output_</span></code>. <code class="docutils literal notranslate"><span class="pre">output_of(handle)</span></code> returns that handle to make its purpose clear. The producer must also appear in the dependency list; <code class="docutils literal notranslate"><span class="pre">add_task()</span></code> rejects undeclared producers and invalid argument positions.</p>
+<p>The job copies referenced outputs into task arguments before dispatch. Executors and subprocess workers receive resolved values. Outputs remain available for the job lifetime, including to consumers added later; retaining field snapshots increases memory use and saved-record size with each step.</p>
+<p>A failed prerequisite causes its dependents to fail without dispatch, propagating through the branch. Controllers receive these records under their callback policy and can add recovery or finalization tasks without the failed prerequisite. A blocked finalizer has not attempted model cleanup.</p>
+<p>Build a fixed directed acyclic graph (DAG) before submission or in a controller’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code>. Adaptive controllers can add tasks from <code class="docutils literal notranslate"><span class="pre">callback()</span></code> based on completed results. Arguments and dependencies are fixed when each task is added; forward references and graph rewiring are unsupported.</p>
+<p>The flowchart below shows execution events and task dispatch in the job actor:</p>
+<pre align="center" id="task-dispatch-diagram" class="mermaid align-center">
+        ---
+config:
+  layout: elk
+  theme: base
+  themeVariables:
+    fontFamily: &quot;Arial, Helvetica, sans-serif&quot;
+    fontSize: &quot;14px&quot;
+    lineColor: &quot;#858b94&quot;
+    edgeLabelBackground: &quot;#ffffff&quot;
+    clusterBkg: &quot;#f9f9fd&quot;
+    clusterBorder: &quot;#dce2ed&quot;
+  themeCSS: |
+    .edgeLabel p {
+      padding: 3px 9px;
+      border: 1px solid #8cbcff;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #1686ff;
+    }
+  flowchart:
+    curve: linear
+    wrappingWidth: 240
+    subGraphTitleMargin:
+      top: 4
+      bottom: 12
+---
+flowchart TB
+    subgraph job_actor[&quot;job_actor · CAF event loop&quot;]
+        direction TB
+
+        E[&quot;Received event&quot;]
+        E --&gt;|&quot;Execution request&quot;| I[&quot;Initialize controller&lt;br/&gt;and prepare initial tasks&quot;]
+        E --&gt;|&quot;Task result&quot;| R[&quot;Record result&lt;br/&gt;and release capacity&quot;]
+        E --&gt;|&quot;Request error&quot;| ER[&quot;Handle request error&quot;]
+        E --&gt;|&quot;Unit termination&quot;| U[&quot;Handle unit loss&lt;br/&gt;and release capacity&quot;]
+
+        I --&gt; P
+        R --&gt; P
+        ER --&gt; P
+        U --&gt; P
+
+        P[&quot;Propagate dependency failures&quot;] --&gt; H[&quot;Run controller callbacks&lt;br/&gt;according to policy&quot;]
+        H --&gt; HP[&quot;Prepare controller-added tasks&quot;]
+        HP --&gt; A
+
+        A[&quot;Worker slot available?&quot;]
+        A --&gt;|Yes| AU[&quot;Idle unit available?&quot;]
+        AU --&gt;|Yes| B[&quot;More queued tasks&lt;br/&gt;to inspect?&quot;]
+        B --&gt;|Yes| C[&quot;Dependencies succeeded?&quot;]
+        C --&gt;|No| B
+        C --&gt;|Yes| CU[&quot;Target unit idle&lt;br/&gt;and eligible?&quot;]
+        CU --&gt;|No| B
+        CU --&gt;|Yes| D[&quot;Resolve referenced outputs&lt;br/&gt;and dispatch task&quot;]
+        D --&gt; A
+
+        A --&gt;|No| Q[&quot;Active tasks remain?&quot;]
+        AU --&gt;|No| Q
+        B --&gt;|&quot;Scan exhausted&quot;| Q
+        Q --&gt;|Yes| W[&quot;Return to event loop&quot;]
+        W --&gt; E
+    end
+
+    Q --&gt;|No| F[&quot;Begin job completion&lt;br/&gt;and shut down units&quot;]
+
+    classDef action fill:#ffffff,stroke:#97aabe,color:#163042,stroke-width:1px,rx:12,ry:12
+    classDef decision fill:#edf2f6,stroke:#97aabe,color:#163042,stroke-width:1px,stroke-dasharray:2 2,rx:12,ry:12
+    class I,R,ER,U,P,H,HP,D,W,F action
+    class E,A,AU,B,C,CU,Q decision
+    style job_actor fill:#f9f9fd,stroke:#dce2ed
+
+    </pre></section>
 <section id="job-lifecycle">
 <h3>Job lifecycle<a class="headerlink" href="#job-lifecycle" title="Link to this heading">¶</a></h3>
 <p>After submission, the job actor calls the controller’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code> hook and begins dispatching tasks. Each executor returns a <code class="docutils literal notranslate"><span class="pre">TaskResult</span></code>. The job actor adds the task’s identity and timing to create a <code class="docutils literal notranslate"><span class="pre">TaskRecord</span></code>, then passes new records to the controller according to its callback policy. The controller can use those results to add more tasks.</p>
-<p>The sequence below shows one job with one unit. Open arrowheads are asynchronous CAF messages; dashed arrows are replies or termination notifications; filled arrowheads are local calls, actor creation, or labelled OS signals.</p>
+<p>The sequence below shows one job with one unit. Open arrowheads are asynchronous CAF messages; dashed arrows are replies or termination notifications; filled arrowheads are local calls, actor creation, or labelled OS signals:</p>
 <pre align="center" class="mermaid align-center">
         ---
 config:

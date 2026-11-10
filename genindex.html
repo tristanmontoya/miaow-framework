@@ -14,6 +14,8 @@
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
 
+import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"
+
 
 
 
@@ -357,6 +359,8 @@ const load = async () => {
 };
 
 
+mermaid.registerLayoutLoaders(elkLayouts);
+
 
 
 
@@ -425,7 +429,7 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow3JobE">miaow::Job (C++ class)</a>
 </li>
-      <li><a href="api.html#_CPPv4IDpEN5miaow3Job8add_taskEv20SimulationUnitHandleNSt6stringEDpRR4Args">miaow::Job::add_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow3Job8add_taskE4Task">[1]</a>
+      <li><a href="api.html#_CPPv4IDpEN5miaow3Job8add_taskE10TaskHandle20SimulationUnitHandleDpRR4Args">miaow::Job::add_task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow3Job8add_taskE4Task">[1]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow3Job8add_unitENSt6stringE14TaskExecutorId">miaow::Job::add_unit (C++ function)</a>
 </li>
@@ -469,6 +473,8 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow15JobSubmissionIdE">miaow::JobSubmissionId (C++ type)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow9output_ofE10TaskHandle">miaow::output_of (C++ function)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow25parse_runtime_cli_optionsEiA_PcR14RuntimeOptions">miaow::parse_runtime_cli_options (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow17print_job_summaryERK9JobRecord">miaow::print_job_summary (C++ function)</a>
@@ -487,21 +493,29 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions20job_request_timeout_E">miaow::RuntimeOptions::job_request_timeout_ (C++ member)</a>
 </li>
-      <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions12max_workers_E">miaow::RuntimeOptions::max_workers_ (C++ member)</a>
+      <li><a href="api.html#_CPPv4NK5miaow14RuntimeOptions11max_workersEv">miaow::RuntimeOptions::max_workers (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions12output_root_E">miaow::RuntimeOptions::output_root_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions14RuntimeOptionsENSt6size_tENSt6chrono12millisecondsENSt6chrono12millisecondsENSt6stringENSt6chrono12millisecondsE">miaow::RuntimeOptions::RuntimeOptions (C++ function)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions15set_max_workersENSt6size_tE">miaow::RuntimeOptions::set_max_workers (C++ function)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions33subprocess_shutdown_grace_period_E">miaow::RuntimeOptions::subprocess_shutdown_grace_period_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow14RuntimeOptions21task_request_timeout_E">miaow::RuntimeOptions::task_request_timeout_ (C++ member)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#_CPPv4N5miaow14SimulationUnitE">miaow::SimulationUnit (C++ class)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow20SimulationUnitHandleE">miaow::SimulationUnitHandle (C++ class)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#_CPPv4N5miaow27SingleTaskPerUnitControllerE">miaow::SingleTaskPerUnitController (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow27SingleTaskPerUnitController8callbackER3JobNSt4spanIK10TaskRecordEENSt4spanIK11UnitFailureEE">miaow::SingleTaskPerUnitController::callback (C++ function)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow27SingleTaskPerUnitController13JobControllerE20TaskGenerationPolicy">miaow::SingleTaskPerUnitController::JobController (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4I0EN5miaow21StaticBmiTaskExecutorE">miaow::StaticBmiTaskExecutor (C++ class)</a>
 </li>
@@ -511,13 +525,15 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task5args_E">miaow::Task::args_ (C++ member)</a>
 </li>
+      <li><a href="api.html#_CPPv4N5miaow4Task13dependencies_E">miaow::Task::dependencies_ (C++ member)</a>
+</li>
       <li><a href="api.html#_CPPv4N5miaow4Task9metadata_E">miaow::Task::metadata_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task10operation_E">miaow::Task::operation_ (C++ member)</a>
 </li>
       <li><a href="api.html#_CPPv4NK5miaow4Task10string_argENSt6size_tE">miaow::Task::string_arg (C++ function)</a>
 </li>
-      <li><a href="api.html#_CPPv4IDpEN5miaow4Task4TaskE20SimulationUnitHandleNSt6stringEDp4Args">miaow::Task::Task (C++ function)</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE20SimulationUnitHandleNSt6stringENSt6vectorIN3caf12config_valueEEE">[1]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskEv">[2]</a>
+      <li><a href="api.html#_CPPv4IDpEN5miaow4Task4TaskE20SimulationUnitHandle10TaskHandleNSt6stringEDp4Args">miaow::Task::Task (C++ function)</a>, <a href="api.html#_CPPv4IDpEN5miaow4Task4TaskE20SimulationUnitHandleNSt6stringEDp4Args">[1]</a>, <a href="api.html#_CPPv4IDpEN5miaow4Task4TaskE20SimulationUnitHandleNSt6vectorI10TaskHandleEENSt6stringEDp4Args">[2]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskE20SimulationUnitHandleNSt6stringENSt6vectorIN3caf12config_valueEEE">[3]</a>, <a href="api.html#_CPPv4N5miaow4Task4TaskEv">[4]</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow4Task10task_name_E">miaow::Task::task_name_ (C++ member)</a>
 </li>
@@ -546,6 +562,10 @@ window.runMermaid = runMermaid;</script>
       <li><a href="api.html#_CPPv4N5miaow20TaskGenerationPolicy12asynchronousE">miaow::TaskGenerationPolicy::asynchronous (C++ enumerator)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow20TaskGenerationPolicy17batch_synchronousE">miaow::TaskGenerationPolicy::batch_synchronous (C++ enumerator)</a>
+</li>
+      <li><a href="api.html#_CPPv4N5miaow10TaskHandleE">miaow::TaskHandle (C++ class)</a>
+</li>
+      <li><a href="api.html#_CPPv4NK5miaow10TaskHandle7task_idEv">miaow::TaskHandle::task_id (C++ function)</a>
 </li>
       <li><a href="api.html#_CPPv4N5miaow6TaskIdE">miaow::TaskId (C++ type)</a>
 </li>

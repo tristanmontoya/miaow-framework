@@ -57,7 +57,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">CITATION.cff</span></code> is the single source for the software version. Use <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0-dev&quot;</span></code> during development and <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0&quot;</span></code> for a release; CMake extracts <code class="docutils literal notranslate"><span class="pre">0.3.0</span></code> and automatically reconfigures when the citation file changes.</p>
-<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds the <code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code> checker, the lifecycle and BMI dispatch test drivers, and the five examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, and <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds the <code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code> checker, the lifecycle and BMI dispatch test drivers, and the six examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>, and <code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
 <p>Run the tests enabled in the current build with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
@@ -132,6 +132,12 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <p>Submits initialization, time queries, two updates, and finalization on one heat unit.</p>
 </td>
 <td><p>Seven tasks succeed on the same unit; model times match 0, 1/6, and 1/3 seconds within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/10_model_coupling/CMakeLists.txt">miaow_example_10_model_coupling</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/10_model_coupling/main.cpp">10_model_coupling/main.cpp</a></p>
+<p>Transfers complete temperature snapshots between two retained heat models using explicit task dependencies.</p>
+</td>
+<td><p>All 22 tasks succeed, temperature fields match the heat stencil at each exchange, and both model clocks reach 0.75 seconds</p></td>
 </tr>
 </tbody>
 </table>
@@ -531,9 +537,9 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <p>The standard regression suite is enabled when <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code> is <code class="docutils literal notranslate"><span class="pre">ON</span></code>, and builds the following additional programs:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code>: the Boost.Test executable that checks saved job records and controller observations.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">miaow_simulation_unit_lifecycle_driver</span></code>: the model-free workload driver for removal, failure recovery, and callback delivery.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">miaow_bmi_dispatch_driver</span></code>: the heat-model workload driver for operation failures and repeated runs across the five BMI execution paths.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, and <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code> example programs, including the heat-model libraries and C++ and Fortran plugins needed by their tests.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow_simulation_unit_lifecycle_driver</span></code>: the model-free workload driver for removal, failure recovery, callback delivery, and task dependencies.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">miaow_bmi_dispatch_driver</span></code>: the heat-model workload driver for operation failures, value transfers, and repeated runs across the five BMI execution paths.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>, and <code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code> example programs, including the heat-model libraries and C++ and Fortran plugins needed by their tests.</p></li>
 </ul>
 <p>The following top-level CMake options are available when building MIAOW:</p>
 <table class="docutils align-default">
@@ -562,7 +568,8 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 <div class="line"><code class="docutils literal notranslate"><span class="pre">00_hello;01_heat;</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi;</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">07_job_controller;</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">09_bmi_operations;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code></div>
 </div>
 </td>
 <td><p>Semicolon-separated list of examples selected by <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES</span></code>; testing includes its required examples independently</p></td>
