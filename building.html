@@ -57,7 +57,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">CITATION.cff</span></code> is the single source for the software version. Use <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0-dev&quot;</span></code> during development and <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">&quot;0.3.0&quot;</span></code> for a release; CMake extracts <code class="docutils literal notranslate"><span class="pre">0.3.0</span></code> and automatically reconfigures when the citation file changes.</p>
-<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds the <code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code> checker, the lifecycle and BMI dispatch test drivers, and the six examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>, and <code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> (the default), CMake builds a Boost.Test checker for each regression workload, the lifecycle and BMI dispatch test drivers, and the six examples required by the standard regression suite: <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>, and <code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code>. Their tests are registered even with <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=OFF</span></code>. See <a class="reference internal" href="#build-options"><span class="std std-ref">Build options</span></a> for the components built in each configuration, and <a class="reference internal" href="#building-examples"><span class="std std-ref">Building examples</span></a> to select additional examples.</p>
 <p>Run the tests enabled in the current build with the following command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </pre></div>
@@ -69,7 +69,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </section>
 <section id="building-examples">
 <span id="id1"></span><h2>Building examples<a class="headerlink" href="#building-examples" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> always includes the five regression examples. <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=ON</span></code> adds the examples selected by <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>; overlapping selections are built once. To build the selected examples without the regression suite:</p>
+<p><code class="docutils literal notranslate"><span class="pre">BUILD_TESTING=ON</span></code> always includes the six regression examples. <code class="docutils literal notranslate"><span class="pre">BUILD_EXAMPLES=ON</span></code> adds the examples selected by <code class="docutils literal notranslate"><span class="pre">MIAOW_EXAMPLES</span></code>; overlapping selections are built once. To build the selected examples without the regression suite:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DBUILD_TESTING<span class="o">=</span>OFF<span class="w"> </span>-DBUILD_EXAMPLES<span class="o">=</span>ON
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
@@ -85,8 +85,8 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>-L<span class="w"> </span>regression<span class="w"> </span>--output-on-failure
 </pre></div>
 </div>
-<p>CTest runs the examples and test drivers, checks exit codes, and uses Boost.Test to validate saved job records. JSON cases in <code class="docutils literal notranslate"><span class="pre">tests/cases</span></code> define inputs and expected results.</p>
-<p>Tests cover BMI execution, unit removal and replacement, and callback delivery. Lifecycle cases run under both callback policies with one and two workers.</p>
+<p>CTest runs Boost.Test checkers using the example and driver job builders. Numerical assertions inspect <code class="docutils literal notranslate"><span class="pre">JobRecord</span></code>; report assertions inspect <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code>. JSON cases in <code class="docutils literal notranslate"><span class="pre">tests/cases</span></code> define inputs, expected failures, and runtime options.</p>
+<p>Tests cover BMI execution, unit removal and replacement, and callback delivery. Lifecycle coverage includes both callback policies and execution with one or two workers.</p>
 <section id="default-example-success-tests">
 <h3>Default example success tests<a class="headerlink" href="#default-example-success-tests" title="Link to this heading">¶</a></h3>
 <p>Examples run with their default inputs.</p>
@@ -104,37 +104,37 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/CMakeLists.txt">miaow_example_00_hello</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
-<p>Runs configurable greeting tasks with an in-process executor.</p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
+<p>Runs configurable greeting tasks with an in-process executor and checks diagnostics on copied records.</p>
 </td>
-<td><p>Saved tasks 0 and 1 succeed with messages <code class="docutils literal notranslate"><span class="pre">hello</span></code> and <code class="docutils literal notranslate"><span class="pre">hello</span> <span class="pre">again</span></code>, names <code class="docutils literal notranslate"><span class="pre">greeting_task_0</span></code> and <code class="docutils literal notranslate"><span class="pre">message_1_task_1</span></code>, and <code class="docutils literal notranslate"><span class="pre">feature_id=greeting</span></code> on task 0</p></td>
+<td><p>Task results 0 and 1 succeed with messages <code class="docutils literal notranslate"><span class="pre">hello</span></code> and <code class="docutils literal notranslate"><span class="pre">hello</span> <span class="pre">again</span></code>; profile labels are <code class="docutils literal notranslate"><span class="pre">greeting</span></code> and <code class="docutils literal notranslate"><span class="pre">message_1</span></code>. Fully populated summaries retain their format. Failed or missing results make <code class="docutils literal notranslate"><span class="pre">all_tasks_succeeded()</span></code> return false; mixed records display <code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">unavailable</span></code> for missing entries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/01_heat/CMakeLists.txt">miaow_example_01_heat</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/01_heat/main.cpp">01_heat/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/01_heat/heat.hpp">01_heat/heat.hpp</a></p>
 <p>Runs the C++ heat model with a statically linked BMI executor.</p>
 </td>
-<td><p>The statically linked C++ heat model completes 120 updates to its configured 20-second end time; its saved task succeeds</p></td>
+<td><p>The statically linked C++ heat model completes 120 updates to its configured 20-second end time; its returned task result succeeds</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/CMakeLists.txt">miaow_example_03_dynamic_bmi</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Submits in-process and subprocess runs for the C++ and Fortran heat-model plugins.</p>
 </td>
 <td><p>All four heat tasks succeed after 40 updates to 10 seconds; each plugin uses distinct task executor IDs for in-process and subprocess execution</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/CMakeLists.txt">miaow_example_07_job_controller</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/main.cpp">07_job_controller/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/job_controller.hpp">07_job_controller/job_controller.hpp</a></p>
 <p>Requests Heron iterations until convergence or the iteration limit.</p>
 </td>
 <td><p>Starting from 1, three Heron estimates match 1.5, 17/12, and 577/408 within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code>; the final residual <code class="docutils literal notranslate"><span class="pre">|x^2</span> <span class="pre">-</span> <span class="pre">2|</span></code> is at most <code class="docutils literal notranslate"><span class="pre">1e-5</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/09_bmi_operations/CMakeLists.txt">miaow_example_09_bmi_operations</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/09_bmi_operations/main.cpp">09_bmi_operations/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/09_bmi_operations/bmi_operations.hpp">09_bmi_operations/bmi_operations.hpp</a></p>
 <p>Submits initialization, time queries, two updates, and finalization on one heat unit.</p>
 </td>
 <td><p>Seven tasks succeed on the same unit; model times match 0, 1/6, and 1/3 seconds within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/10_model_coupling/CMakeLists.txt">miaow_example_10_model_coupling</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/10_model_coupling/main.cpp">10_model_coupling/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/10_model_coupling/model_coupling.hpp">10_model_coupling/model_coupling.hpp</a></p>
 <p>Transfers complete temperature snapshots between two retained heat models using explicit task dependencies.</p>
 </td>
 <td><p>All 22 tasks succeed, temperature fields match the heat stencil at each exchange, and both model clocks reach 0.75 seconds</p></td>
@@ -159,28 +159,28 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_empty.json">miaow_example_00_hello_empty</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
-<p>Submits an empty job.</p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
+<p>Submits an empty job and checks diagnostics on a copy containing one missing result.</p>
 </td>
-<td><p>Submitting a job with an empty task list succeeds and writes <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> with an empty <code class="docutils literal notranslate"><span class="pre">tasks</span></code> array</p></td>
+<td><p>Submitting a job with an empty task list succeeds and writes <code class="docutils literal notranslate"><span class="pre">job_record.json</span></code> with an empty <code class="docutils literal notranslate"><span class="pre">profile.tasks</span></code> array. The empty record satisfies <code class="docutils literal notranslate"><span class="pre">all_tasks_succeeded()</span></code>; the copy returns false and displays <code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">unavailable</span></code> in its summary.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_zero_tolerance.json">miaow_example_03_dynamic_bmi_zero_tolerance</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Submits in-process and subprocess runs for the C++ and Fortran heat-model plugins.</p>
 </td>
 <td><p>With zero clock tolerance, all four tasks succeed after forty 0.25-second updates reach 10 seconds exactly</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_zero_duration.json">miaow_example_03_dynamic_bmi_zero_duration</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Submits in-process and subprocess runs for the C++ and Fortran heat-model plugins.</p>
 </td>
 <td><p>With initial and end times both zero, all four tasks succeed with zero updates</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/controller_small_values.json">miaow_example_07_job_controller_small_values</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/main.cpp">07_job_controller/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/job_controller.hpp">07_job_controller/job_controller.hpp</a></p>
 <p>Requests Heron iterations until convergence or the iteration limit.</p>
 </td>
-<td><p>For radicand <code class="docutils literal notranslate"><span class="pre">2e-16</span></code>, saved estimates match <code class="docutils literal notranslate"><span class="pre">1e-8</span> <span class="pre">*</span> <span class="pre">[1.5,</span> <span class="pre">17/12,</span> <span class="pre">577/408]</span></code> within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code> relative error; the final residual is positive and at most <code class="docutils literal notranslate"><span class="pre">1e-21</span></code></p></td>
+<td><p>For radicand <code class="docutils literal notranslate"><span class="pre">2e-16</span></code>, returned estimates match <code class="docutils literal notranslate"><span class="pre">1e-8</span> <span class="pre">*</span> <span class="pre">[1.5,</span> <span class="pre">17/12,</span> <span class="pre">577/408]</span></code> within <code class="docutils literal notranslate"><span class="pre">1e-14</span></code> relative error; the final residual is positive and at most <code class="docutils literal notranslate"><span class="pre">1e-21</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -202,103 +202,103 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_missing_message.json">miaow_example_00_hello_missing_message</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Submits a task without a message followed by a valid greeting, using one worker slot.</p>
 </td>
 <td><p>With one concurrent task slot, an operation without a message fails; the following unit’s operation succeeds with message <code class="docutils literal notranslate"><span class="pre">recovered</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_unknown_executor.json">miaow_example_00_hello_unknown_executor</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Submits greetings using an unregistered executor and a valid executor.</p>
 </td>
 <td><p>A unit selecting unregistered executor 999 fails during activation; the default controller fails the job and no job record is saved</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_duplicate_feature_id.json">miaow_example_00_hello_duplicate_feature_id</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Attempts to declare two greeting units with the same <code class="docutils literal notranslate"><span class="pre">feature_id=greeting</span></code>.</p>
 </td>
 <td><p>Declaring two units with <code class="docutils literal notranslate"><span class="pre">feature_id=greeting</span></code> produces a duplicate unit-label error; no job record is saved</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_feature_id_slash.json">miaow_example_00_hello_feature_id_slash</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Uses a greeting feature label containing a forward slash.</p>
 </td>
-<td><p>A task with <code class="docutils literal notranslate"><span class="pre">feature_id=greeting/1</span></code> is rejected for containing a path separator; no job record is saved</p></td>
+<td><p>A unit with <code class="docutils literal notranslate"><span class="pre">feature_id=greeting/1</span></code> is rejected for containing a path separator; no job record is saved</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_feature_id_backslash.json">miaow_example_00_hello_feature_id_backslash</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Uses a greeting feature label containing a backslash.</p>
 </td>
-<td><p>A task whose feature ID contains a backslash is rejected for containing a path separator; no job record is saved</p></td>
+<td><p>A unit whose feature ID contains a backslash is rejected for containing a path separator; no job record is saved</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_task_timeout.json">miaow_example_00_hello_task_timeout</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Runs a 2.5-second greeting with a 1-second task deadline.</p>
 </td>
 <td><p>A 2.5-second operation exceeds its 1-second deadline; the default controller fails the job with <code class="docutils literal notranslate"><span class="pre">request_timeout</span></code> and saves no job record. Shutdown waits for the native call to return</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_job_timeout.json">miaow_example_00_hello_job_timeout</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Queues two 2.5-second greetings with one worker slot and a 1-second job deadline.</p>
 </td>
 <td><p>A 1-second job timeout marks the active 2.5-second task and a queued task failed; the queued record retains its target, has no dispatch offset, and has a zero run time</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_invalid_max_workers.json">miaow_example_00_hello_invalid_max_workers</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Passes <code class="docutils literal notranslate"><span class="pre">--max_workers</span> <span class="pre">0</span></code> to the greeting example.</p>
 </td>
 <td><p><code class="docutils literal notranslate"><span class="pre">--max_workers</span> <span class="pre">0</span></code> reports <code class="docutils literal notranslate"><span class="pre">requires</span> <span class="pre">a</span> <span class="pre">positive</span> <span class="pre">integer</span></code>; no job record is saved</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_invalid_task_timeout.json">miaow_example_00_hello_invalid_task_timeout</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Passes <code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span> <span class="pre">0</span></code> to the greeting example.</p>
 </td>
 <td><p><code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span> <span class="pre">0</span></code> reports <code class="docutils literal notranslate"><span class="pre">requires</span> <span class="pre">a</span> <span class="pre">positive</span> <span class="pre">integer</span></code>; no job record is saved</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/hello_invalid_job_timeout.json">miaow_example_00_hello_invalid_job_timeout</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/main.cpp">00_hello/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/00_hello/hello.hpp">00_hello/hello.hpp</a></p>
 <p>Passes <code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span> <span class="pre">0</span></code> to the greeting example.</p>
 </td>
 <td><p><code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span> <span class="pre">0</span></code> reports <code class="docutils literal notranslate"><span class="pre">requires</span> <span class="pre">a</span> <span class="pre">positive</span> <span class="pre">integer</span></code>; no job record is saved</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_missing_cpp_plugin.json">miaow_example_03_dynamic_bmi_missing_cpp_plugin</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Submits four plugin tasks with a missing C++ plugin path and a valid Fortran plugin path.</p>
 </td>
 <td><p>A nonexistent C++ plugin path fails both C++ tasks; both Fortran tasks use a valid plugin path and succeed after 40 updates</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_missing_fortran_plugin.json">miaow_example_03_dynamic_bmi_missing_fortran_plugin</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Submits four plugin tasks with a missing Fortran plugin path and a valid C++ plugin path.</p>
 </td>
 <td><p>A nonexistent Fortran plugin path fails both Fortran tasks; both C++ tasks use a valid plugin path and succeed after 40 updates</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_invalid_tolerance.json">miaow_example_03_dynamic_bmi_invalid_tolerance</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Sets a 1-second clock tolerance for heat models with a 0.25-second time step.</p>
 </td>
 <td><p>A 1-second clock tolerance exceeds half the 0.25-second time step; all four tasks fail with zero updates</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_negative_tolerance.json">miaow_example_03_dynamic_bmi_negative_tolerance</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Sets a clock tolerance of -1 second for all four plugin tasks.</p>
 </td>
 <td><p>A clock tolerance of -1 second fails validation; all four tasks fail with zero updates</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_tolerance_boundary.json">miaow_example_03_dynamic_bmi_tolerance_boundary</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Sets clock tolerance to half the 0.25-second model time step.</p>
 </td>
 <td><p>A clock tolerance of 0.125 seconds equals half the 0.25-second time step; all four tasks fail with zero updates</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_overshoot.json">miaow_example_03_dynamic_bmi_overshoot</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/main.cpp">03_dynamic_bmi/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/03_dynamic_bmi/dynamic_bmi.hpp">03_dynamic_bmi/dynamic_bmi.hpp</a></p>
 <p>Sets the model end time to 0.1 seconds with a 0.25-second time step.</p>
 </td>
 <td><p>With end time 0.1 seconds, all four tasks fail after one 0.25-second update with <code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">passed</span> <span class="pre">the</span> <span class="pre">end</span> <span class="pre">time</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/controller_non_convergence.json">miaow_example_07_job_controller_non_convergence</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/main.cpp">07_job_controller/main.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/examples/07_job_controller/job_controller.hpp">07_job_controller/job_controller.hpp</a></p>
 <p>Limits the Heron controller to one iteration.</p>
 </td>
 <td><p>With the iteration limit set to 1, the controller reports non-convergence after its first iteration; the program exits with code 1 and saves no job record</p></td>
@@ -310,8 +310,8 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 <h3>Tests using dedicated drivers<a class="headerlink" href="#tests-using-dedicated-drivers" title="Link to this heading">¶</a></h3>
 <section id="bmi-task-dispatch-driver">
 <h4>BMI task dispatch driver<a class="headerlink" href="#bmi-task-dispatch-driver" title="Link to this heading">¶</a></h4>
-<p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/bmi_task_dispatch_driver.cpp</span></code>. The five execution paths are a statically linked C++ model, C++ and Fortran plugins in-process, and C++ and Fortran plugins in subprocesses.</p>
-<p>The initialization and finalization failure cases use a custom exception in the static test model. Its destructor records whether the model is still alive, and the saved-record checker requires exception destruction before model destruction. This checks the lifetime ordering needed to keep plugin exception code available.</p>
+<p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/bmi_task_dispatch.hpp</span></code>. The five execution paths are a statically linked C++ model, C++ and Fortran plugins in-process, and C++ and Fortran plugins in subprocesses.</p>
+<p>The initialization and finalization failure cases use a custom exception in the static test model. Its destructor records whether the model is still alive, and the checker requires exception destruction before model destruction. This checks the lifetime ordering needed to keep plugin exception code available.</p>
 <table class="regression-tests docutils align-default">
 <colgroup>
 <col style="width: 34.0%" />
@@ -326,73 +326,67 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_unknown_operation.json">miaow_bmi_task_dispatch</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Submits an unsupported operation, then a valid run, on each of five BMI execution paths.</p>
 </td>
 <td><p>Five execution paths each reject an unknown operation and then complete a valid run after 40 updates</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_static_lifecycle.json">miaow_bmi_static_lifecycle</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Rejects invalid lifecycle operations on one static heat model, then finalizes and reinitializes it.</p>
 </td>
 <td><p>Updates outside an initialized session, duplicate initialization, and a complete run during a session fail; the active clock is preserved, and a fresh session starts at zero</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_dynamic_cpp_lifecycle.json">miaow_bmi_dynamic_cpp_lifecycle</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Runs the lifecycle sequence with an in-process C++ plugin.</p>
 </td>
 <td><p>The same lifecycle guards hold; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_dynamic_fortran_lifecycle.json">miaow_bmi_dynamic_fortran_lifecycle</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Runs the lifecycle sequence with an in-process Fortran plugin.</p>
 </td>
 <td><p>The same lifecycle guards hold; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_subprocess_cpp_lifecycle.json">miaow_bmi_subprocess_cpp_lifecycle</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Runs the lifecycle sequence with a C++ plugin in a persistent subprocess.</p>
 </td>
 <td><p>Model time persists between tasks; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_subprocess_fortran_lifecycle.json">miaow_bmi_subprocess_fortran_lifecycle</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Runs the lifecycle sequence with a Fortran plugin in a persistent subprocess.</p>
 </td>
 <td><p>Model time persists between tasks; rejected operations preserve time 0.25 seconds, and reinitialization starts at zero</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_initialize_failure.json">miaow_bmi_initialize_failure</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Makes the first instance of a controllable static heat model throw from <code class="docutils literal notranslate"><span class="pre">Initialize()</span></code>.</p>
 </td>
 <td><p>The failed initialization destroys the exception before releasing the model, without finalization. Updates, queries, and finalization report no initialized model; a fresh session works and is finalized and destroyed once.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_update_failure.json">miaow_bmi_update_failure</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Makes the first instance of a controllable static heat model throw from <code class="docutils literal notranslate"><span class="pre">Update()</span></code>.</p>
 </td>
 <td><p>Updates and queries remain blocked until finalization, a fresh session works, and each model is finalized and destroyed once. The existing job record checker verifies the task results and per-model counts collected after unit shutdown.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_get_current_time_failure.json">miaow_bmi_get_current_time_failure</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Makes the first instance of the same test model throw from <code class="docutils literal notranslate"><span class="pre">GetCurrentTime()</span></code>.</p>
 </td>
 <td><p>Both updates and time queries remain blocked until finalization, with no additional model calls. A fresh model updates and reports time 0.25 seconds, and both instances are finalized and destroyed once.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/bmi_finalize_failure.json">miaow_bmi_finalize_failure</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Makes the first instance of the same test model throw from <code class="docutils literal notranslate"><span class="pre">Finalize()</span></code>.</p>
 </td>
 <td><p>The failed finalization destroys the exception before releasing the model; subsequent operations report no initialized model. Reinitialization succeeds, the failed instance is never finalized again, and unit shutdown finalizes only the second instance.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run.json">miaow_bmi_repeated_run</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
-<p>Submits two successive runs per unit across five BMI execution paths.</p>
-</td>
-<td><p>Five execution paths each complete two successive runs on the same unit, with 40 updates per run</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run_concurrent.json">miaow_bmi_repeated_run_concurrent</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch_driver.cpp">bmi_task_dispatch_driver.cpp</a></p>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/dynamic_repeated_run_concurrent.json">miaow_bmi_repeated_run_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/bmi_task_dispatch.hpp">bmi_task_dispatch.hpp</a></p>
 <p>Submits two successive runs per unit across five BMI execution paths.</p>
 </td>
 <td><p>With three worker slots, each of the five units completes two successful runs of 40 updates.</p></td>
@@ -402,7 +396,7 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </section>
 <section id="simulation-unit-lifecycle-driver">
 <h4>Simulation unit lifecycle driver<a class="headerlink" href="#simulation-unit-lifecycle-driver" title="Link to this heading">¶</a></h4>
-<p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/simulation_unit_lifecycle_driver.cpp</span></code>.</p>
+<p>These cases use <code class="docutils literal notranslate"><span class="pre">tests/simulation_unit_lifecycle.hpp</span></code>.</p>
 <table class="regression-tests docutils align-default">
 <colgroup>
 <col style="width: 34.0%" />
@@ -417,61 +411,55 @@ ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class=
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work.json">miaow_simulation_unit_removal_with_queued_work</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Queues work, removes the target unit, and continues work on another unit.</p>
 </td>
-<td><p>With one worker slot and asynchronous callbacks, accepted target work drains, new work is rejected, repeated removal is harmless, every task is reported once, and the other unit retains its handle and state.</p></td>
+<td><p>With one worker slot and asynchronous callbacks, accepted target work drains, new work is rejected, repeated removal is harmless, every task is reported once, and the other unit retains its ID and state.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work_concurrent.json">miaow_simulation_unit_removal_with_queued_work_concurrent</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Queues work, removes the target unit, and continues work on another unit.</p>
 </td>
-<td><p>With two worker slots and asynchronous callbacks, accepted target work drains, new work is rejected, repeated removal is harmless, every task is reported once, and the other unit retains its handle and state.</p></td>
+<td><p>With two worker slots and asynchronous callbacks, accepted target work drains, new work is rejected, repeated removal is harmless, every task is reported once, and the other unit retains its ID and state.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work_batch_synchronous.json">miaow_simulation_unit_removal_with_queued_work_batch_synchronous</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Queues work, removes the target unit, and continues work on another unit.</p>
 </td>
-<td><p>With one worker slot and batch-synchronous callbacks, one callback reports all four tasks with no unit failures; accepted work drains, new work is rejected, and the other unit retains its handle and state.</p></td>
+<td><p>With one worker slot and batch-synchronous callbacks, one callback reports all four tasks with no unit failures; accepted work drains, new work is rejected, and the other unit retains its ID and state.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_removal_with_queued_work_batch_synchronous_concurrent.json">miaow_simulation_unit_removal_with_queued_work_batch_synchronous_concurrent</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
-<p>Queues work, removes the target unit, and continues work on another unit.</p>
-</td>
-<td><p>With two worker slots and batch-synchronous callbacks, one callback reports all four tasks with no unit failures; accepted work drains, new work is rejected, and the other unit retains its handle and state.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure.json">miaow_simulation_unit_replacement_after_failure</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure.json">miaow_simulation_unit_replacement_after_failure</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Injects executor-construction failure, replaces the unit, and continues work.</p>
 </td>
-<td><p>With one worker slot and asynchronous callbacks, dispatched and queued target tasks fail once with one unit-failure report; the replacement reuses the label with a new handle and fresh state, while the other unit retains its handle and state.</p></td>
+<td><p>With one worker slot and asynchronous callbacks, dispatched and queued target tasks fail once with one unit-failure report; the replacement reuses the label with a new ID and fresh state, while the other unit retains its ID and state.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_concurrent.json">miaow_simulation_unit_replacement_after_failure_concurrent</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_concurrent.json">miaow_simulation_unit_replacement_after_failure_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Injects executor-construction failure, replaces the unit, and continues work.</p>
 </td>
-<td><p>With two worker slots and asynchronous callbacks, dispatched and queued target tasks fail once with one unit-failure report; the replacement reuses the label with a new handle and fresh state, while the other unit retains its handle and state.</p></td>
+<td><p>With two worker slots and asynchronous callbacks, dispatched and queued target tasks fail once with one unit-failure report; the replacement reuses the label with a new ID and fresh state, while the other unit retains its ID and state.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_batch_synchronous.json">miaow_simulation_unit_replacement_after_failure_batch_synchronous</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_batch_synchronous.json">miaow_simulation_unit_replacement_after_failure_batch_synchronous</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Injects executor-construction failure, replaces the unit, and continues work.</p>
 </td>
 <td><p>With one worker slot, the first batch callback reports two failed tasks, one successful task, and one unit failure; the second reports three successful tasks and no unit failures.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_batch_synchronous_concurrent.json">miaow_simulation_unit_replacement_after_failure_batch_synchronous_concurrent</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a></p>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/unit_replacement_after_failure_batch_synchronous_concurrent.json">miaow_simulation_unit_replacement_after_failure_batch_synchronous_concurrent</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a></p>
 <p>Injects executor-construction failure, replaces the unit, and continues work.</p>
 </td>
 <td><p>With two worker slots, the first batch callback reports two failed tasks, one successful task, and one unit failure; the second reports three successful tasks and no unit failures.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/subprocess_shutdown_within_grace.json">miaow_subprocess_shutdown_within_grace</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a> and <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/subprocess_shutdown_worker.cpp">subprocess_shutdown_worker.cpp</a></p>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/subprocess_shutdown_within_grace.json">miaow_subprocess_shutdown_within_grace</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a> and <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/subprocess_shutdown_worker.cpp">subprocess_shutdown_worker.cpp</a></p>
 <p>Times out a child task that subsequently returns and completes destructor cleanup within the shutdown grace period.</p>
 </td>
 <td><p>The child exits normally and writes its cleanup marker. The active and queued tasks fail once with one unit-failure report, the queued task never dispatches, new work on the failed unit is rejected, and the worker slot becomes available only after the child is reaped.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/subprocess_shutdown_grace_expired.json">miaow_subprocess_shutdown_grace_expired</a></p></td>
-<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle_driver.cpp">simulation_unit_lifecycle_driver.cpp</a> and <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/subprocess_shutdown_worker.cpp">subprocess_shutdown_worker.cpp</a></p>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/cases/subprocess_shutdown_grace_expired.json">miaow_subprocess_shutdown_grace_expired</a></p></td>
+<td><p><a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/simulation_unit_lifecycle.hpp">simulation_unit_lifecycle.hpp</a> and <a class="reference external" href="https://github.com/uofs-simlab/miaow-framework/blob/main/tests/subprocess_shutdown_worker.cpp">subprocess_shutdown_worker.cpp</a></p>
 <p>Times out a child task whose destructor cleanup exceeds the configured grace period.</p>
 </td>
 <td><p>The child starts cleanup but is terminated by SIGKILL before finishing it. The timeout remains the failure cause, the child is reaped, queued work never dispatches, and the independent unit can then use the worker slot.</p></td>
@@ -508,7 +496,7 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_program</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">miaow::miaow</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The imported target supplies the installed MIAOW include directory, requests C++20, and links the required CAF and procedural BMI bridge libraries. Source files can include <code class="docutils literal notranslate"><span class="pre">miaow.hpp</span></code>, <code class="docutils literal notranslate"><span class="pre">miaow_bmi.hpp</span></code>, and <code class="docutils literal notranslate"><span class="pre">miaow_io.hpp</span></code> as needed.</p>
+<p>The imported target supplies the installed MIAOW include directory, requests C++20, and links the required CAF, nlohmann/json, and procedural BMI bridge libraries. Source files can include <code class="docutils literal notranslate"><span class="pre">miaow.hpp</span></code>, <code class="docutils literal notranslate"><span class="pre">miaow_bmi.hpp</span></code>, and <code class="docutils literal notranslate"><span class="pre">miaow_io.hpp</span></code> as needed.</p>
 <p>A custom subprocess worker is another executable linked against <code class="docutils literal notranslate"><span class="pre">miaow::miaow</span></code>:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">my_worker</span><span class="w"> </span><span class="s">worker.cpp</span><span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_worker</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">miaow::miaow</span><span class="p">)</span>
@@ -519,7 +507,7 @@ cmake<span class="w"> </span>--install<span class="w"> </span>build
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 </pre></div>
 </div>
-<p>The MIAOW package locates the required CAF components when <code class="docutils literal notranslate"><span class="pre">find_package(miaow)</span></code> runs. CAF must be discoverable through the system installation, <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, or the downstream project’s CMake toolchain. <a class="reference external" href="https://json.nlohmann.me/">nlohmann/json</a> is a private header-only build dependency and is not required by installed consumers. The installed procedural BMI bridge depends on a compatible Fortran runtime library, such as <code class="docutils literal notranslate"><span class="pre">libgfortran</span></code> when the bridge is built with GNU Fortran. This runtime library must remain available when an application that links to MIAOW runs, but compiling the downstream project does not require a Fortran compiler.</p>
+<p>The MIAOW package locates the required CAF components and <a class="reference external" href="https://json.nlohmann.me/">nlohmann/json</a> when <code class="docutils literal notranslate"><span class="pre">find_package(miaow)</span></code> runs. Both packages must be discoverable through the system installation, <code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, or the downstream project’s CMake toolchain. Nlohmann/json supplies the return type of <code class="docutils literal notranslate"><span class="pre">miaow::to_json()</span></code> in <code class="docutils literal notranslate"><span class="pre">miaow_io.hpp</span></code>. The installed procedural BMI bridge depends on a compatible Fortran runtime library, such as <code class="docutils literal notranslate"><span class="pre">libgfortran</span></code> when the bridge is built with GNU Fortran. This runtime library must remain available when an application that links to MIAOW runs, but compiling the downstream project does not require a Fortran compiler.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Configure <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> before building so <code class="docutils literal notranslate"><span class="pre">bmi_subprocess_executable_path()</span></code> can locate the installed worker. Changing only <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span> <span class="pre">build</span> <span class="pre">--prefix</span> <span class="pre">&lt;path&gt;</span></code> does not update this lookup. If you relocate the installation, reconfigure and rebuild MIAOW or pass the installed worker path directly to <code class="docutils literal notranslate"><span class="pre">TaskExecutorRegistry::add_subprocess()</span></code>.</p>
@@ -536,7 +524,7 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build
 </ul>
 <p>The standard regression suite is enabled when <code class="docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code> is <code class="docutils literal notranslate"><span class="pre">ON</span></code>, and builds the following additional programs:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">miaow_job_record_checks</span></code>: the Boost.Test executable that checks saved job records and controller observations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;target&gt;_checks</span></code>: Boost.Test executables sharing the corresponding example or driver workload and its model linkage. They check numerical results in process and inspect the final report schema and controller observations.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">miaow_simulation_unit_lifecycle_driver</span></code>: the model-free workload driver for removal, failure recovery, callback delivery, and task dependencies.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">miaow_bmi_dispatch_driver</span></code>: the heat-model workload driver for operation failures, value transfers, and repeated runs across the five BMI execution paths.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">00_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">01_heat</span></code>, <code class="docutils literal notranslate"><span class="pre">03_dynamic_bmi</span></code>, <code class="docutils literal notranslate"><span class="pre">07_job_controller</span></code>, <code class="docutils literal notranslate"><span class="pre">09_bmi_operations</span></code>, and <code class="docutils literal notranslate"><span class="pre">10_model_coupling</span></code> example programs, including the heat-model libraries and C++ and Fortran plugins needed by their tests.</p></li>
