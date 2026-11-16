@@ -160,6 +160,31 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow3Job17release_task_dataE6TaskId">
+<span id="_CPPv3N5miaow3Job17release_task_dataE6TaskId"></span><span id="_CPPv2N5miaow3Job17release_task_dataE6TaskId"></span><span id="miaow::Job::release_task_data__TaskId"></span><span class="target" id="classmiaow_1_1Job_1a8c0cb5538f9ec86f527fe48178d3c94e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">release_task_data</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow6TaskIdE" title="miaow::TaskId"><span class="n"><span class="pre">TaskId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow3Job17release_task_dataE6TaskId" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Clear a completed task’s payload while retaining its task and result entries. Call from a controller hook after the data’s final use; repeated release is harmless.</p>
+<p>Cleared fields for task_id:<ul class="simple">
+<li><p><a class="reference internal" href="#structmiaow_1_1Task_1a30195b3a84b8011f85d682a4e7637ae9"><span class="std std-ref">Task::args_</span></a>: destroy arguments and release the vector’s allocated storage.</p></li>
+<li><p><a class="reference internal" href="#structmiaow_1_1Task_1a6ca97b3d358028d64459b806240bcf87"><span class="std std-ref">Task::dependencies_</span></a>: remove prerequisite IDs and release allocated storage.</p></li>
+<li><p>Task::output_references_: erase all argument-position / producer-ID map entries.</p></li>
+<li><p><a class="reference internal" href="#structmiaow_1_1TaskResult_1a80f1fc3d4aaef8cf1252629921b27539"><span class="std std-ref">TaskResult::output_</span></a>: destroy the stored value and replace it with null.</p></li>
+</ul>
+</p>
+<p>Retained fields:<ul class="simple">
+<li><p><a class="reference internal" href="#structmiaow_1_1Task_1ad3cf15cfecf555cf717efca8d73c34f3"><span class="std std-ref">Task::unit_id_</span></a>, <a class="reference internal" href="#structmiaow_1_1Task_1adde74a9406531cb43b0b485db468c0fc"><span class="std std-ref">Task::operation_</span></a>, and <a class="reference internal" href="#structmiaow_1_1Task_1ac77991730a4f652ab417e51506810513"><span class="std std-ref">Task::task_output_dir_</span></a> (already empty).</p></li>
+<li><p><a class="reference internal" href="#structmiaow_1_1TaskResult_1a941188b88705ffe782a85ef879e85dc7"><span class="std std-ref">TaskResult::status_</span></a>, <a class="reference internal" href="#structmiaow_1_1TaskResult_1a282175a0bc0a244994ee72a175a0dae8"><span class="std std-ref">TaskResult::message_</span></a>, and <a class="reference internal" href="#structmiaow_1_1TaskResult_1a354021c4ee1aed9b62124c232d6ce406"><span class="std std-ref">TaskResult::artifact_paths_</span></a>.</p></li>
+<li><p><a class="reference internal" href="#structmiaow_1_1TaskTiming_1a0ff7e2ddcf39bd4e1f55e7d9498f170a"><span class="std std-ref">TaskTiming::dispatch_offset_ns_</span></a> and <a class="reference internal" href="#structmiaow_1_1TaskTiming_1ac80fb00582e3b728620802b03e14406b"><span class="std std-ref">TaskTiming::completion_offset_ns_</span></a>. The task ID remains the same vector index; no task, result, or timing slot is erased.</p></li>
+</ul>
+</p>
+<p>Released output is null in <a class="reference internal" href="#classmiaow_1_1Job_1a8869fffb169f3e0b40b8f3e532f06726"><span class="std std-ref">result()</span></a> and the final <a class="reference internal" href="#structmiaow_1_1JobRecord"><span class="std std-ref">JobRecord</span></a>. New output references are rejected; queued consumers that still need the output fail without dispatch. Completion-only dependencies remain valid. Borrowed payload references are invalidated. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">logic_error</span></span></span> – if called outside a running job or before task completion. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow3Job6timingE6TaskId">
 <span id="_CPPv3NK5miaow3Job6timingE6TaskId"></span><span id="_CPPv2NK5miaow3Job6timingE6TaskId"></span><span id="miaow::Job::timing__TaskIdC"></span><span class="target" id="classmiaow_1_1Job_1aa83b29b84bb73e73c923a911ce8dca6f"></span><a class="reference internal" href="#_CPPv4N5miaow10TaskTimingE" title="miaow::TaskTiming"><span class="n"><span class="pre">TaskTiming</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timing</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5miaow6TaskIdE" title="miaow::TaskId"><span class="n"><span class="pre">TaskId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">task_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow3Job6timingE6TaskId" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Return event offsets by value, including -1 for events that have not occurred. </p>
@@ -886,7 +911,7 @@ Spans are borrowed for this call and must not be retained. Asynchronous callback
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow15BmiTaskExecutor7executeERK4Task">
 <span id="_CPPv3N5miaow15BmiTaskExecutor7executeERK4Task"></span><span id="_CPPv2N5miaow15BmiTaskExecutor7executeERK4Task"></span><span id="miaow::BmiTaskExecutor::execute__TaskCR"></span><span class="target" id="classmiaow_1_1BmiTaskExecutor_1a619fff8beffd23bb9d7dcf1a659ea224"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">caf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow10TaskResultE" title="miaow::TaskResult"><span class="n"><span class="pre">TaskResult</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">execute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow4TaskE" title="miaow::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">task</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5miaow15BmiTaskExecutor7executeERK4Task" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Execute <code class="docutils literal notranslate"><span class="pre">run</span></code>, lifecycle/time operations, complete/indexed reads, or complete writes. </p>
+<dd><p>Execute a serial <code class="docutils literal notranslate"><span class="pre">sequence</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, or an individual BMI operation. </p>
 </dd></dl>
 
 </div>
