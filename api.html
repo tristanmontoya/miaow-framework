@@ -120,6 +120,23 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5miaow3Job11max_workersEv">
+<span id="_CPPv3NK5miaow3Job11max_workersEv"></span><span id="_CPPv2NK5miaow3Job11max_workersEv"></span><span id="miaow::Job::max_workersC"></span><span class="target" id="classmiaow_1_1Job_1af2c0ec2d842d94d27b3cd2739eb87b23"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_workers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow3Job11max_workersEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Maximum occupied task slots, including timed-out native calls still running. An unset limit reads as one before submission and takes the runtime default on submission. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow3Job15set_max_workersENSt6size_tE">
+<span id="_CPPv3N5miaow3Job15set_max_workersENSt6size_tE"></span><span id="_CPPv2N5miaow3Job15set_max_workersENSt6size_tE"></span><span id="miaow::Job::set_max_workers__std::s"></span><span class="target" id="classmiaow_1_1Job_1a9994c0dc198303d468f416a4d8444c5d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_workers</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">workers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow3Job15set_max_workersENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Set this job’s limit on occupied task slots. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if workers is zero. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow3Job8add_unitENSt6stringE14TaskExecutorId">
 <span id="_CPPv3N5miaow3Job8add_unitENSt6stringE14TaskExecutorId"></span><span id="_CPPv2N5miaow3Job8add_unitENSt6stringE14TaskExecutorId"></span><span id="miaow::Job::add_unit__ss.TaskExecutorId"></span><span class="target" id="classmiaow_1_1Job_1ae185483c7b24d0305964610300445fb5"></span><a class="reference internal" href="#_CPPv4N5miaow16SimulationUnitIdE" title="miaow::SimulationUnitId"><span class="n"><span class="pre">SimulationUnitId</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_unit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">feature_id</span></span>, <a class="reference internal" href="#_CPPv4N5miaow14TaskExecutorIdE" title="miaow::TaskExecutorId"><span class="n"><span class="pre">TaskExecutorId</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">executor_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow3Job8add_unitENSt6stringE14TaskExecutorId" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Prepare a unit under a feature label unique among units accepting new work </p>
@@ -166,7 +183,7 @@
 <p>Cleared fields for task_id:<ul class="simple">
 <li><p><a class="reference internal" href="#structmiaow_1_1Task_1a30195b3a84b8011f85d682a4e7637ae9"><span class="std std-ref">Task::args_</span></a>: destroy arguments and release the vector’s allocated storage.</p></li>
 <li><p><a class="reference internal" href="#structmiaow_1_1Task_1a6ca97b3d358028d64459b806240bcf87"><span class="std std-ref">Task::dependencies_</span></a>: remove prerequisite IDs and release allocated storage.</p></li>
-<li><p>Task::output_references_: erase all argument-position / producer-ID map entries.</p></li>
+<li><p><a class="reference internal" href="#structmiaow_1_1Task_1aa7275a15360209db04bea8f8a00d4135"><span class="std std-ref">Task::output_references_</span></a>: erase all argument-position / producer-ID map entries.</p></li>
 <li><p><a class="reference internal" href="#structmiaow_1_1TaskResult_1a80f1fc3d4aaef8cf1252629921b27539"><span class="std std-ref">TaskResult::output_</span></a>: destroy the stored value and replace it with null.</p></li>
 </ul>
 </p>
@@ -305,7 +322,13 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow4Task13dependencies_E">
 <span id="_CPPv3N5miaow4Task13dependencies_E"></span><span id="_CPPv2N5miaow4Task13dependencies_E"></span><span id="miaow::Task::dependencies___std::vector:TaskId:"></span><span class="target" id="structmiaow_1_1Task_1a6ca97b3d358028d64459b806240bcf87"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5miaow6TaskIdE" title="miaow::TaskId"><span class="n"><span class="pre">TaskId</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dependencies_</span></span></span><a class="headerlink" href="#_CPPv4N5miaow4Task13dependencies_E" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Parent-job scheduling data; only resolved arguments are sent to executors. </p>
+<dd><p>Earlier task IDs in this job that must all succeed before dispatch Used only by the parent job; not sent to executors </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5miaow4Task18output_references_E">
+<span id="_CPPv3N5miaow4Task18output_references_E"></span><span id="_CPPv2N5miaow4Task18output_references_E"></span><span id="miaow::Task::output_references___std::map:std::s.TaskId:"></span><span class="target" id="structmiaow_1_1Task_1aa7275a15360209db04bea8f8a00d4135"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5miaow6TaskIdE" title="miaow::TaskId"><span class="n"><span class="pre">TaskId</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_references_</span></span></span><a class="headerlink" href="#_CPPv4N5miaow4Task18output_references_E" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Map from indices in args_ (0 = first argument) to producer task IDs Before dispatch, the parent job replaces args_[index] with that producer’s output </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -735,13 +758,13 @@ Spans are borrowed for this call and must not be retained. Asynchronous callback
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5miaow14RuntimeOptions11max_workersEv">
 <span id="_CPPv3NK5miaow14RuntimeOptions11max_workersEv"></span><span id="_CPPv2NK5miaow14RuntimeOptions11max_workersEv"></span><span id="miaow::RuntimeOptions::max_workersC"></span><span class="target" id="structmiaow_1_1RuntimeOptions_1a12152a4fc51faa5b79b3563a9e6c4267"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_workers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5miaow14RuntimeOptions11max_workersEv" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Maximum occupied task slots per job, including timed-out native calls still running. </p>
+<dd><p>Default maximum occupied task slots for jobs without an explicit limit. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5miaow14RuntimeOptions15set_max_workersENSt6size_tE">
 <span id="_CPPv3N5miaow14RuntimeOptions15set_max_workersENSt6size_tE"></span><span id="_CPPv2N5miaow14RuntimeOptions15set_max_workersENSt6size_tE"></span><span id="miaow::RuntimeOptions::set_max_workers__std::s"></span><span class="target" id="structmiaow_1_1RuntimeOptions_1a283f82916b752628e9f62004104d1b4b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_workers</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">workers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5miaow14RuntimeOptions15set_max_workersENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Set the positive limit on occupied task slots per job </p>
+<dd><p>Set the positive default limit on occupied task slots per job </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if workers is zero. </p>
@@ -756,7 +779,7 @@ Spans are borrowed for this call and must not be retained. Asynchronous callback
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>workers</strong> – Positive maximum active task requests for each job. </p></li>
+<li><p><strong>workers</strong> – Positive default maximum occupied task slots per job. </p></li>
 <li><p><strong>task_timeout</strong> – Task-response timeout; terminates only subprocess tasks. </p></li>
 <li><p><strong>job_timeout</strong> – Timeout that fails unfinished tasks and requests unit shutdown. </p></li>
 <li><p><strong>output_root</strong> – Root directory for runtime-managed output folders. Empty string (default) disables all file output. </p></li>
