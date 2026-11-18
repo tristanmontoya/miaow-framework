@@ -198,6 +198,14 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 <td><p>Disabled</p></td>
 <td><p>Maximum occupied task slots across all jobs sharing the runtime.</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--caf_scheduler_threads</span></code></p></td>
+<td><p>CAF automatic</p></td>
+<td><p>Positive thread count for the parent CAF scheduler. Use <code class="docutils literal notranslate"><span class="pre">--caf_scheduler_threads</span> <span class="pre">1</span></code> for a single parent scheduler thread.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--caf_scheduler_policy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stealing</span></code></p></td>
+<td><p>Parent CAF scheduler policy. Use <code class="docutils literal notranslate"><span class="pre">--caf_scheduler_policy</span> <span class="pre">sharing</span></code> to select the shared queue and let idle scheduler threads sleep.</p></td>
+</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p></td>
 <td><p>Task-response timeout, in seconds; expiry makes the unit unavailable and notifies the controller. Only subprocess tasks are terminated; running in-process evaluations are not interrupted.</p></td>
