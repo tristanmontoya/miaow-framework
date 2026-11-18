@@ -89,6 +89,15 @@
 </tbody>
 </table>
 <p>For example, a job controller config containing <code class="docutils literal notranslate"><span class="pre">{&quot;maximum_iterations&quot;:</span> <span class="pre">1}</span></code> reports non-convergence after the first iteration. Run it with <code class="docutils literal notranslate"><span class="pre">./miaow_job_controller</span> <span class="pre">--config</span> <span class="pre">&lt;file.json&gt;</span></code> from the example directory. Plugin and model configuration paths are also resolved from the example’s working directory.</p>
+<section id="shared-worker-limit">
+<h3>Shared worker limit<a class="headerlink" href="#shared-worker-limit" title="Link to this heading">¶</a></h3>
+<p>From <code class="docutils literal notranslate"><span class="pre">examples/00_hello</span></code>, the greeting example runs the bundled <code class="docutils literal notranslate"><span class="pre">data/configs/shared_workers.json</span></code> workload by default:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./miaow_hello
+</pre></div>
+</div>
+<p>Both jobs are submitted before the driver waits for either result. Each job can use up to two task slots, and both jobs combined can use up to two. Once the shorter job finishes, the remaining job can use both slots. Override these limits with <code class="docutils literal notranslate"><span class="pre">--max_workers</span></code> and <code class="docutils literal notranslate"><span class="pre">--max_total_workers</span></code>.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--config</span></code> to supply a workload with either one configuration object or an array with one object per job.</p>
+</section>
 </section>
 <section id="additional-examples">
 <h2>Additional examples<a class="headerlink" href="#additional-examples" title="Link to this heading">¶</a></h2>
@@ -185,15 +194,19 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>Maximum occupied task slots per job; unit count is independent of this limit. Timed-out native calls retain their slots until they return.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--max_total_workers</span></code></p></td>
+<td><p>Disabled</p></td>
+<td><p>Maximum occupied task slots across all jobs sharing the runtime.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--task_request_timeout</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p></td>
 <td><p>Task-response timeout, in seconds; expiry makes the unit unavailable and notifies the controller. Only subprocess tasks are terminated; running in-process evaluations are not interrupted.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--job_request_timeout</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">300</span></code></p></td>
 <td><p>Job timeout, in seconds; unfinished tasks fail and unit shutdown is requested. Delivery waits for cleanup, including running in-process evaluations, which are not interrupted.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output_root</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output_root</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
 <td><p>Root directory path for runtime-managed output folders, disabled by default</p></td>
 </tr>
